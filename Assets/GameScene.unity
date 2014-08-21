@@ -25674,7 +25674,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1825448393}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.01574826, y: -10.8889999, z: .465979576}
+  m_LocalPosition: {x: .926243067, y: -10.8889999, z: .465979576}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 935185188}
@@ -25692,7 +25692,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   collection: {fileID: 11400000, guid: 74e070e230b6442de9c45976dbe600e0, type: 2}
   _color: {r: 0, g: 0, b: 0, a: 1}
-  _scale: {x: 25.9036083, y: 12.4976902, z: 1}
+  _scale: {x: 25.7078171, y: 12.4976902, z: 1}
   _spriteId: 38
   boxCollider2D: {fileID: 0}
   polygonCollider2D: []
