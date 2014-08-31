@@ -178,6 +178,7 @@
      <None Include="Assets\TK2DROOT\tk2d\Shaders\Blend2TexVertexColor.shader" />
      <None Include="Assets\Universal Sound FX\#Game Genre References\Platform.txt" />
      <None Include="Assets\TK2DROOT\tk2dUI\Shaders\DepthMaskSolid.shader" />
+     <None Include="Assets\Fonts\permian-sans\Permian Free Font License English.txt" />
      <None Include="Assets\TK2DROOT\tk2dUI_demo\Assets\Dark\Fonts\Nunito24.fnt" />
      <None Include="Assets\Universal Sound FX\#Game Genre References\Real Time Stategy (RTS) Medieval.txt" />
      <None Include="Assets\Universal Sound FX\#Game Genre References\Shoot em Up.txt" />
@@ -187,6 +188,7 @@
      <None Include="Assets\Standard Assets (Mobile)\Shaders\Lightmap Shaders (Legacy)\Mobile Lightmap Reflective.shader" />
      <None Include="Assets\TK2DROOT\tk2d\Shaders\LitCutoutVertexColor.shader" />
      <None Include="Assets\Standard Assets (Mobile)\Shaders\Particle Shaders\Mobile Particles Additive Culled.shader" />
+     <None Include="Assets\FX Mega Pack\FX Mega Pack - Readme.txt" />
      <None Include="Assets\TK2DROOT\tk2d\Editor\EditorUtility.shader" />
      <None Include="Assets\Universal Sound FX\#Game Genre References\Puzzle.txt" />
      <None Include="Assets\Resources\slothFacts.txt" />

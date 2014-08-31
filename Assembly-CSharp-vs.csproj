@@ -53,6 +53,7 @@
      <Compile Include="Assets\Extensions\FlashLikeEvents\Events\interfaces\IDispatcher.cs" />
      <Compile Include="Assets\Extensions\FlashLikeEvents\Example\Scripts\EventButtonExample.cs" />
      <Compile Include="Assets\Extensions\FlashLikeEvents\Example\Scripts\ExampleListner.cs" />
+     <Compile Include="Assets\FX Mega Pack\Scripts\SmoothCameraOrbit.cs" />
      <Compile Include="Assets\Facebook\Scripts\AndroidFacebook.cs" />
      <Compile Include="Assets\Facebook\Scripts\AndroidFacebookLoader.cs" />
      <Compile Include="Assets\Facebook\Scripts\CanvasFacebookLoader.cs" />
@@ -82,6 +83,7 @@
      <Compile Include="Assets\Scripts\FireflyBehavior.cs" />
      <Compile Include="Assets\Scripts\Flash.cs" />
      <Compile Include="Assets\Scripts\GameController.cs" />
+     <Compile Include="Assets\Scripts\Gradient.cs" />
      <Compile Include="Assets\Scripts\GuiController.cs" />
      <Compile Include="Assets\Scripts\HighScoreSceneController.cs" />
      <Compile Include="Assets\Scripts\InputController.cs" />
@@ -101,6 +103,7 @@
      <Compile Include="Assets\Scripts\PlayerPrefsX.cs" />
      <Compile Include="Assets\Scripts\SceneController.cs" />
      <Compile Include="Assets\Scripts\ScoreController.cs" />
+     <Compile Include="Assets\Scripts\Slothlopedia.cs" />
      <Compile Include="Assets\Scripts\StarBehavior.cs" />
      <Compile Include="Assets\Scripts\TimeController.cs" />
      <Compile Include="Assets\Scripts\TitleAnimation.cs" />
@@ -204,6 +207,7 @@
      <None Include="Assets\TK2DROOT\tk2d\Shaders\Blend2TexVertexColor.shader" />
      <None Include="Assets\Universal Sound FX\#Game Genre References\Platform.txt" />
      <None Include="Assets\TK2DROOT\tk2dUI\Shaders\DepthMaskSolid.shader" />
+     <None Include="Assets\Fonts\permian-sans\Permian Free Font License English.txt" />
      <None Include="Assets\TK2DROOT\tk2dUI_demo\Assets\Dark\Fonts\Nunito24.fnt" />
      <None Include="Assets\Universal Sound FX\#Game Genre References\Real Time Stategy (RTS) Medieval.txt" />
      <None Include="Assets\Universal Sound FX\#Game Genre References\Shoot em Up.txt" />
@@ -213,6 +217,7 @@
      <None Include="Assets\Standard Assets (Mobile)\Shaders\Lightmap Shaders (Legacy)\Mobile Lightmap Reflective.shader" />
      <None Include="Assets\TK2DROOT\tk2d\Shaders\LitCutoutVertexColor.shader" />
      <None Include="Assets\Standard Assets (Mobile)\Shaders\Particle Shaders\Mobile Particles Additive Culled.shader" />
+     <None Include="Assets\FX Mega Pack\FX Mega Pack - Readme.txt" />
      <None Include="Assets\TK2DROOT\tk2d\Editor\EditorUtility.shader" />
      <None Include="Assets\Universal Sound FX\#Game Genre References\Puzzle.txt" />
      <None Include="Assets\Resources\slothFacts.txt" />
