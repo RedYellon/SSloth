@@ -813,19 +813,19 @@ MonoBehaviour:
     - cloud_5
     - cloud_6
     - blankCircle
-    - platform_Dirty_2
+    - 
     - blankSquare
     - newStar
     - Platform_Crack-2
-    - platform_Dirty_1
+    - 
     - dustEffectParticle
     - butterfly_2
     - butterfly_1
     - Balloon
-    - 
+    - platform_Dirtynew_2
     - llama_fixed
     - rock_1_fixed
-    - 
+    - platform_Dirtynew_1
     - 
     - 
     - 
@@ -871,19 +871,19 @@ MonoBehaviour:
     - e56eea1bd79d340ddb43acbd07afadf9
     - e76d5c9cb43d546e5a836e9200914d22
     - 682eadfb1e0d14736b6dfe18db69db9d
-    - 1e46a1a409afc4d5e99314bceea4ec59
+    - 
     - 58af877347d7749dea04aa76cc380891
     - 7552d15f20b104053ac71e76a144636e
     - 485e125d351ba460b926482393e7fb69
-    - 61c4d653904a84d8d9bb9f348bb14a28
+    - 
     - 4ee841ca040834961960402b782501bc
     - 053908a93b5ba4ed5b976542af1a39f6
     - efa1f77721e7b4f4589de9dcfa1a33ad
     - d201fbadab6c64e0db18d73fce81f6f7
-    - 
+    - 2e9fa97eaccb24406abd2fb4a9a995b4
     - 14c56a9d94c5a4778b6f34ecc697ac68
     - 22147eb3070474747a6220667eca57cd
-    - 
+    - b2ba70a659ccb489e9b436b814c3e9f1
     - 
     - 
     - 
@@ -929,19 +929,19 @@ MonoBehaviour:
     - 1400794712
     - 1400795032
     - 1401203901
-    - 1401632960
+    - 0
     - 1401364173
     - 1401641808
     - 1401894632
-    - 1401632984
+    - 0
     - 1402071572
     - 1401290218
     - 1401290196
     - 1402188376
-    - 0
+    - 1408455062
     - 1407968542
     - 1407968432
-    - 0
+    - 1408455030
     - 0
     - 0
     - 0

@@ -99,7 +99,13 @@ public class PlatformManager : MonoBehaviour
 		private Transform platformHolder;
 		// The temporary platform move speed percentage (for when we only want to temporarily change move speed)
 		private float temporaryMoveSpeedVariable = 1;
-	
+		//
+		private Vector3 platParentOffscreenPos = new Vector3 (0, -9, 0);
+		//
+		private Vector3 platParentTargPos;
+		//
+		private bool goPlatParentMove = false;
+		
 		#endregion
 	
 	#endregion
@@ -258,6 +264,17 @@ public class PlatformManager : MonoBehaviour
 	
 	
 	#region Update
+	
+	//
+	//
+	void Update ()
+	{
+		if (goPlatParentMove)
+		{
+			platformHolder.position = Vector3.Lerp (platformHolder.position, platParentTargPos, Time.deltaTime * 10.0f);
+		}
+	}
+	
 	
 	// Used for framerate-independent stuff
 	// Called automatically every fixed frame
@@ -440,6 +457,22 @@ public class PlatformManager : MonoBehaviour
 		stars.Clear ();
 	}	
 	
+	
+	//
+	//
+	void RaisePlatforms ()
+	{
+		platParentTargPos = Vector3.zero;
+	}
+	
+	
+	//
+	//
+	void LowerPlatforms ()
+	{
+		platParentTargPos = platParentOffscreenPos;
+	}
+	
 	#endregion
 	
 	
@@ -450,8 +483,11 @@ public class PlatformManager : MonoBehaviour
 	void OnEnable ()
 	{
 		EventManager.OnRoundBegin += GameStarted;
+		EventManager.OnRoundBegin += RaisePlatforms;
 		EventManager.OnRoundRestart += GameStarted;
+		EventManager.OnRoundRestart += RaisePlatforms;
 		EventManager.OnRoundEnd += GameEnded;
+		EventManager.OnRoundEnd += LowerPlatforms;
 		EventManager.OnBackToMainMenuFromGame += Cleanup;
 		EventManager.OnPlayerLandFirstPlatform += BeginMovingPlatforms;
 	}
@@ -463,7 +499,10 @@ public class PlatformManager : MonoBehaviour
 	{
 		EventManager.OnRoundBegin -= GameStarted;
 		EventManager.OnRoundRestart -= GameStarted;
+		EventManager.OnRoundBegin -= RaisePlatforms;
+		EventManager.OnRoundRestart -= RaisePlatforms;
 		EventManager.OnRoundEnd -= GameEnded;
+		EventManager.OnRoundEnd -= LowerPlatforms;
 		EventManager.OnBackToMainMenuFromGame -= Cleanup;
 		EventManager.OnPlayerLandFirstPlatform -= BeginMovingPlatforms;
 	}
@@ -496,7 +535,9 @@ public class PlatformManager : MonoBehaviour
 			GameObject plat = Instantiate (platformPrefab, platformStagingPosition, Quaternion.identity) as GameObject;
 			plat.transform.parent = platformHolder;
 			platforms [i] = plat.GetComponent <PlatformController> ();
+			goPlatParentMove = true;
 		}
+		platParentTargPos = platParentOffscreenPos;
 	}
 	
 	

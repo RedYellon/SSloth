@@ -77,7 +77,13 @@ public class PlayerController : MonoBehaviour
 		Transform spriteTrans;
 		// The cached rigidbody of the sloth
 		Rigidbody rb;
-		
+		// The mud splatter particle system
+		ParticleSystem mudSplatter;
+		// The hard land smoke particle system
+		ParticleSystem hardLandSmoke;
+		// The double jump effect particle system
+		ParticleSystem doubleJumpEffect;
+	
 		#endregion
 		
 		#region Private
@@ -128,7 +134,11 @@ public class PlayerController : MonoBehaviour
 		private bool guiSlothAnimateBool = false;
 		//
 		private bool didPrevLandOnBouncePlat = false;
-		
+		//
+		private Vector3 mudSplatterLocalPosition;
+		private Vector3 hardLandSmokeLocalPosition;
+		private Vector3 doubleJumpEffectLocalPosition;
+	
 		#endregion
 	
 	#endregion
@@ -393,6 +403,15 @@ public class PlayerController : MonoBehaviour
 		}
 		else
 			didPrevLandOnBouncePlat = false;
+			
+		//
+		if (p.GetFaceType () == 3)
+		{
+			mudSplatter.transform.parent = trans;
+			mudSplatter.transform.localPosition = mudSplatterLocalPosition;
+			mudSplatter.Play ();
+			mudSplatter.transform.parent = p.transform;
+		}
 		
 		//
 		if (isLaunchingUp || previousWasFalling)
@@ -419,6 +438,12 @@ public class PlayerController : MonoBehaviour
 		isHardLand = false;
 		camCont.Shake ();
 		p.SetIsCracked ();
+		
+		//
+		hardLandSmoke.transform.parent = trans;
+		hardLandSmoke.transform.localPosition = hardLandSmokeLocalPosition;
+		hardLandSmoke.Play ();
+		hardLandSmoke.transform.parent = p.transform;
 	}
 	
 	
@@ -428,6 +453,11 @@ public class PlayerController : MonoBehaviour
 	{
 		// Play the jump sound effect
 		audioCont.PlaySound ("Jump");
+		
+		//doubleJumpEffect.transform.parent = trans;
+		///doubleJumpEffect.transform.localPosition = doubleJumpEffectLocalPosition;
+		//doubleJumpEffect.Play ();
+		//doubleJumpEffect.transform.parent = null;
 		
 		// The sloth is now in the air
 		fallingWithPlat = null;
@@ -482,6 +512,10 @@ public class PlayerController : MonoBehaviour
 	{
 		// Play the jump sound effect
 		audioCont.PlaySound ("Double Jump");
+		doubleJumpEffect.transform.parent = trans;
+		doubleJumpEffect.transform.localPosition = doubleJumpEffectLocalPosition;
+		doubleJumpEffect.Play ();
+		doubleJumpEffect.transform.parent = null;
 		
 		// 
 		if (!isOnTheWayUp)
@@ -615,6 +649,7 @@ public class PlayerController : MonoBehaviour
 		trans.position = startGamePos;
 		spriteTrans.rotation = Quaternion.Euler (Vector3.zero);
 		trans.position = beginningPosition;
+		//sprite.SortingOrder = -1;
 		
 		// If the player had a high score, apply the shades 8)
 		ApplyShadesIfNeeded ();
@@ -688,6 +723,7 @@ public class PlayerController : MonoBehaviour
 		trans.parent = guiTransParent;
 		trans.localPosition = guiLocalPos;
 		trans.position = new Vector3 (trans.position.x, deathYLevel, trans.position.y);
+		//sprite.SortingOrder = 0;
 		
 		// Play the game over sound effect and duck the music
 		audioCont.DuckMusic (true);
@@ -785,6 +821,12 @@ public class PlayerController : MonoBehaviour
 		beginningPosition = new Vector3 (trans.position.x, trans.position.y + 0.15f, trans.position.z);
 		rb.isKinematic = true;
 		startGamePos = trans.position;
+		mudSplatter = GameObject.Find ("MudSplatterEffect").particleSystem;
+		hardLandSmoke = GameObject.Find ("HardLandSmokeEffect").particleSystem;
+		doubleJumpEffect = GameObject.Find ("DoubleJumpEffect").particleSystem;
+		mudSplatterLocalPosition = mudSplatter.transform.localPosition;
+		hardLandSmokeLocalPosition = hardLandSmoke.transform.localPosition;
+		doubleJumpEffectLocalPosition = doubleJumpEffect.transform.localPosition;
 	}
 	
 	#endregion

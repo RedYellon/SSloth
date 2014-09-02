@@ -46,6 +46,11 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\ComboBox\Scripts\StyledComboBox.cs" />
+     <Compile Include="Assets\ComboBox\Scripts\StyledComboBoxPrefab.cs" />
+     <Compile Include="Assets\ComboBox\Scripts\StyledItem.cs" />
+     <Compile Include="Assets\ComboBox\Scripts\StyledItemButtonImageText.cs" />
+     <Compile Include="Assets\ComboBox\Scripts\TestStyledComboBox.cs" />
      <Compile Include="Assets\Extensions\FlashLikeEvents\Events\Core\Events\EventDispatcher.cs" />
      <Compile Include="Assets\Extensions\FlashLikeEvents\Events\Core\Events\EventDispatcherBase.cs" />
      <Compile Include="Assets\Extensions\FlashLikeEvents\Events\Data\BaseEvent.cs" />
@@ -78,6 +83,14 @@
      <Compile Include="Assets\Scripts\CreditsController.cs" />
      <Compile Include="Assets\Scripts\DataController.cs" />
      <Compile Include="Assets\Scripts\EventManager.cs" />
+     <Compile Include="Assets\Scripts\Extensions\CameraExtensions.cs" />
+     <Compile Include="Assets\Scripts\Extensions\ComponentExtensions.cs" />
+     <Compile Include="Assets\Scripts\Extensions\FloatExtensions.cs" />
+     <Compile Include="Assets\Scripts\Extensions\IntExtensions.cs" />
+     <Compile Include="Assets\Scripts\Extensions\RaycastExtensions.cs" />
+     <Compile Include="Assets\Scripts\Extensions\RectExtensions.cs" />
+     <Compile Include="Assets\Scripts\Extensions\TransformExtensions.cs" />
+     <Compile Include="Assets\Scripts\Extensions\VectorExtensions.cs" />
      <Compile Include="Assets\Scripts\FacebookController.cs" />
      <Compile Include="Assets\Scripts\FigureEightMovement.cs" />
      <Compile Include="Assets\Scripts\FireflyBehavior.cs" />
@@ -103,11 +116,13 @@
      <Compile Include="Assets\Scripts\PlayerPrefsX.cs" />
      <Compile Include="Assets\Scripts\SceneController.cs" />
      <Compile Include="Assets\Scripts\ScoreController.cs" />
+     <Compile Include="Assets\Scripts\ScreenClutterMovement.cs" />
      <Compile Include="Assets\Scripts\Slothlopedia.cs" />
      <Compile Include="Assets\Scripts\StarBehavior.cs" />
      <Compile Include="Assets\Scripts\TimeController.cs" />
      <Compile Include="Assets\Scripts\TitleAnimation.cs" />
      <Compile Include="Assets\Scripts\TitleGyrate.cs" />
+     <Compile Include="Assets\Scripts\Utility\Mathfx.cs" />
      <Compile Include="Assets\TK2DROOT\tk2d\Code\Camera\tk2dCamera.cs" />
      <Compile Include="Assets\TK2DROOT\tk2d\Code\Camera\tk2dCameraAnchor.cs" />
      <Compile Include="Assets\TK2DROOT\tk2d\Code\Camera\tk2dCameraUtil.cs" />

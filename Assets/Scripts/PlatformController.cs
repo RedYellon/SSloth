@@ -173,7 +173,7 @@ public class PlatformController : MonoBehaviour
 			case 2: faceImg.SetSprite ("platform_Angry_1"); break;
 			// Dirty face
 			case 3:
-				faceImg.SetSprite ("platform_Dirty_1");
+				faceImg.SetSprite ("platform_Dirtynew_1");
 				dirtyFly.SetActive (true);
 			break;
 			// Sad face
@@ -216,7 +216,7 @@ public class PlatformController : MonoBehaviour
 			break;
 			// Dirty face
 			case 3:
-				faceImg.SetSprite ("platform_Dirty_2");
+				faceImg.SetSprite ("platform_Dirtynew_2");
 				audioCont.PlayLandSound ();
 				audioCont.PlayDirtyLandSound ();
 				
