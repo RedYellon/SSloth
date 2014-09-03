@@ -25,12 +25,26 @@ public class DataController : MonoBehaviour
 		private float seVolume = 1;
 		// The current state of music volume level
 		private float musicVolume = 1;
-		// The number of times played
-		private int numberOfPlays = 0;
-		// The number of platforms hit
-		private int numberOfPlatsHit = 0;
-		// The player's cumulative score
-		private int totalScore = 0;
+		
+			#region Stats
+			
+			private int numberOfPlays = 0;
+			private int numberOfPlatsHit = 0;
+			private int totalScore = 0;
+			private int secondsPlayed = 0;
+			private int jumps = 0;
+			private int doubleJumps = 0;
+			private int landings = 0;
+			private int angryPlatsHit = 0;
+			private int dirtyPlatsHit = 0;
+			private int sadPlatsHit = 0;
+			private int totalStars = 0;
+			private int goldStars = 0;
+			private int silverStars = 0;
+			private int bronzeStars = 0;
+			
+			#endregion
+		
 		// The new total score to be used for items
 		private int totalScoreItemUsable = 0;
 		// The camera resolution override type being used
@@ -78,6 +92,17 @@ public class DataController : MonoBehaviour
 		numberOfPlatsHit = PlayerPrefs.GetInt ("PlatsHit", 0);
 		totalScore = PlayerPrefs.GetInt ("TotalScore", 0);
 		totalScoreItemUsable = PlayerPrefs.GetInt ("TotalScoreItemUsable", 0);
+		secondsPlayed = PlayerPrefs.GetInt ("SecondsPlayed", 0);
+		jumps = PlayerPrefs.GetInt ("Jumps", 0);
+		doubleJumps = PlayerPrefs.GetInt ("DoubleJumps", 0);
+		landings = PlayerPrefs.GetInt ("Landings", 0);
+		angryPlatsHit = PlayerPrefs.GetInt ("AngryPlatsHit", 0);
+		dirtyPlatsHit = PlayerPrefs.GetInt ("DirtyPlatsHit", 0);
+		sadPlatsHit = PlayerPrefs.GetInt ("SadPlatsHit", 0);
+		totalStars = PlayerPrefs.GetInt ("TotalStars", 0);
+		goldStars = PlayerPrefs.GetInt ("GoldStars", 0);
+		silverStars = PlayerPrefs.GetInt ("SilverStars", 0);
+		bronzeStars = PlayerPrefs.GetInt ("BronzeStars", 0);
 	}
 	
 	
@@ -147,24 +172,20 @@ public class DataController : MonoBehaviour
 	
 	
 	//
-	public int GetTimesPlayed ()
-	{
-		return numberOfPlays;
-	}
-	
-	
-	//
-	public int GetPlatsHit ()
-	{
-		return numberOfPlatsHit;
-	}
-	
-	
-	//
-	public int GetTotalScore ()
-	{
-		return totalScore;
-	}
+	public int GetTimesPlayed () { return numberOfPlays; }
+	public int GetPlatsHit () { return numberOfPlatsHit; }
+	public int GetTotalScore () { return totalScore; }
+	public int GetSecondsPlayed () { return secondsPlayed; }
+	public int GetJumps () { return jumps; }
+	public int GetDoubleJumps () { return doubleJumps; }
+	public int GetLandings () { return landings; }
+	public int GetAngryPlatsHit () { return angryPlatsHit; }
+	public int GetDirtyPlatsHit () { return dirtyPlatsHit; }
+	public int GetSadPlatsHit () { return sadPlatsHit; }
+	public int GetTotalStars () { return totalStars; }
+	public int GetGoldStars () { return goldStars; }
+	public int GetSilverStars () { return silverStars; }
+	public int GetBronzeStars () { return bronzeStars; }
 	
 	
 	//
@@ -259,6 +280,62 @@ public class DataController : MonoBehaviour
 		PlayerPrefs.SetInt ("TotalScore", totalScore);
 	}
 	
+	public void AddToSecondsPlayed (int toAdd)
+	{
+		secondsPlayed += toAdd;
+		PlayerPrefs.SetInt ("SecondsPlayed", secondsPlayed);
+	}
+	public void IncrementJumps (int toAdd)
+	{
+		jumps += toAdd;
+		PlayerPrefs.SetInt ("Jumps", jumps);
+	}
+	public void IncrementDoubleJumps (int toAdd)
+	{
+		doubleJumps += toAdd;
+		PlayerPrefs.SetInt ("DoubleJumps", doubleJumps);
+	}
+	public void IncrementLandings (int toAdd)
+	{
+		landings += toAdd;
+		PlayerPrefs.SetInt ("Landings", landings);
+	}
+	public void IncrementAngryPlatsHit (int toAdd)
+	{
+		angryPlatsHit += toAdd;
+		PlayerPrefs.SetInt ("AngryPlatsHit", angryPlatsHit);
+	}
+	public void IncrementDirtyPlatsHit (int toAdd)
+	{
+		dirtyPlatsHit += toAdd;
+		PlayerPrefs.SetInt ("DirtyPlatsHit", dirtyPlatsHit);
+	}
+	public void IncrementSadPlatsHit (int toAdd)
+	{
+		sadPlatsHit += toAdd;
+		PlayerPrefs.SetInt ("SadPlatsHit", sadPlatsHit);
+	}
+	public void IncrementTotalStars (int toAdd)
+	{
+		totalStars += toAdd;
+		PlayerPrefs.SetInt ("TotalStars", totalStars);
+	}
+	public void IncrementGoldStars (int toAdd)
+	{
+		goldStars += toAdd;
+		PlayerPrefs.SetInt ("GoldStars", goldStars);
+	}
+	public void IncrementSilverStars (int toAdd)
+	{
+		silverStars += toAdd;
+		PlayerPrefs.SetInt ("SilverStars", silverStars);
+	}
+	public void IncrementBronzeStars (int toAdd)
+	{
+		bronzeStars += toAdd;
+		PlayerPrefs.SetInt ("BronzeStars", bronzeStars);
+	}
+	
 	
 	//
 	public void IncrementTotalScoreItemUsable (int toAdd)
@@ -273,7 +350,7 @@ public class DataController : MonoBehaviour
 	public void EraseData ()
 	{
 		// Create blank level data
-		for (int i = 0; i < 10; ++i)
+		/*for (int i = 0; i < 10; ++i)
 			highScores [i] = 0;
 		PlayerPrefsX.SetIntArray ("HighScores", highScores);
 		numberOfPlays = 0;
@@ -282,8 +359,13 @@ public class DataController : MonoBehaviour
 		PlayerPrefs.SetInt ("PlatsHit", 0);
 		totalScore = 0;
 		PlayerPrefs.SetInt ("TotalScore", 0);
+		secondsPlayed = 0;
+		PlayerPrefs.SetInt ("SecondsPlayed", 0);
 		totalScoreItemUsable = 0;
-		PlayerPrefs.SetInt ("TotalScoreItemUsable", 0);
+		PlayerPrefs.SetInt ("TotalScoreItemUsable", 0);*/
+		
+		
+		PlayerPrefs.DeleteAll ();
 	}
 	
 	

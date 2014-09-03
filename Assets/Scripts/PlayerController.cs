@@ -86,6 +86,18 @@ public class PlayerController : MonoBehaviour
 	
 		#endregion
 		
+		#region Stat Collection
+		
+		int sessionPlayTime = 0;
+		int angryPlatsHit = 0;
+		int sadPlatsHit = 0;
+		int dirtyPlatsHit = 0;
+		int timesJumped = 0;
+		int timesDoubleJumped = 0;
+		int timesLanded = 0;
+		
+		#endregion
+		
 		#region Private
 		
 		//
@@ -138,6 +150,8 @@ public class PlayerController : MonoBehaviour
 		private Vector3 mudSplatterLocalPosition;
 		private Vector3 hardLandSmokeLocalPosition;
 		private Vector3 doubleJumpEffectLocalPosition;
+		//
+		private int playTimeAtStart = 0;
 	
 		#endregion
 	
@@ -360,9 +374,11 @@ public class PlayerController : MonoBehaviour
 			fallingWithPlat = p.transform;
 			fallingWithPlatHeight = p.platformHeight;
 			didLandOnSad = true;
+			sadPlatsHit ++;
 		}
 		
 		//
+		timesLanded ++;
 		spriteTrans.rotation = Quaternion.Euler (Vector3.zero);
 		dataCont.IncrementNumberOfPlatsHit ();
 		bool ihl = false; if (isHardLand || rb.velocity.y <= -landHardVelocityGate) ihl = true;
@@ -411,6 +427,7 @@ public class PlayerController : MonoBehaviour
 			mudSplatter.transform.localPosition = mudSplatterLocalPosition;
 			mudSplatter.Play ();
 			mudSplatter.transform.parent = p.transform;
+			dirtyPlatsHit ++;
 		}
 		
 		//
@@ -453,7 +470,7 @@ public class PlayerController : MonoBehaviour
 	{
 		// Play the jump sound effect
 		audioCont.PlaySound ("Jump");
-		
+		timesJumped ++;
 		//doubleJumpEffect.transform.parent = trans;
 		///doubleJumpEffect.transform.localPosition = doubleJumpEffectLocalPosition;
 		//doubleJumpEffect.Play ();
@@ -495,6 +512,7 @@ public class PlayerController : MonoBehaviour
 		isGrounded = false;
 		isOnTheWayUp = true;
 		isLaunchingUp = true;
+		angryPlatsHit ++;
 		
 		// We want to stop the walking animation
 		CancelInvoke ("AnimateWalking");
@@ -512,10 +530,12 @@ public class PlayerController : MonoBehaviour
 	{
 		// Play the jump sound effect
 		audioCont.PlaySound ("Double Jump");
-		doubleJumpEffect.transform.parent = trans;
-		doubleJumpEffect.transform.localPosition = doubleJumpEffectLocalPosition;
-		doubleJumpEffect.Play ();
-		doubleJumpEffect.transform.parent = null;
+		timesDoubleJumped ++;
+		
+		//doubleJumpEffect.transform.parent = trans;
+		//doubleJumpEffect.transform.localPosition = doubleJumpEffectLocalPosition;
+		//doubleJumpEffect.Play ();
+		//doubleJumpEffect.transform.parent = null;
 		
 		// 
 		if (!isOnTheWayUp)
@@ -649,7 +669,7 @@ public class PlayerController : MonoBehaviour
 		trans.position = startGamePos;
 		spriteTrans.rotation = Quaternion.Euler (Vector3.zero);
 		trans.position = beginningPosition;
-		//sprite.SortingOrder = -1;
+		playTimeAtStart = (int) Time.time;
 		
 		// If the player had a high score, apply the shades 8)
 		ApplyShadesIfNeeded ();
@@ -723,7 +743,7 @@ public class PlayerController : MonoBehaviour
 		trans.parent = guiTransParent;
 		trans.localPosition = guiLocalPos;
 		trans.position = new Vector3 (trans.position.x, deathYLevel, trans.position.y);
-		//sprite.SortingOrder = 0;
+		SubmitStats ();
 		
 		// Play the game over sound effect and duck the music
 		audioCont.DuckMusic (true);
@@ -751,6 +771,38 @@ public class PlayerController : MonoBehaviour
 		InvokeRepeating ("GuiSlothAnimate", 0.0f, 0.4f);
 	}
 	
+	
+	// Sends the stats to the data controller
+	//
+	void SubmitStats ()
+	{
+		// Calc play time
+		sessionPlayTime = (int) Time.time - playTimeAtStart;
+		dataCont.AddToSecondsPlayed (sessionPlayTime);
+		
+		// Other stats
+		dataCont.IncrementJumps (timesJumped);
+		dataCont.IncrementDoubleJumps (timesDoubleJumped);
+		dataCont.IncrementLandings (timesLanded);
+		dataCont.IncrementAngryPlatsHit (angryPlatsHit);
+		dataCont.IncrementDirtyPlatsHit (dirtyPlatsHit);
+		dataCont.IncrementSadPlatsHit (sadPlatsHit);
+	}
+	
+	
+	// Resets the per-round stats
+	//
+	void ResetStats ()
+	{
+		sessionPlayTime = 0;
+		angryPlatsHit = 0;
+		sadPlatsHit = 0;
+		dirtyPlatsHit = 0;
+		timesJumped = 0;
+		timesDoubleJumped = 0;
+		timesLanded = 0;
+	}
+	
 	#endregion
 	
 	
@@ -762,6 +814,8 @@ public class PlayerController : MonoBehaviour
 	{
 		EventManager.OnRoundBegin += GameStarted;
 		EventManager.OnRoundRestart += GameStarted;
+		EventManager.OnBackToMainMenuFromGame += ResetStats;
+		EventManager.OnRoundRestart += ResetStats;
 		EventManager.OnRoundEnd += GameEnded;
 		EventManager.OnPlayerLandFirstPlatform += PlayerHasLandedOnFirstPlatform;
 	}
@@ -773,6 +827,8 @@ public class PlayerController : MonoBehaviour
 	{
 		EventManager.OnRoundBegin -= GameStarted;
 		EventManager.OnRoundRestart -= GameStarted;
+		EventManager.OnBackToMainMenuFromGame -= ResetStats;
+		EventManager.OnRoundRestart -= ResetStats;
 		EventManager.OnRoundEnd -= GameEnded;
 		EventManager.OnPlayerLandFirstPlatform -= PlayerHasLandedOnFirstPlatform;
 	}

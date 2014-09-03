@@ -510,6 +510,10 @@ public class GuiController : MonoBehaviour
 		// Calculate the score to be added to the total score
 		Vector3 stars = scoreCont.GetStarCount ();
 		int starsAddNum = (int) (((int) stars.z * scoreCont.goldStarValue) + ((int) stars.y * scoreCont.silverStarValue) + ((int) stars.x * scoreCont.bronzeStarValue));
+		dataCont.IncrementGoldStars ((int) stars.z);
+		dataCont.IncrementSilverStars ((int) stars.y);
+		dataCont.IncrementBronzeStars ((int) stars.x);
+		dataCont.IncrementTotalStars ((int) stars.z + (int) stars.y + (int) stars.x);
 		if (starsAddNum != 0)
 		{
 			addedScoreNumber.gameObject.renderer.enabled = true;

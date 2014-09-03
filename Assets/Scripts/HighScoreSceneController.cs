@@ -13,6 +13,7 @@
 
 using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 
 public class HighScoreSceneController : MonoBehaviour 
@@ -30,11 +31,34 @@ public class HighScoreSceneController : MonoBehaviour
 		// The view leaderboards button
 		public GameObject leaderboardsButton;
 		//
-		public TextMesh timesPlayedNum;
-		public TextMesh avgScoreNum;
-		public TextMesh platsNum;
-		public TextMesh totalScoreNum;
-	
+		 
+			#region Stats
+			
+			public Text timesPlayedNum;
+			public Text avgScoreNum;
+			public Text platsNum;
+			public Text totalScoreNum;
+			public Text totalTimeNum;
+			public Text jumpNum;
+			public Text doubleJumpNum;
+			public Text landNum;
+			public Text slothsLaunchedNum;
+			public Text mudSplatteredNum;
+			public Text sadsHitNum;
+			public Text starsTotalNum;
+			public Text starsGoldNum;
+			public Text starsSilverNum;
+			public Text starsBronzeNum;
+			public Text nightsSurvivedNum;
+			public Text recordsBrokenNum;
+			public Text balloonsSeenNum;
+			public Text butterfliesSeenNum;
+			public Text firefliesSeenNum;
+			public Text mammalsSeenNum;
+			public Text factsLearnedNum;
+			
+			#endregion
+		
 		#endregion
 	
 		#region Scripts
@@ -163,16 +187,6 @@ public class HighScoreSceneController : MonoBehaviour
 		//
 		GetHighScores ();
 		GetOtherData ();
-		
-		foreach (Renderer r in staticRends)
-			r.enabled = true;
-		foreach (TextMesh t in highScoreSlots)
-			t.gameObject.renderer.enabled = true;
-		timesPlayedNum.gameObject.renderer.enabled = true;
-		avgScoreNum.gameObject.renderer.enabled = true;
-		platsNum.gameObject.renderer.enabled = true;
-		backToMenuButton.SetActive (true);
-		leaderboardsButton.SetActive (true);
 		isTransitioning = true;	
 		
 		// Begin the transition
@@ -232,16 +246,6 @@ public class HighScoreSceneController : MonoBehaviour
 		isFadingInResetMask = false;
 		isFadingOutResetMask = false;
 		resetMaskRend.material.color = new Color (resetMaskRend.material.color.r, resetMaskRend.material.color.g, resetMaskRend.material.color.b, 0.0f);
-		
-		foreach (Renderer r in staticRends)
-			r.enabled = false;
-		foreach (TextMesh t in highScoreSlots)
-			t.gameObject.renderer.enabled = false;
-		backToMenuButton.SetActive (false);
-		leaderboardsButton.SetActive (false);
-		timesPlayedNum.gameObject.renderer.enabled = false;
-		avgScoreNum.gameObject.renderer.enabled = false;
-		platsNum.gameObject.renderer.enabled = false;
 		transitionDropSpeed = 0;
 		
 		sceneCont.ChangeScene (1);
@@ -277,9 +281,35 @@ public class HighScoreSceneController : MonoBehaviour
 	//
 	private void GetOtherData ()
 	{
+		// Calculate play time
+		int pt = dataCont.GetSecondsPlayed ();
+		int hoursPlayed = 0;
+		if (pt >= 3600)
+			hoursPlayed = pt / 3600;
+		pt -= (hoursPlayed * 3600);
+		int minutesPlayed = 0;
+		if (pt >= 60)
+			minutesPlayed = pt / 60;
+		pt -= (minutesPlayed * 60);
+		int secondsPlayed = pt;
+		string hps = "00"; if (hoursPlayed > 0) hps = hoursPlayed.ToString (); if (hps.Length == 1) hps = "0" + hps;
+		string mps = "00"; if (minutesPlayed > 0) mps = minutesPlayed.ToString (); if (mps.Length == 1) mps = "0" + mps;
+		string sps = "00"; if (secondsPlayed > 0) sps = secondsPlayed.ToString (); if (sps.Length == 1) sps = "0" + sps;
+		totalTimeNum.text = hps + ":" + mps + ":" + sps;
+		
 		timesPlayedNum.text = dataCont.GetTimesPlayed ().ToString ();
 		platsNum.text = dataCont.GetPlatsHit ().ToString ();
 		totalScoreNum.text = dataCont.GetTotalScoreItemUsable ().ToString ();
+		jumpNum.text = dataCont.GetJumps ().ToString ();
+		doubleJumpNum.text = dataCont.GetDoubleJumps ().ToString ();
+		landNum.text = dataCont.GetLandings ().ToString ();
+		slothsLaunchedNum.text = dataCont.GetAngryPlatsHit ().ToString ();
+		mudSplatteredNum.text = dataCont.GetDirtyPlatsHit ().ToString ();
+		sadsHitNum.text = dataCont.GetSadPlatsHit ().ToString ();
+		starsTotalNum.text = dataCont.GetTotalStars ().ToString ();
+		starsGoldNum.text = dataCont.GetGoldStars ().ToString ();
+		starsSilverNum.text = dataCont.GetSilverStars ().ToString ();
+		starsBronzeNum.text = dataCont.GetBronzeStars ().ToString ();
 		if (dataCont.GetTimesPlayed () != 0)
 			avgScoreNum.text = (dataCont.GetTotalScore () / dataCont.GetTimesPlayed ()).ToString ();
 		else
@@ -299,11 +329,6 @@ public class HighScoreSceneController : MonoBehaviour
 		audioCont = gameObject.GetComponent <AudioController> ();
 		lb = gameObject.GetComponent <Leaderboard> ();
 		resetMaskRend = GameObject.Find ("ScreenMask").renderer;
-		backToMenuButton.SetActive (false);
-		leaderboardsButton.SetActive (false);
-		timesPlayedNum.gameObject.renderer.enabled = false;
-		avgScoreNum.gameObject.renderer.enabled = false;
-		platsNum.gameObject.renderer.enabled = false;
 		transitionCont = GetComponent <MenuBackgroundTransitionController> ();
 	}
 	
