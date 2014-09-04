@@ -42,6 +42,12 @@ public class DataController : MonoBehaviour
 			private int goldStars = 0;
 			private int silverStars = 0;
 			private int bronzeStars = 0;
+			private int nightsSurvived = 0;
+			private int recordsBroken = 0;
+			private int balloonsSeen = 0;
+			private int butterfliesSeen = 0;
+			private int firefliesSeen = 0;
+			private int animalsSeen = 0;
 			
 			#endregion
 		
@@ -103,6 +109,12 @@ public class DataController : MonoBehaviour
 		goldStars = PlayerPrefs.GetInt ("GoldStars", 0);
 		silverStars = PlayerPrefs.GetInt ("SilverStars", 0);
 		bronzeStars = PlayerPrefs.GetInt ("BronzeStars", 0);
+		nightsSurvived = PlayerPrefs.GetInt ("NightsSurvived", 0);
+		recordsBroken = PlayerPrefs.GetInt ("RecordsBroken", 0);
+		balloonsSeen = PlayerPrefs.GetInt ("BalloonsSeen", 0);
+		butterfliesSeen = PlayerPrefs.GetInt ("ButterfliesSeen", 0);
+		firefliesSeen = PlayerPrefs.GetInt ("FirefliesSeen", 0);
+		animalsSeen = PlayerPrefs.GetInt ("AnimalsSeen", 0);
 	}
 	
 	
@@ -186,6 +198,12 @@ public class DataController : MonoBehaviour
 	public int GetGoldStars () { return goldStars; }
 	public int GetSilverStars () { return silverStars; }
 	public int GetBronzeStars () { return bronzeStars; }
+	public int GetNightsSurvived () { return nightsSurvived; }
+	public int GetRecordsBroken () { return recordsBroken; }
+	public int GetBalloonsSeen () { return balloonsSeen; }
+	public int GetButterfliesSeen () { return butterfliesSeen; }
+	public int GetFirefliesSeen () { return firefliesSeen; }
+	public int GetAnimalsSeen () { return animalsSeen; }
 	
 	
 	//
@@ -334,6 +352,36 @@ public class DataController : MonoBehaviour
 	{
 		bronzeStars += toAdd;
 		PlayerPrefs.SetInt ("BronzeStars", bronzeStars);
+	}
+	public void IncrementNightsSurvived (int toAdd)
+	{
+		nightsSurvived += toAdd;
+		PlayerPrefs.SetInt ("NightsSurvived", nightsSurvived);
+	}
+	public void IncrementRecordsBroken (int toAdd)
+	{
+		recordsBroken += toAdd;
+		PlayerPrefs.SetInt ("RecordsBroken", recordsBroken);
+	}
+	public void IncrementBalloonsSeen (int toAdd)
+	{
+		balloonsSeen += toAdd;
+		PlayerPrefs.SetInt ("BalloonsSeen", balloonsSeen);
+	}
+	public void IncrementButterfliesSeen (int toAdd)
+	{
+		butterfliesSeen += toAdd;
+		PlayerPrefs.SetInt ("ButterfliesSeen", butterfliesSeen);
+	}
+	public void IncrementFirefliesSeen (int toAdd)
+	{
+		firefliesSeen += toAdd;
+		PlayerPrefs.SetInt ("FirefliesSeen", firefliesSeen);
+	}
+	public void IncrementAnimalsSeen (int toAdd)
+	{
+		animalsSeen += toAdd;
+		PlayerPrefs.SetInt ("AnimalsSeen", animalsSeen);
 	}
 	
 	

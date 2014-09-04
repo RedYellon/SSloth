@@ -223,6 +223,7 @@ public class ScoreController : MonoBehaviour
 				{
 					playerCont.SetIsWearingShades (true);
 					guiCont.SetMoveGlasses (true);
+					dataCont.IncrementRecordsBroken (1);
 				}
 				
 				return;

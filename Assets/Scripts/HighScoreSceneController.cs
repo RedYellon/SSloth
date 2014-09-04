@@ -310,6 +310,12 @@ public class HighScoreSceneController : MonoBehaviour
 		starsGoldNum.text = dataCont.GetGoldStars ().ToString ();
 		starsSilverNum.text = dataCont.GetSilverStars ().ToString ();
 		starsBronzeNum.text = dataCont.GetBronzeStars ().ToString ();
+		nightsSurvivedNum.text = dataCont.GetNightsSurvived ().ToString ();
+		recordsBrokenNum.text = dataCont.GetRecordsBroken ().ToString ();
+		balloonsSeenNum.text = dataCont.GetBalloonsSeen ().ToString ();
+		butterfliesSeenNum.text = dataCont.GetButterfliesSeen ().ToString ();
+		firefliesSeenNum.text = dataCont.GetFirefliesSeen ().ToString ();
+		mammalsSeenNum.text = dataCont.GetAnimalsSeen ().ToString ();
 		if (dataCont.GetTimesPlayed () != 0)
 			avgScoreNum.text = (dataCont.GetTotalScore () / dataCont.GetTimesPlayed ()).ToString ();
 		else

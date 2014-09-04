@@ -43,6 +43,8 @@ public class BalloonController : MonoBehaviour
 		
 		// The platform manager
 		PlatformManager manager;
+		//
+		DataController dataCont;
 		
 		#endregion
 		
@@ -169,6 +171,7 @@ public class BalloonController : MonoBehaviour
 		
 		// Make sure the balloon is moving!
 		isMoving = true;
+		dataCont.IncrementBalloonsSeen (1);
 		
 		// We will spawn another ballon a random time from now
 		float randTime = Random.Range (spawnWaitTimeRange.x, spawnWaitTimeRange.y);
@@ -225,6 +228,7 @@ public class BalloonController : MonoBehaviour
 		slothBalloon = GameObject.Find ("SlothBalloon").transform;
 		mannedBalloon = GameObject.Find ("MannedBalloon").transform;
 		manager = GameObject.Find ("&MainController").GetComponent <PlatformManager> ();
+		dataCont = GameObject.Find ("&MainController").GetComponent <DataController> ();
 	}
 	
 	#endregion

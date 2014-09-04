@@ -36,6 +36,13 @@ public class ScreenClutterMovement : MonoBehaviour
 	
 		#endregion
 		
+		#region Scripts
+		
+		// The data controller
+		DataController dataCont;
+		
+		#endregion
+		
 		#region Private
 		
 		//
@@ -97,6 +104,7 @@ public class ScreenClutterMovement : MonoBehaviour
 		activeTrans = trans [randInt];
 		targetPosition = targetPositions [randInt];
 		returnPosition = activeTrans.position;
+		dataCont.IncrementAnimalsSeen (1);
 		
 		// Set a random sprite
 		activeTrans.GetComponent <tk2dSprite> ().SetSprite (sprites [Random.Range (0, sprites.Length)]);
@@ -151,7 +159,7 @@ public class ScreenClutterMovement : MonoBehaviour
 	// Called from Start ()
 	private void AssignVariables ()
 	{
-	
+		dataCont = GameObject.Find ("&MainController").GetComponent <DataController> ();
 	}
 	
 	#endregion

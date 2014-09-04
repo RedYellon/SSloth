@@ -63,6 +63,8 @@ public class TimeController : MonoBehaviour
 		FireflyBehavior firefly;
 		// The leaderboard controller
 		Leaderboard lb;
+		// The data controller 
+		DataController dataCont;
 		
 		#endregion
 		
@@ -161,6 +163,9 @@ public class TimeController : MonoBehaviour
 					// Enable day-specific grass ornaments
 					butterfly.SetIsActive (true);
 					firefly.SetIsActive (false);
+					
+					// We've survived the night!
+					dataCont.IncrementNightsSurvived (1);
 				break;
 				// Reset
 				case 5:
@@ -274,6 +279,7 @@ public class TimeController : MonoBehaviour
 	{
 		tinter = GameObject.Find ("TimeTint").GetComponent <tk2dSprite> ();
 		audioCont = GameObject.Find ("&MainController").GetComponent <AudioController> ();
+		dataCont = GameObject.Find ("&MainController").GetComponent <DataController> ();
 		lb = GameObject.Find ("&MainController").GetComponent <Leaderboard> ();
 		scoreCont = GameObject.Find ("Score").GetComponent <ScoreController> ();
 		butterfly = GameObject.Find ("Butterfly").GetComponent <ButterflyBehavior> ();

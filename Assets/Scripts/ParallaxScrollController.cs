@@ -50,6 +50,8 @@ public class ParallaxScrollController : MonoBehaviour
 		ButterflyBehavior butterfly;
 		// The firefly controller
 		FireflyBehavior firefly;
+		//
+		DataController dataCont;
 		
 		#endregion
 		
@@ -218,10 +220,13 @@ public class ParallaxScrollController : MonoBehaviour
 		if (activeOrnament == butterflyParent)
 		{
 			butterfly.SetIsInMotion (true);
+			dataCont.IncrementButterfliesSeen (1);
 		}
 		else if (activeOrnament == fireflyParent)
 		{
 			firefly.SetIsInMotion (true);
+			if (firefly.gameObject.renderer.enabled)
+				dataCont.IncrementFirefliesSeen (1);
 		}
 	}
 	
@@ -327,6 +332,7 @@ public class ParallaxScrollController : MonoBehaviour
 		}
 		butterfly = GameObject.Find ("Butterfly").GetComponent <ButterflyBehavior> ();
 		firefly = GameObject.Find ("Firefly").GetComponent <FireflyBehavior> ();
+		dataCont = GameObject.Find ("&MainController").GetComponent <DataController> ();
 	}
 	
 	#endregion

@@ -13,6 +13,7 @@
 
 using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 
 public class MainMenuController : MonoBehaviour 
@@ -46,6 +47,8 @@ public class MainMenuController : MonoBehaviour
 		public Transform transitionDropParent;
 		//
 		public float transitionDropYTarget;
+		// The version numner
+		public Text versionInfoText;
 	
 		#endregion
 	
@@ -338,6 +341,7 @@ public class MainMenuController : MonoBehaviour
 			creditsButton.gameObject.SetActive (true);
 			facebookButton.gameObject.SetActive (true);
 			twitterButton.gameObject.SetActive (true);
+			versionInfoText.enabled = true;
 			
 			// Start dropping the clouds
 			if (cloudsParentTransform.position.y != 0) 
@@ -501,6 +505,7 @@ public class MainMenuController : MonoBehaviour
 		highlighterRend.enabled = false;
 		highlighterCapRend.enabled = false;
 		creditsButton.gameObject.SetActive (false);
+		versionInfoText.enabled = false;
 		
 		// Turn all of the main menu renderers off
 		foreach (Renderer r in mainMenuRenderers)
@@ -555,6 +560,7 @@ public class MainMenuController : MonoBehaviour
 		twitterButton.gameObject.SetActive (true);
 		highlighterRend.enabled = true;
 		highlighterCapRend.enabled = true;
+		versionInfoText.enabled = true;
 		
 		SetButtonsToInactiveColor ();
 		startButtonSprite.color = Color.white;
