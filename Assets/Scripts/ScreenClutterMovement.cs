@@ -103,7 +103,7 @@ public class ScreenClutterMovement : MonoBehaviour
 		int randInt = Random.Range (0, trans.Length);
 		activeTrans = trans [randInt];
 		targetPosition = targetPositions [randInt];
-		returnPosition = activeTrans.position;
+		returnPosition = activeTrans.localPosition;
 		dataCont.IncrementAnimalsSeen (1);
 		
 		// Set a random sprite
@@ -160,6 +160,10 @@ public class ScreenClutterMovement : MonoBehaviour
 	private void AssignVariables ()
 	{
 		dataCont = GameObject.Find ("&MainController").GetComponent <DataController> ();
+		for (int i = 0; i < targetPositions.Length; i++)
+		{
+			targetPositions [i] = new Vector3 (targetPositions [i].x, targetPositions [i].y, trans [i].position.z);
+		}
 	}
 	
 	#endregion

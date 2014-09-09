@@ -13,6 +13,7 @@
 
 using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 
 public class AudioController : MonoBehaviour 
@@ -43,6 +44,8 @@ public class AudioController : MonoBehaviour
 		public float defaultButtonSourceVolume = 0.919f;
 		// The default volume for the drumroll source
 		public float defaultDrumrollSourceVolume = 0.919f;
+		//
+		public Image volumeOffImg;
 			
 		#endregion
 	
@@ -435,6 +438,25 @@ public class AudioController : MonoBehaviour
 	public void SetSEVolume (float f)
 	{
 		masterSEVolumeLevel = f;
+	}
+	
+	
+	//
+	//
+	public void SwitchVolume ()
+	{
+		if (masterSEVolumeLevel > 0.1f)
+		{
+			masterSEVolumeLevel = 0;
+			masterMusicVolumeLevel = 0;	
+			volumeOffImg.enabled = true;
+		}
+		else
+		{
+			masterSEVolumeLevel = 1;
+			masterMusicVolumeLevel = 1;	
+			volumeOffImg.enabled = false;
+		}
 	}
 	
 	

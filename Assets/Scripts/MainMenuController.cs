@@ -47,9 +47,20 @@ public class MainMenuController : MonoBehaviour
 		public Transform transitionDropParent;
 		//
 		public float transitionDropYTarget;
-		// The version numner
-		public Text versionInfoText;
-	
+		//
+		public RectTransform optionsFoldout;
+		public GameObject optionsMasterButton;
+		public float optionsFoldoutOnscreenPosition = -211.81f;
+		//
+		public RectTransform creditsScrollRect;
+		public GameObject scrollThing;
+		public float csrOnscreenPositionY;
+		//
+		public Transform buttonNavParent;
+		//
+		public Transform ospinner1;
+		public Transform ospinner2;
+		
 		#endregion
 	
 		#region Scripts
@@ -115,6 +126,14 @@ public class MainMenuController : MonoBehaviour
 		private BounceObject cloudsBounce;
 		//
 		private bool isInMainMenu = true;
+		float optionsFoldoutOffscreenPosition = 0;
+		bool optionsFoldoutIsShowing = false;
+		bool creditsScrollerIsShowing = false;
+		float csrOffscreenPositionY;
+		bool bnpIsOnScreen = false;
+		//
+		private Vector3 title1ResetPos;
+		private Vector3 title2ResetPos;
 	
 		#endregion
 	
@@ -132,6 +151,11 @@ public class MainMenuController : MonoBehaviour
 		
 		// Set button sizes
 		SetButtonSizes ();
+		
+		//
+		MoveOptionsFoldout ();
+		MoveCreditsScroller ();
+		MoveButtonNavParent ();
 		
 		// Move the highlighter
 		if (!sceneIsTransitioning) MoveHighlighter ();
@@ -176,7 +200,7 @@ public class MainMenuController : MonoBehaviour
 	// Called every frame from Update ()
 	void MoveHighlighter ()
 	{
-		highlighter.position = Vector3.Lerp (highlighter.position, highlighterTargetPosition, Time.deltaTime * 15.0f);
+		highlighter.localPosition = Vector3.Lerp (highlighter.localPosition, highlighterTargetPosition, Time.deltaTime * 15.0f);
 	}
 	
 	
@@ -213,6 +237,19 @@ public class MainMenuController : MonoBehaviour
 				// React
 				ButtonTouched (inputCont.GetTouchRaycastObject ());
 			}
+			
+			if ((Input.mousePosition.x < (Screen.width / 2)) && optionsFoldoutIsShowing)
+			{
+				creditsScrollerIsShowing = false;
+				scrollThing.SetActive (false);
+				scrollThing.transform.parent.gameObject.GetComponent <ScrollRect> ().StopMovement ();
+				scrollThing.transform.localPosition = new Vector3 (scrollThing.transform.localPosition.x, -15.81f, scrollThing.transform.localPosition.z);
+				//optionsFoldout.gameObject.SetActive (true);
+				bnpIsOnScreen = true;
+				optionsFoldoutIsShowing = false;
+				optionsMasterButton.SetActive (true);
+				optionsFoldout.gameObject.SetActive (true);
+			}
 		}
 	}
 	
@@ -239,7 +276,7 @@ public class MainMenuController : MonoBehaviour
 				else
 				{
 					currentActiveButton = 1;
-					highlighterTargetPosition = new Vector3 (highlighter.position.x, optionsHighlighterYPos, highlighter.position.z);
+					highlighterTargetPosition = new Vector3 (highlighter.localPosition.x, optionsHighlighterYPos, highlighter.localPosition.z);
 					SetButtonsToInactiveColor ();
 					optionsButtonSprite.color = Color.white;
 				}
@@ -252,6 +289,8 @@ public class MainMenuController : MonoBehaviour
 				if (currentActiveButton == 2)
 				{
 					audioCont.PlaySound ("Button");
+					optionsFoldoutIsShowing = false;
+					bnpIsOnScreen = false;
 					BeginTransitionToScene ();
 				}
 				else
@@ -259,7 +298,7 @@ public class MainMenuController : MonoBehaviour
 					currentActiveButton = 2;
 					SetButtonsToInactiveColor ();
 					hsButtonSprite.color = Color.white;
-					highlighterTargetPosition = new Vector3 (highlighter.position.x, hsHighlighterYPos, highlighter.position.z);
+					highlighterTargetPosition = new Vector3 (highlighter.localPosition.x, hsHighlighterYPos, highlighter.localPosition.z);
 				}
 				
 			break;
@@ -270,6 +309,8 @@ public class MainMenuController : MonoBehaviour
 				if (currentActiveButton == 3)
 				{
 					audioCont.PlaySound ("Button");
+					optionsFoldoutIsShowing = false;
+					bnpIsOnScreen = false;
 					BeginTransitionToScene ();
 				}
 				else
@@ -277,7 +318,7 @@ public class MainMenuController : MonoBehaviour
 					currentActiveButton = 3;
 					SetButtonsToInactiveColor ();
 					startButtonSprite.color = Color.white;
-					highlighterTargetPosition = new Vector3 (highlighter.position.x, startHighlighterYPos, highlighter.position.z);
+					highlighterTargetPosition = new Vector3 (highlighter.localPosition.x, startHighlighterYPos, highlighter.localPosition.z);
 				}
 				
 			break;
@@ -295,22 +336,14 @@ public class MainMenuController : MonoBehaviour
 					currentActiveButton = 5;
 					SetButtonsToInactiveColor ();
 					creditsButtonSprite.color = Color.white;
-					highlighterTargetPosition = new Vector3 (highlighter.position.x, creditsHighlighterYPos, highlighter.position.z);
+					highlighterTargetPosition = new Vector3 (highlighter.localPosition.x, creditsHighlighterYPos, highlighter.localPosition.z);
 				}
 				
 			break;
-			
-			// If we touched the Facebook share button
-			case "FacebookButton":
-				Application.OpenURL ("https://www.facebook.com/pages/Super-Sloth/272901039540746");
-			break;
-			
-			// If we touched the Twitter share button
-			case "TwitterButton":
-				Application.OpenURL ("https://twitter.com/SuperSlothGame");
-			break;
 		}
 	}
+	public void FBButtonPressed () { Application.OpenURL ("https://www.facebook.com/pages/Super-Sloth/272901039540746"); }
+	public void TwitterButtonPressed () { Application.OpenURL ("https://twitter.com/SuperSlothGame"); }
 	
 	
 	// Sets the colors of all of the buttons to the inactive color
@@ -321,6 +354,76 @@ public class MainMenuController : MonoBehaviour
 		hsButtonSprite.color = buttonInactiveColor;
 		optionsButtonSprite.color = buttonInactiveColor;
 		creditsButtonSprite.color = buttonInactiveColor;
+	}
+	
+	
+	//
+	//
+	void MoveButtonNavParent ()
+	{
+		if (bnpIsOnScreen)
+		{
+			buttonNavParent.localPosition = Vector3.Lerp (buttonNavParent.localPosition, new Vector3 (0, buttonNavParent.localPosition.y, buttonNavParent.localPosition.z), Time.deltaTime * 10.0f);
+		}
+		else
+		{
+			buttonNavParent.localPosition = Vector3.Lerp (buttonNavParent.localPosition, new Vector3 (10f, buttonNavParent.localPosition.y, buttonNavParent.localPosition.z), Time.deltaTime * 10.0f);
+		}
+	}
+	
+	
+	//
+	//
+	public void OptionsFoldoutButtonPressed ()
+	{
+		// Flip the showing bool
+		optionsFoldoutIsShowing = !optionsFoldoutIsShowing;
+	}
+	
+	
+	//
+	//
+	public void CreditsScrollButtonPressed ()
+	{
+		// Flip the showing bool
+		creditsScrollerIsShowing = true;
+		bnpIsOnScreen = false;
+		scrollThing.SetActive (true);
+		optionsFoldout.gameObject.SetActive (false);
+		optionsMasterButton.SetActive (false);
+	}	
+	
+	
+	//
+	//
+	void MoveOptionsFoldout ()
+	{	
+		float yV = optionsFoldoutOffscreenPosition; if (optionsFoldoutIsShowing) yV = optionsFoldoutOnscreenPosition;
+		Vector3 targ = new Vector3 (optionsFoldout.localPosition.x, yV, optionsFoldout.localPosition.z);
+		optionsFoldout.localPosition = Vector3.Lerp (optionsFoldout.localPosition, targ, Time.deltaTime * 15.0f);
+		
+		//
+		if (optionsFoldoutIsShowing)
+		{
+			ospinner1.Rotate (Vector3.forward * Time.deltaTime * 50);
+			ospinner2.Rotate (Vector3.back * Time.deltaTime * 50);
+		}
+	}
+	
+	
+	//
+	//
+	void MoveCreditsScroller ()
+	{	
+		float yV = csrOffscreenPositionY; if (creditsScrollerIsShowing) yV = csrOnscreenPositionY;
+		Vector3 targ = new Vector3 (creditsScrollRect.localPosition.x, yV, creditsScrollRect.localPosition.z);
+		creditsScrollRect.localPosition = Vector3.Lerp (creditsScrollRect.localPosition, targ, Time.deltaTime * 10.0f);
+		
+		//
+		if (creditsScrollerIsShowing && scrollThing.activeInHierarchy && !Input.GetMouseButton (0))
+		{
+			scrollThing.transform.Translate (Vector3.up * 0.7f * Time.deltaTime);
+		}
 	}
 	
 	#endregion 
@@ -335,13 +438,13 @@ public class MainMenuController : MonoBehaviour
 		// If we've animated the movement, we can activate the buttons n shit
 		if (didAnimate)
 		{
-			settingsButton.gameObject.SetActive (true);
+			//settingsButton.gameObject.SetActive (true);
 			scoresButton.gameObject.SetActive (true);
 			playButton.gameObject.SetActive (true);
-			creditsButton.gameObject.SetActive (true);
+			//creditsButton.gameObject.SetActive (true);
+			optionsMasterButton.SetActive (true);
 			facebookButton.gameObject.SetActive (true);
 			twitterButton.gameObject.SetActive (true);
-			versionInfoText.enabled = true;
 			
 			// Start dropping the clouds
 			if (cloudsParentTransform.position.y != 0) 
@@ -397,9 +500,10 @@ public class MainMenuController : MonoBehaviour
 	// Called from TransitionFromScene ()
 	void SetSceneIsDoneTransitioning ()
 	{
+		bnpIsOnScreen = true;
 		highlighterRend.enabled = true;
 		highlighterCapRend.enabled = true;
-		highlighter.position = highlighterTargetPosition;
+		//highlighter.position = highlighterTargetPosition;
 		sceneIsTransitioning = false;
 	}
 	
@@ -497,15 +601,20 @@ public class MainMenuController : MonoBehaviour
 		// Reset bools
 		isInMainMenu = false;
 		sceneIsTransitioning = false;
-		settingsButton.gameObject.SetActive (false);
+		//settingsButton.gameObject.SetActive (false);
 		scoresButton.gameObject.SetActive (false);
 		playButton.gameObject.SetActive (false);
 		facebookButton.gameObject.SetActive (false);
 		twitterButton.gameObject.SetActive (false);
+		optionsMasterButton.SetActive (false);
 		highlighterRend.enabled = false;
 		highlighterCapRend.enabled = false;
-		creditsButton.gameObject.SetActive (false);
-		versionInfoText.enabled = false;
+		//creditsButton.gameObject.SetActive (false);
+		bnpIsOnScreen = false;
+		
+		//
+		mainTitleTransform.localPosition = title1ResetPos;
+		superTitleTransform.localPosition = title2ResetPos;
 		
 		// Turn all of the main menu renderers off
 		foreach (Renderer r in mainMenuRenderers)
@@ -552,15 +661,16 @@ public class MainMenuController : MonoBehaviour
 	{ 
 		didAnimate = true; 
 		StartCoroutine ("DropClouds");
-		settingsButton.gameObject.SetActive (true);
+		//settingsButton.gameObject.SetActive (true);
 		scoresButton.gameObject.SetActive (true);
 		playButton.gameObject.SetActive (true);
-		creditsButton.gameObject.SetActive (true);
+		//creditsButton.gameObject.SetActive (true);
 		facebookButton.gameObject.SetActive (true);
 		twitterButton.gameObject.SetActive (true);
+		optionsMasterButton.SetActive (true);
 		highlighterRend.enabled = true;
 		highlighterCapRend.enabled = true;
-		versionInfoText.enabled = true;
+		bnpIsOnScreen = true;
 		
 		SetButtonsToInactiveColor ();
 		startButtonSprite.color = Color.white;
@@ -596,7 +706,12 @@ public class MainMenuController : MonoBehaviour
 		cloudsParentTransform = GameObject.Find ("Cloudtops").transform;
 		grassParentTransform = GameObject.Find ("*GrassParent").transform;
 		cloudsBounce = GameObject.Find ("Cloudtops").GetComponent <BounceObject> ();
-		highlighterTargetPosition = new Vector3 (highlighter.position.x, startHighlighterYPos, highlighter.position.z);
+		highlighterTargetPosition = new Vector3 (highlighter.localPosition.x, startHighlighterYPos, highlighter.localPosition.z);
+		optionsFoldoutOffscreenPosition = optionsFoldout.localPosition.y;
+		csrOffscreenPositionY = creditsScrollRect.localPosition.y;
+		scrollThing.transform.localPosition = new Vector3 (scrollThing.transform.localPosition.x, -15.81f, scrollThing.transform.localPosition.z);
+		title1ResetPos = mainTitleTransform.localPosition;
+		title2ResetPos = superTitleTransform.localPosition;
 		
 		// Sprites
 		startButtonSprite = playButton.gameObject.GetComponent <tk2dSprite> ();

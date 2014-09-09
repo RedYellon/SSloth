@@ -27,11 +27,21 @@ public class HighScoreSceneController : MonoBehaviour
 		// The collection of static rendererd for this scene
 		public Renderer [] staticRends;
 		// The list of score slots
-		public TextMesh [] highScoreSlots;
+		public Text [] highScoreSlots;
 		// The view leaderboards button
 		public GameObject leaderboardsButton;
+		// The tab buttons
+		public GameObject statsTabButton;
+		public GameObject scoresTabButton;
+		public GameObject leaderboardsTabButton;
+		// The objects that are enabled/disabled for each tab
+		public GameObject [] statsObjects;
+		public GameObject [] scoresObjects;
+		public GameObject [] leaderboardsObjects;
 		//
-		 
+		public ParticleSystem dustHitParticles;
+	
+	
 			#region Stats
 			
 			public Text timesPlayedNum;
@@ -41,7 +51,6 @@ public class HighScoreSceneController : MonoBehaviour
 			public Text totalTimeNum;
 			public Text jumpNum;
 			public Text doubleJumpNum;
-			public Text landNum;
 			public Text slothsLaunchedNum;
 			public Text mudSplatteredNum;
 			public Text sadsHitNum;
@@ -93,8 +102,16 @@ public class HighScoreSceneController : MonoBehaviour
 		//
 		private bool isFadingInResetMask = false;
 		private bool isFadingOutResetMask = false;
+		// The currently selected tab
+		private string currentlySelectedTab = "stats";
+		// The heights of the buttons
+		float buttonTabEnabledHeight = 37.42f;
+		float buttonTabDisabledHeight = 30f;
+		// The colors of the tab buttons
+		Color buttonTabEnabledColor;
+		Color buttonTabDisabledColor;
 	
-		#endregion
+	#endregion
 	
 	#endregion
 	
@@ -162,6 +179,16 @@ public class HighScoreSceneController : MonoBehaviour
 	
 	//
 	//
+	public void BackButtonPressed ()
+	{
+		transitionCont.ChangeToScene (0);
+		audioCont.PlayButtonPressSound ();
+		StartCoroutine ("Rise");
+	}
+	
+	
+	//
+	//
 	void FadeInResetMask ()
 	{
 		resetMaskRend.material.color = Color.Lerp (resetMaskRend.material.color, new Color (resetMaskRend.material.color.r, resetMaskRend.material.color.g, resetMaskRend.material.color.b, 0.8f), Time.deltaTime * 15.0f);
@@ -179,6 +206,50 @@ public class HighScoreSceneController : MonoBehaviour
 	
 	
 	#region Scene Switching
+	
+	//
+	//
+	public void SetTab (string currentTab)
+	{
+		// Set the tab
+		if (currentlySelectedTab == currentTab)
+			return;
+		currentlySelectedTab = currentTab;
+		
+		// Turn off all buttons
+		statsTabButton.GetComponent <Image> ().color = buttonTabDisabledColor;
+		statsTabButton.GetComponent <RectTransform> ().sizeDelta = new Vector2 (statsTabButton.GetComponent <RectTransform> ().sizeDelta.x, buttonTabDisabledHeight);
+		scoresTabButton.GetComponent <Image> ().color = buttonTabDisabledColor;
+		scoresTabButton.GetComponent <RectTransform> ().sizeDelta = new Vector2 (scoresTabButton.GetComponent <RectTransform> ().sizeDelta.x, buttonTabDisabledHeight);
+		leaderboardsTabButton.GetComponent <Image> ().color = buttonTabDisabledColor;
+		leaderboardsTabButton.GetComponent <RectTransform> ().sizeDelta = new Vector2 (leaderboardsTabButton.GetComponent <RectTransform> ().sizeDelta.x, buttonTabDisabledHeight);
+		
+		// Turn off all renderers
+		foreach (GameObject o in statsObjects) { o.SetActive (false); }
+		foreach (GameObject o in scoresObjects) { o.SetActive (false); }
+		foreach (GameObject o in leaderboardsObjects) { o.SetActive (false); }
+		
+		// Depending on the tab button we press
+		switch (currentlySelectedTab)
+		{
+			case "stats":
+				statsTabButton.GetComponent <Image> ().color = buttonTabEnabledColor;
+				statsTabButton.GetComponent <RectTransform> ().sizeDelta = new Vector2 (statsTabButton.GetComponent <RectTransform> ().sizeDelta.x, buttonTabEnabledHeight);
+				foreach (GameObject o in statsObjects) { o.SetActive (true); }
+			break;
+			case "scores":
+				scoresTabButton.GetComponent <Image> ().color = buttonTabEnabledColor;
+				scoresTabButton.GetComponent <RectTransform> ().sizeDelta = new Vector2 (scoresTabButton.GetComponent <RectTransform> ().sizeDelta.x, buttonTabEnabledHeight);
+				foreach (GameObject o in scoresObjects) { o.SetActive (true); }
+			break;
+			case "leaderboard":
+				leaderboardsTabButton.GetComponent <Image> ().color = buttonTabEnabledColor;
+				leaderboardsTabButton.GetComponent <RectTransform> ().sizeDelta = new Vector2 (leaderboardsTabButton.GetComponent <RectTransform> ().sizeDelta.x, buttonTabEnabledHeight);
+				foreach (GameObject o in leaderboardsObjects) { o.SetActive (true); }
+			break;
+		}	
+	}
+	
 	
 	//
 	//
@@ -210,6 +281,7 @@ public class HighScoreSceneController : MonoBehaviour
 		// Now that the transform parent is out of the way, we can cleanup the scene
 		transitionDropSpeed = 0;
 		bounce.Bounce ();
+		dustHitParticles.Play ();
 		isTransitioning = false;
 	}
 	
@@ -272,7 +344,10 @@ public class HighScoreSceneController : MonoBehaviour
 		int [] highScores = dataCont.GetHighScores ();
 		for (int i = 0; i < 10; i++)
 		{
-			highScoreSlots [i].text = highScores [i].ToString ();
+			if (i >= 9)
+				highScoreSlots [i].text = (i + 1).ToString () + ")\t" + highScores [i].ToString ();
+			else
+				highScoreSlots [i].text = (i + 1).ToString () + ")\t\t" + highScores [i].ToString ();
 		}
 	}
 	
@@ -302,7 +377,6 @@ public class HighScoreSceneController : MonoBehaviour
 		totalScoreNum.text = dataCont.GetTotalScoreItemUsable ().ToString ();
 		jumpNum.text = dataCont.GetJumps ().ToString ();
 		doubleJumpNum.text = dataCont.GetDoubleJumps ().ToString ();
-		landNum.text = dataCont.GetLandings ().ToString ();
 		slothsLaunchedNum.text = dataCont.GetAngryPlatsHit ().ToString ();
 		mudSplatteredNum.text = dataCont.GetDirtyPlatsHit ().ToString ();
 		sadsHitNum.text = dataCont.GetSadPlatsHit ().ToString ();
@@ -336,6 +410,8 @@ public class HighScoreSceneController : MonoBehaviour
 		lb = gameObject.GetComponent <Leaderboard> ();
 		resetMaskRend = GameObject.Find ("ScreenMask").renderer;
 		transitionCont = GetComponent <MenuBackgroundTransitionController> ();
+		buttonTabEnabledColor = statsTabButton.GetComponent <Image> ().color;
+		buttonTabDisabledColor = scoresTabButton.GetComponent <Image> ().color;
 	}
 	
 	#endregion

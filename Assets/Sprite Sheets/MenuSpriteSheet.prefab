@@ -63,7 +63,7 @@ MonoBehaviour:
   atlasWidth: 1024
   atlasHeight: 2048
   forceSquareAtlas: 0
-  atlasWastage: 17.4338341
+  atlasWastage: 13.8630867
   allowMultipleAtlases: 0
   removeDuplicates: 1
   textureParams:
@@ -276,7 +276,7 @@ MonoBehaviour:
     disableTrimming: 0
     additive: 0
     scale: {x: 1, y: 1, z: 1}
-    texture: {fileID: 2800000, guid: c687ae1774f4d4af9a9cd664e6745994, type: 3}
+    texture: {fileID: 2800000, guid: b4bc9979264514275825f253d3b4fff5, type: 3}
     materialId: 0
     anchor: 4
     anchorX: 0
@@ -317,7 +317,7 @@ MonoBehaviour:
     disableTrimming: 0
     additive: 0
     scale: {x: 1, y: 1, z: 1}
-    texture: {fileID: 2800000, guid: 5e3f7fc6c3878444481218be98deb061, type: 3}
+    texture: {fileID: 2800000, guid: 7f72929d0088544de98c9e26ca03c68f, type: 3}
     materialId: 0
     anchor: 4
     anchorX: 0
@@ -600,11 +600,11 @@ MonoBehaviour:
     colliderSmoothSphereCollisions: 0
     colliderColor: 0
     attachPoints: []
-  - name: 
+  - name: Button_Star_new
     disableTrimming: 0
     additive: 0
     scale: {x: 1, y: 1, z: 1}
-    texture: {fileID: 0}
+    texture: {fileID: 2800000, guid: 62abd618f527c4f419c21f40debb0459, type: 3}
     materialId: 0
     anchor: 4
     anchorX: 0
@@ -641,11 +641,11 @@ MonoBehaviour:
     colliderSmoothSphereCollisions: 0
     colliderColor: 0
     attachPoints: []
-  - name: 
+  - name: scoresAndStatsButton
     disableTrimming: 0
     additive: 0
     scale: {x: 1, y: 1, z: 1}
-    texture: {fileID: 0}
+    texture: {fileID: 2800000, guid: fba38ba9c21924eae9520b526a80dd33, type: 3}
     materialId: 0
     anchor: 4
     anchorX: 0
@@ -682,11 +682,11 @@ MonoBehaviour:
     colliderSmoothSphereCollisions: 0
     colliderColor: 0
     attachPoints: []
-  - name: 
+  - name: backMenuButtonNew
     disableTrimming: 0
     additive: 0
     scale: {x: 1, y: 1, z: 1}
-    texture: {fileID: 0}
+    texture: {fileID: 2800000, guid: 885742e2408bc4c00ad54096f5e8e1f7, type: 3}
     materialId: 0
     anchor: 4
     anchorX: 0

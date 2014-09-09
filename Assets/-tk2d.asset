@@ -713,9 +713,9 @@ MonoBehaviour:
     - Button_Credits_resized
     - Button_Menu_resized
     - Button_Options_resized
-    - 
-    - 
-    - 
+    - Button_Star_new
+    - scoresAndStatsButton
+    - backMenuButtonNew
     - 
     - 
     - 
@@ -728,17 +728,17 @@ MonoBehaviour:
     - 155e40e2df1824c1db9a6ecf90e0c737
     - 1de0b151a821f4545af79d2c70ce20d3
     - 5e0c5246838f747a8b93ec9e44b27164
-    - c687ae1774f4d4af9a9cd664e6745994
-    - 5e3f7fc6c3878444481218be98deb061
+    - b4bc9979264514275825f253d3b4fff5
+    - 7f72929d0088544de98c9e26ca03c68f
     - eccebddeaded147fbb7d09870275c426
     - cfd9fd85ca2db43efbaf43266045c6ac
     - 13a4607806b4949ce895aa776948a9f5
     - 2ec6ae1da5a7c4dcabef6785f40aed6b
     - 35250fab5a8514ab7b88c041710e4e62
     - 97e20b89a77e54f82ad0934f65b2b457
-    - 
-    - 
-    - 
+    - 62abd618f527c4f419c21f40debb0459
+    - fba38ba9c21924eae9520b526a80dd33
+    - 885742e2408bc4c00ad54096f5e8e1f7
     - 
     - 
     - 
@@ -751,17 +751,17 @@ MonoBehaviour:
     - 1401803726
     - 1401803898
     - 1401803772
-    - 1393443078
-    - 1393443136
+    - 1409861657
+    - 1409861642
     - 1401411053
     - 1401803830
-    - 1401893916
+    - 1409848605
     - 1401894060
     - 1401893983
     - 1401893951
-    - 0
-    - 0
-    - 0
+    - 1409861423
+    - 1409862050
+    - 1409927150
     - 0
     - 0
     - 0
