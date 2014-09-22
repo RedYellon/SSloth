@@ -5,7 +5,7 @@
  	www.michaeljohnstephens.com
  	
  	Created:		February 12, 2014
- 	Last Edited:	June 8, 2014
+ 	Last Edited:	September 13, 2014
  	
  	Controls the player.
 */
@@ -36,7 +36,7 @@ public class PlayerController : MonoBehaviour
 		public float landHardVelocityGate = 28f;
 		// How quickly the sloth sprite rotates during a double jump
 		public float doubleJumpRotationSpeed = 800;
-		//
+		// Used to position the gui sloth on the death screen
 		public Transform guiTransParent;
 		public Vector3 guiLocalPos;
 		
@@ -152,6 +152,9 @@ public class PlayerController : MonoBehaviour
 		private Vector3 doubleJumpEffectLocalPosition;
 		//
 		private int playTimeAtStart = 0;
+		private float _hangtimeStartTime = 0;
+		private float _maxHangtimeThisRun = 0;
+		private float _peakAirThisRun = 0;
 	
 		#endregion
 	
@@ -266,6 +269,7 @@ public class PlayerController : MonoBehaviour
 		{
 			canLand = true;
 			isOnTheWayUp = false;
+			_peakAirThisRun = Mathf.Max (_peakAirThisRun, (trans.position.y * 2));
 			
 			if (isLaunchingUp)
 			{
@@ -378,6 +382,10 @@ public class PlayerController : MonoBehaviour
 		}
 		
 		//
+		float hangtime = Time.time - _hangtimeStartTime;
+		_maxHangtimeThisRun = Mathf.Max (_maxHangtimeThisRun, hangtime);
+		
+		//
 		timesLanded ++;
 		spriteTrans.rotation = Quaternion.Euler (Vector3.zero);
 		dataCont.IncrementNumberOfPlatsHit ();
@@ -471,10 +479,6 @@ public class PlayerController : MonoBehaviour
 		// Play the jump sound effect
 		audioCont.PlaySound ("Jump");
 		timesJumped ++;
-		//doubleJumpEffect.transform.parent = trans;
-		///doubleJumpEffect.transform.localPosition = doubleJumpEffectLocalPosition;
-		//doubleJumpEffect.Play ();
-		//doubleJumpEffect.transform.parent = null;
 		
 		// The sloth is now in the air
 		fallingWithPlat = null;
@@ -487,6 +491,7 @@ public class PlayerController : MonoBehaviour
 		canDoubleJump = true;
 		isHardLand = false;
 		platformManager.DeactivateDirtySlowdown ();
+		_hangtimeStartTime = Time.time;
 		
 		// We want to stop the walking animation
 		CancelInvoke ("AnimateWalking");
@@ -513,6 +518,7 @@ public class PlayerController : MonoBehaviour
 		isOnTheWayUp = true;
 		isLaunchingUp = true;
 		angryPlatsHit ++;
+		_hangtimeStartTime = Time.time;
 		
 		// We want to stop the walking animation
 		CancelInvoke ("AnimateWalking");
@@ -588,7 +594,7 @@ public class PlayerController : MonoBehaviour
 	// Called from GameEnded ()
 	void GuiSlothAnimate ()
 	{
-		trans.localPosition = guiLocalPos;
+		//trans.localPosition = guiLocalPos;
 		if (guiSlothAnimateBool)
 		{
 			sprite.SetSprite ("slothIdle1"); 
@@ -668,8 +674,10 @@ public class PlayerController : MonoBehaviour
 		trans.parent = null;
 		trans.position = startGamePos;
 		spriteTrans.rotation = Quaternion.Euler (Vector3.zero);
+		spriteTrans.localScale = new Vector3 (1, 1, 1);
 		trans.position = beginningPosition;
 		playTimeAtStart = (int) Time.time;
+		_hangtimeStartTime = Time.time;
 		
 		// If the player had a high score, apply the shades 8)
 		ApplyShadesIfNeeded ();
@@ -729,20 +737,30 @@ public class PlayerController : MonoBehaviour
 		}
 	}
 	
+	
+	// Disables death screen shades when the user returns to the main menu
+	// Called from BeginMenuReturnReceiver () in DeathScreen.cs
+	public void UnApplyShadesFromDeathScreen ()
+	{
+		itemCont.SetHeadSpriteActive (false);
+	}
+	
 	#endregion
 	
 	
 	#region Cleanup
 	
 	// Ends the current game
-	//
+	// Called from OnRoundEnd event trigger
 	void GameEnded ()
 	{
 		// Set proper transform values
 		spriteTrans.rotation = Quaternion.Euler (Vector3.zero);
+		spriteTrans.localScale = new Vector3 (3.5f, 3.5f, 3.5f);
 		trans.parent = guiTransParent;
 		trans.localPosition = guiLocalPos;
 		trans.position = new Vector3 (trans.position.x, deathYLevel, trans.position.y);
+		trans.localPosition = guiLocalPos;
 		SubmitStats ();
 		
 		// Play the game over sound effect and duck the music
@@ -766,19 +784,25 @@ public class PlayerController : MonoBehaviour
 		
 		// Reset animations
 		CancelInvoke ("AnimateWalking");
-		sprite.SetSprite ("slothJump1");
+		sprite.SetSprite ("slothIdle1");
 		itemCont.SetFrame (3);
 		InvokeRepeating ("GuiSlothAnimate", 0.0f, 0.4f);
 	}
 	
+	#endregion
+	
+	
+	#region Stats
 	
 	// Sends the stats to the data controller
-	//
+	// Called from GameEnded ()
 	void SubmitStats ()
 	{
 		// Calc play time
 		sessionPlayTime = (int) Time.time - playTimeAtStart;
 		dataCont.AddToSecondsPlayed (sessionPlayTime);
+		dataCont.CheckPeakAir (_peakAirThisRun);
+		dataCont.CheckMaxHangtime (_maxHangtimeThisRun);
 		
 		// Other stats
 		dataCont.IncrementJumps (timesJumped);
@@ -791,7 +815,7 @@ public class PlayerController : MonoBehaviour
 	
 	
 	// Resets the per-round stats
-	//
+	// Called from events OnBackToMainMenuFromGame & OnRoundRestart
 	void ResetStats ()
 	{
 		sessionPlayTime = 0;
@@ -801,6 +825,9 @@ public class PlayerController : MonoBehaviour
 		timesJumped = 0;
 		timesDoubleJumped = 0;
 		timesLanded = 0;
+		_peakAirThisRun = 0;
+		_maxHangtimeThisRun = 0;
+		_hangtimeStartTime = Time.time;
 	}
 	
 	#endregion

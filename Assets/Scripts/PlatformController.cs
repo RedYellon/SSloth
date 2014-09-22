@@ -20,6 +20,19 @@ public class PlatformController : MonoBehaviour
 	
 		#region Public
 		
+			#region Sprite Names
+			
+			public string dirtyPlatOffSprite = "PlatformDirtyOff";
+			public string dirtyPlatOnSprite = "PlatformDirtyOff";
+			public string angryPlatOffSprite = "PlatformDirtyOff";
+			public string angryPlatOnSprite = "PlatformDirtyOff";
+			public string sadPlatOffSprite = "PlatformDirtyOff";
+			public string sadPlatOnSprite = "PlatformDirtyOff";
+			public string starPlatOffSprite = "PlatformDirtyOff";
+			public string starPlatOnSprite = "PlatformDirtyOff";
+			
+			#endregion
+		
 		// The height of this platform
 		public float platformHeight = 0.46f;
 		// The width of this platform
@@ -168,16 +181,16 @@ public class PlatformController : MonoBehaviour
 		switch (type)
 		{
 			// Happy face (star)
-			case 1: faceImg.SetSprite ("platform_star_1"); break;
+			case 1: faceImg.SetSprite (starPlatOffSprite); break;
 			// Angry face
-			case 2: faceImg.SetSprite ("platform_Angry_1"); break;
+			case 2: faceImg.SetSprite (angryPlatOffSprite); break;
 			// Dirty face
 			case 3:
-				faceImg.SetSprite ("platform_Dirtynew_1");
+				faceImg.SetSprite (dirtyPlatOffSprite);
 				dirtyFly.SetActive (true);
 			break;
 			// Sad face
-			case 4: faceImg.SetSprite ("platform_Sad_1"); break;
+			case 4: faceImg.SetSprite (sadPlatOffSprite); break;
 		}
 	}
 	
@@ -202,21 +215,21 @@ public class PlatformController : MonoBehaviour
 			break;
 			// Happy (star) face
 			case 1:
-				faceImg.SetSprite ("platform_star_2");
+				faceImg.SetSprite (starPlatOnSprite);
 				audioCont.PlayLandSound ();
 				audioCont.PlayStarLandSound ();
 				Invoke ("ReturnToNormalcy", 0.4f);
 			break;
 			// Angry face
 			case 2:
-				faceImg.SetSprite ("platform_Angry_2");
+				faceImg.SetSprite (angryPlatOnSprite);
 				audioCont.PlayLandSound ();
 				audioCont.PlayAngryLandSound ();
 				Invoke ("ReturnToNormalcy", 0.4f);
 			break;
 			// Dirty face
 			case 3:
-				faceImg.SetSprite ("platform_Dirtynew_2");
+				faceImg.SetSprite (dirtyPlatOnSprite);
 				audioCont.PlayLandSound ();
 				audioCont.PlayDirtyLandSound ();
 				
@@ -231,7 +244,7 @@ public class PlatformController : MonoBehaviour
 			break;
 			// Sad face
 			case 4:
-				faceImg.SetSprite ("platform_Sad_2");
+				faceImg.SetSprite (sadPlatOnSprite);
 				audioCont.PlayLandSound ();
 				audioCont.PlaySadLandSound ();
 				Invoke ("BeginSadFall", 0.0f);

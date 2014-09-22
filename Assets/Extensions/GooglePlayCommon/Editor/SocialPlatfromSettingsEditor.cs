@@ -11,8 +11,8 @@ public class SocialPlatfromSettingsEditor : Editor {
 
 	
 
-	static GUIContent TConsumerKey   = new GUIContent("Consumer Key [?]:", "Twitter register app consumer key");
-	static GUIContent TConsumerSecret   = new GUIContent("Consumer Secret [?]:", "Twitter register app consumer secret");
+	static GUIContent TConsumerKey   = new GUIContent("API Key [?]:", "Twitter register app consumer key");
+	static GUIContent TConsumerSecret   = new GUIContent("API Secret [?]:", "Twitter register app consumer secret");
 
 
 	
@@ -98,11 +98,17 @@ public class SocialPlatfromSettingsEditor : Editor {
 		}
 	}
 
+	public static float Version {
+		get {
+			return System.Convert.ToSingle(DataVersion);
+		}
+	}
+
 
 
 	private void GeneralOptions() {
 		
-		
+
 		
 		if(!IsInstalled) {
 			EditorGUILayout.HelpBox("Install Required ", MessageType.Error);
@@ -123,6 +129,29 @@ public class SocialPlatfromSettingsEditor : Editor {
 		if(IsInstalled) {
 			if(!IsUpToDate) {
 				EditorGUILayout.HelpBox("Update Required \nResources version: " + DataVersion + " Plugin version: " + SocialPlatfromSettings.VERSION_NUMBER, MessageType.Warning);
+
+				if(Version <= 4.4f) {
+					EditorGUILayout.HelpBox("New version contains AndroidManifest.xml chnages, Please remove Assets/Plugins/Android/AndroidManifest.xml file before update or add manualy File Sharing Block from Assets/Plugins/StansAssets/Android/AndroidManifest.xml", MessageType.Warning);
+					
+					EditorGUILayout.BeginHorizontal();
+					EditorGUILayout.Space();
+					
+					if(GUILayout.Button("Remove AndroidManifest and Update to " + AndroidNativeSettings.VERSION_NUMBER,  GUILayout.Width(250))) {
+						
+						string file = "AndroidManifest.xml";
+						FileStaticAPI.DeleteFile(PluginsInstalationUtil.ANDROID_DESTANATION_PATH + file);
+						
+						PluginsInstalationUtil.Android_UpdatePlugin();
+						UpdateVersionInfo();
+					}
+					
+					
+					EditorGUILayout.Space();
+					EditorGUILayout.EndHorizontal();
+					EditorGUILayout.Space();
+				}
+
+
 				
 				
 				EditorGUILayout.BeginHorizontal();
@@ -141,6 +170,7 @@ public class SocialPlatfromSettingsEditor : Editor {
 				
 			} else {
 				EditorGUILayout.HelpBox("Mobile Social Plugin v" + SocialPlatfromSettings.VERSION_NUMBER + " is installed", MessageType.Info);
+				Actions();
 
 			}
 		}
@@ -151,11 +181,48 @@ public class SocialPlatfromSettingsEditor : Editor {
 	}
 
 
+	private void Actions() {
+		EditorGUILayout.Space();
+		SocialPlatfromSettings.Instance.ShowActions = EditorGUILayout.Foldout(SocialPlatfromSettings.Instance.ShowActions, "More Actions");
+		if(SocialPlatfromSettings.Instance.ShowActions) {
+			
+			if(!FileStaticAPI.IsFolderExists("Facebook")) {
+				GUI.enabled = false;
+			}	
+			
+			if(GUILayout.Button("Remove Facebook SDK",  GUILayout.Width(160))) {
+				
+				
+				bool result = EditorUtility.DisplayDialog(
+					"Removing Facebook SDK",
+					"Warning action can not be undone without reimporting the plugin",
+					"Remove",
+					"Cansel");
+				
+				if(result) {
+					FileStaticAPI.DeleteFolder(PluginsInstalationUtil.ANDROID_DESTANATION_PATH + "facebook");
+					FileStaticAPI.DeleteFolder("Facebook");
+					FileStaticAPI.DeleteFolder("Extensions/GooglePlayCommon/Social/Facebook");
+					FileStaticAPI.DeleteFile("Extensions/AndroidNative/xExample/Scripts/Social/FacebookAndroidUseExample.cs");
+					
+				}
+				
+			}
+			GUI.enabled = true;
+			
+		}
+	}
+
+
 	private static string newPermition = "";
 	public static void FacebookSettings() {
 		EditorGUILayout.HelpBox("Facebook Settings", MessageType.None);
 
-		SocialPlatfromSettings.Instance.showPermitions = EditorGUILayout.Foldout(SocialPlatfromSettings.Instance.showPermitions, "Permissions");
+		if (SocialPlatfromSettings.Instance.fb_scopes_list.Count == 0) {
+			SocialPlatfromSettings.Instance.AddDefaultScopes();
+		}
+
+		SocialPlatfromSettings.Instance.showPermitions = EditorGUILayout.Foldout(SocialPlatfromSettings.Instance.showPermitions, "Facebook Permissions");
 		if(SocialPlatfromSettings.Instance.showPermitions) {
 			foreach(string s in SocialPlatfromSettings.Instance.fb_scopes_list) {
 				EditorGUILayout.BeginVertical (GUI.skin.box);

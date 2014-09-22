@@ -1,0 +1,58 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 870ac8f5cd2144b87b54e16e1ef3e830, type: 3}
+  m_Name: UltimateMobileSettings
+  m_EditorClassIdentifier: 
+  IOSAdEdngine: 0
+  WP8AdEdngine: 0
+  IsInAppSettingsOpen: 0
+  IsInAppSettingsPlatfromsOpen: 1
+  IsInAppSettingsProductsOpen: 1
+  Leaderboards:
+  - id: 1.4lb
+    IsOpen: 0
+    IOSId: lb3
+    AndroidId: CgkInZaV_KAKEAIQAA
+  Achievements:
+  - id: 24hoursloth
+    IsOpen: 1
+    IsIncremental: 0
+    IOSId: sloth1
+    AndroidId: CgkInZaV_KAKEAIQAg
+  - id: trampolinesloth
+    IsOpen: 1
+    IsIncremental: 0
+    IOSId: sloth2
+    AndroidId: CgkInZaV_KAKEAIQAw
+  - id: starsloth
+    IsOpen: 1
+    IsIncremental: 0
+    IOSId: sloth3
+    AndroidId: CgkInZaV_KAKEAIQBA
+  - id: persistentsloth
+    IsOpen: 1
+    IsIncremental: 0
+    IOSId: sloth4
+    AndroidId: CgkInZaV_KAKEAIQBQ
+  - id: bisloth
+    IsOpen: 1
+    IsIncremental: 0
+    IOSId: sloth5
+    AndroidId: CgkInZaV_KAKEAIQBg
+  IsaAdvertisementSettingsOpen: 0
+  AdIOSSettings: 0
+  AdAndroidSettings: 0
+  AdWp8Settings: 0
+  IsGameServiceOpen: 0
+  IsLeaderBoardsOpen: 0
+  IsAchievmentsOpen: 0
+  IsMoreActionsOpen: 1
+  InAppProducts: []

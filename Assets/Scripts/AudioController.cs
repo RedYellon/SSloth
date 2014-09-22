@@ -5,7 +5,7 @@
  	www.michaeljohnstephens.com
  	
  	Created:		September 18, 2013
- 	Last Edited:	June 18, 2014
+ 	Last Edited:	September 12, 2014
  	
  	Contains methods for audio playback and manipulation.
 */
@@ -44,7 +44,7 @@ public class AudioController : MonoBehaviour
 		public float defaultButtonSourceVolume = 0.919f;
 		// The default volume for the drumroll source
 		public float defaultDrumrollSourceVolume = 0.919f;
-		//
+		// The image used to indicate the volume has been turned off
 		public Image volumeOffImg;
 			
 		#endregion
@@ -72,8 +72,16 @@ public class AudioController : MonoBehaviour
 		public AudioClip scoreMultiBlinkClip;
 		public AudioClip scoreAddingLoopClip;
 		public AudioClip scoreAddingLoopDoneClip;
+		public AudioClip scoreAddingLoopDoneHighClip;
 		public AudioClip scoreAddingStarsValueClip;
 		public AudioClip dirtyLandClip;
+		public AudioClip optionsPressedClip;
+		public AudioClip tabPressedClip;
+		public AudioClip optionsLandPressedClip;
+		public AudioClip dexterWhooClip;
+		public AudioClip whooshClip;
+		public AudioClip applauseClip;
+		public AudioClip shingClip;
 		// The happy sounds
 		public AudioClip [] happySounds;
 		// The angry sounds
@@ -402,11 +410,35 @@ public class AudioController : MonoBehaviour
 			case "ScoreRunnerDone":
 				clipp = scoreAddingLoopDoneClip;
 			break;
+			case "ScoreRunnerDoneHigh":
+				clipp = scoreAddingLoopDoneHighClip;
+			break;
 			case "ScoreRunnerStar":
 				clipp = scoreAddingStarsValueClip;
 			break;
 			case "DirtyLand":
 				clipp = dirtyLandClip;
+			break;
+			case "Options":
+				clipp = optionsPressedClip;
+			break;
+			case "Tab":
+				clipp = tabPressedClip;
+			break;
+			case "OptionsLand":
+				clipp = optionsLandPressedClip;
+			break;
+			case "Dexter":
+				clipp = dexterWhooClip;
+			break;
+			case "Whoosh":
+				clipp = whooshClip;
+			break;
+			case "Applause":
+				clipp = applauseClip;
+			break;
+			case "Shing":
+				clipp = shingClip;
 			break;
 		}
 		return clipp;

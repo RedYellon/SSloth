@@ -41,6 +41,10 @@ public class GPLeaderBoard  {
 	// PUBLIC METHODS
 	//--------------------------------------
 
+	public void UpdateName(string lName) {
+		_name = lName;
+	}
+
 
 	public List<GPScore> GetScoresList(GPBoardTimeSpan timeSpan, GPCollectionType collection) {
 		GPScoreCollection col = GlobalCollection;

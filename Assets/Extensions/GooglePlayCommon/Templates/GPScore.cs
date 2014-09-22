@@ -44,6 +44,10 @@ public class GPScore  {
 
 	}
 
+	public void UpdateScore(int vScore) {
+		_score = vScore;
+	}
+
 
 	//--------------------------------------
 	// GET / SET

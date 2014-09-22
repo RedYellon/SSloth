@@ -8,9 +8,9 @@ using UnityEngine.UI;
 public class Gradient : BaseVertexEffect 
 {
 	[SerializeField]
-	private Color32 topColor = Color.white;
+	public Color32 topColor = Color.white;
 	[SerializeField]
-	private Color32 bottomColor = Color.black;
+	public Color32 bottomColor = Color.black;
 	[SerializeField]
 	private bool reverse = false;
 	

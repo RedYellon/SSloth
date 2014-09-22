@@ -15,10 +15,14 @@ using System.Collections;
 public class FacebookEvents {
 	
 	public const string FACEBOOK_INITED 				= "facebook_inited";
-	
+
 
 	public const string AUTHENTICATION_SUCCEEDED 		= "authentication_succeeded";
 	public const string AUTHENTICATION_FAILED   		= "authentication_failed";
+
+
+	public const string PAYMENT_SUCCEEDED 				= "payment_succeeded";
+	public const string PAYMENT_FAILED   				= "payment_failed";
 
 
 	public const string POST_SUCCEEDED 					= "post_succeeded";

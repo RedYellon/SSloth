@@ -33,7 +33,7 @@ public class GameController : MonoBehaviour
 		// The platform manager
 		PlatformManager platManager;
 		// The gui controller
-		GuiController guiCont;
+		DeathScreen deathScreenCont;
 		// The camera controller
 		CameraController camCont;
 	
@@ -98,7 +98,7 @@ public class GameController : MonoBehaviour
 		scoreCont.gameObject.renderer.enabled = false;
 		
 		// Remove all GUI elements
-		guiCont.Cleanup ();
+		//deathScreenCont.Cleanup ();
 		timeCont.Reset ();
 		timeCont.SetIsChanging (false);
 		foreground.SetForegroundVisible (false);
@@ -120,7 +120,7 @@ public class GameController : MonoBehaviour
 		sceneCont = GetComponent <SceneController> ();
 		timeCont = GetComponent <TimeController> ();
 		platManager = GetComponent <PlatformManager> ();
-		guiCont = GetComponent <GuiController> ();
+		deathScreenCont = GetComponent <DeathScreen> ();
 		foreground = GameObject.Find ("Foreground Grass").GetComponent <ParallaxScrollController> ();
 		scoreCont = GameObject.Find ("Score").GetComponent <ScoreController> ();
 		camCont = GameObject.Find ("Main Camera").GetComponent <CameraController> ();

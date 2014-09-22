@@ -244,6 +244,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa8012c31093e4b319dd1fe3526e33c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dirtyPlatOffSprite: PlatformDirtyOff
+  dirtyPlatOnSprite: PlatformDirtyOn
+  angryPlatOffSprite: PlatformAngryOff
+  angryPlatOnSprite: PlatformAngryOn
+  sadPlatOffSprite: PlatformSadOff
+  sadPlatOnSprite: PlatformSadOn
+  starPlatOffSprite: PlatformStarOff
+  starPlatOnSprite: PlatformStarOn
   platformHeight: 1.29499996
   platformWidth: 2.4000001
   moveSpeed: 5

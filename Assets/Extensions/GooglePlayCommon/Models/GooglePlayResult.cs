@@ -16,8 +16,7 @@ public class GooglePlayResult {
 	private GP_GamesStatusCodes _response;
 	private string _message;
 
-	public string leaderboardId = "";
-	public string achievementId = "";
+
 
 
 	//--------------------------------------

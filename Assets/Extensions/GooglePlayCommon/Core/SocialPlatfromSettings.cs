@@ -9,16 +9,13 @@ using UnityEditor;
 
 public class SocialPlatfromSettings : ScriptableObject {
 
-	public const string VERSION_NUMBER = "3.2";
+	public const string VERSION_NUMBER = "3.5";
 
 	public bool showPermitions = true;
+	public bool ShowActions = true;
+
 	public List<string> fb_scopes_list =  new List<string>();
-
-
 	
-
-	//private string TWITTER_CONSUMER_KEY = "wEvDyAUr2QabVAsWPDiGwg";
-	//private string TWITTER_CONSUMER_SECRET = "igRxZbOrkLQPNLSvibNC3mdNJ5tOlVOPH3HNNKDY0";
 
 	public string TWITTER_CONSUMER_KEY 	= "REPLACE_WITH_YOUR_CONSUMER_KEY";
 	public string TWITTER_CONSUMER_SECRET 	= "REPLACE_WITH_YOUR_CONSUMER_SECRET";
@@ -45,11 +42,16 @@ public class SocialPlatfromSettings : ScriptableObject {
 					// If not found, autocreate the asset object.
 					instance = CreateInstance<SocialPlatfromSettings>();
 					#if UNITY_EDITOR
-					string properPath = Path.Combine(Application.dataPath, ISNSettingsPath);
+					//string properPath = Path.Combine(Application.dataPath, ISNSettingsPath);
+
+					FileStaticAPI.CreateFolder(ISNSettingsPath);
+
+					/*
 					if (!Directory.Exists(properPath)) {
 						AssetDatabase.CreateFolder("Extensions/", "GooglePlayCommon");
 						AssetDatabase.CreateFolder("Extensions/GooglePlayCommon", "Resources");
 					}
+					*/
 					
 					string fullPath = Path.Combine(Path.Combine("Assets", ISNSettingsPath),
 					                               ISNSettingsAssetName + ISNSettingsAssetExtension
@@ -58,14 +60,7 @@ public class SocialPlatfromSettings : ScriptableObject {
 					AssetDatabase.CreateAsset(instance, fullPath);
 
 
-					instance.fb_scopes_list.Add("user_about_me");
-					instance.fb_scopes_list.Add("user_friends");
-					instance.fb_scopes_list.Add("email");
-					instance.fb_scopes_list.Add("publish_actions");
-					instance.fb_scopes_list.Add("read_friendlists");
-					instance.fb_scopes_list.Add("user_games_activity");
-					instance.fb_scopes_list.Add("user_activities");
-					instance.fb_scopes_list.Add("user_likes");
+					instance.AddDefaultScopes();
 
 					#endif
 				}
@@ -88,6 +83,18 @@ public class SocialPlatfromSettings : ScriptableObject {
 
 			return scopes;
 		}
+	}
+
+	public void AddDefaultScopes() {
+	
+		instance.fb_scopes_list.Add("user_about_me");
+		instance.fb_scopes_list.Add("user_friends");
+		instance.fb_scopes_list.Add("email");
+		instance.fb_scopes_list.Add("publish_actions");
+		instance.fb_scopes_list.Add("read_friendlists");
+		instance.fb_scopes_list.Add("user_games_activity");
+		instance.fb_scopes_list.Add("user_activities");
+		instance.fb_scopes_list.Add("user_likes");
 	}
 	
 

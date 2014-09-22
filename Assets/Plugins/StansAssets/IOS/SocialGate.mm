@@ -24,6 +24,7 @@ static SocialGate *_sharedInstance;
 }
 
 -(void) mediaShare:(NSString *)text  media:(NSString *)media {
+    NSLog(@"mediaShare");
     UIActivityViewController *controller;
                                             
                                             
@@ -149,12 +150,22 @@ static SocialGate *_sharedInstance;
     NSLog(@"fbPost");
     
     SLComposeViewController *fbSheet = [SLComposeViewController  composeViewControllerForServiceType:SLServiceTypeFacebook];
-    [fbSheet setInitialText:status];
     
+    
+    if(fbSheet == NULL) {
+        NSLog(@"SLServiceTypeFacebook not avaliable ");
+        UnitySendMessage("IOSSocialManager", "OnFacebookPostFailed", [ISNDataConvertor NSStringToChar:@""]);
+        return;
+    }
+    
+    [fbSheet setInitialText:status];
     
     UIViewController *vc =  UnityGetGLViewController();
     
     [vc presentViewController:fbSheet animated:YES completion:nil];
+    
+    NSLog(@"SLServiceTypeFacebook showed ");
+
     
     fbSheet.completionHandler = ^(SLComposeViewControllerResult result) {
         NSArray *vComp;
@@ -211,13 +222,20 @@ static SocialGate *_sharedInstance;
 
 -(void) fbPostWithMedia:(NSString *)status media:(NSString *)media {
     
-    
+    NSLog(@"fbPostWithMedia");
     
     NSData *imageData = [[NSData alloc] initWithBase64Encoding:media];
     UIImage *image = [[UIImage alloc] initWithData:imageData];
     
     
     SLComposeViewController *fbSheet = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeFacebook];
+    if(fbSheet == NULL) {
+        NSLog(@"SLServiceTypeFacebook not avaliable ");
+        UnitySendMessage("IOSSocialManager", "OnFacebookPostFailed", [ISNDataConvertor NSStringToChar:@""]);
+        return;
+    }
+    
+    
     [fbSheet setInitialText:status];
     [fbSheet addImage:image];
     
@@ -259,6 +277,9 @@ static SocialGate *_sharedInstance;
 
 
 - (void) sendEmail:(NSString *)subject body:(NSString *)body recipients: (NSString*) recipients media:(NSString *)media {
+    
+    NSLog(@"sendEmail");
+
    
     //Create a string with HTML formatting for the email body
     NSMutableString *emailBody = [[[NSMutableString alloc] initWithString:@"<html><body>"] retain];

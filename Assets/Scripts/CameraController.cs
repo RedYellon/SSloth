@@ -69,6 +69,10 @@ public class CameraController : MonoBehaviour
 		// Depending on the scene, the camera's behavior changes
 		if (isInMainMenuMode) MainMenuSnap ();
 		else PlayerFollow ();
+		
+		// Make sure we aren't below our minimum threshold
+		if (trans.position.y < threshold.x)
+			trans.position.ReplaceY (threshold.x);
 	}
 	
 	
@@ -144,6 +148,14 @@ public class CameraController : MonoBehaviour
 	#endregion
 	
 	
+	#if UNITY_ANDROID
+	
+	// Required to fix some shitty Android glitch
+	void OnGUI () { GUI.Button (new Rect (0,0,1,1), ""); }
+	
+	#endif
+	
+	
 	#region Initialization
 	
 	// Used for initialization
@@ -161,6 +173,11 @@ public class CameraController : MonoBehaviour
 	// Called automatically at beginning (after Awake ())
 	void Start () 
 	{
+		// Set immersive mode
+		#if UNITY_ANDROID
+			ImmersiveMode.instance.EnableImmersiveMode ();
+		#endif
+		
 		// Assign the initial private/script/reference variables
 		AssignVariables ();
 		

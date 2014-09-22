@@ -5,7 +5,7 @@
  	www.michaeljohnstephens.com
  	
  	Created:		February 14, 2014
- 	Last Edited:	June 18, 2014
+ 	Last Edited:	September 12, 2014
  	
  	Coordinates the changing of "scenes".
 */
@@ -34,10 +34,6 @@ public class SceneController : MonoBehaviour
 		GameController gameCont;
 		// The high score scene controller
 		HighScoreSceneController highScoreCont;
-		// The credits controller
-		CreditsController creditsCont;
-		// The options scene controller
-		OptionsController optionsCont;
 		// The bounce controller
 		BounceObject cloudBounce;
 		
@@ -92,16 +88,6 @@ public class SceneController : MonoBehaviour
 				highScoreCont.Setup ();
 				cloudBounce.StopBounce ();
 			break;
-			// If we are changing to the credits scene
-			case 4:
-				creditsCont.Setup ();
-				cloudBounce.StopBounce ();
-			break;
-			// If we are changing to the options scene
-			case 5:
-				optionsCont.Setup ();
-				cloudBounce.StopBounce ();
-			break;
 		}
 		currentScene = scene;
 	}
@@ -127,8 +113,6 @@ public class SceneController : MonoBehaviour
 		mainMenuCont = gameObject.GetComponent <MainMenuController> ();
 		gameCont = gameObject.GetComponent <GameController> ();
 		highScoreCont = gameObject.GetComponent <HighScoreSceneController> ();
-		creditsCont = gameObject.GetComponent <CreditsController> ();
-		optionsCont = gameObject.GetComponent <OptionsController> ();
 		
 		currentScene = startScene;
 		cloudBounce = GameObject.Find ("Cloudtops").GetComponent <BounceObject> ();

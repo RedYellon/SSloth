@@ -5,7 +5,7 @@
  	www.michaeljohnstephens.com
  	
  	Created:		February 14, 2014
- 	Last Edited:	August 13, 2014
+ 	Last Edited:	September 15, 2014
  	
  	Controls the functions and behavior of the main menu "scene".
 */
@@ -28,10 +28,8 @@ public class MainMenuController : MonoBehaviour
 		// How quickly the buttons scale when they become active/inactive
 		public float buttonGrowSpeed = 10.0f;
 		// The button transforms
-		public Transform settingsButton;
 		public Transform scoresButton;
 		public Transform playButton;
-		public Transform creditsButton;
 		public Transform facebookButton;
 		public Transform twitterButton;
 		// The menu highlighter
@@ -65,6 +63,8 @@ public class MainMenuController : MonoBehaviour
 	
 		#region Scripts
 		
+		// The data controller
+		DataController dataCont;
 		// The input controller
 		InputController inputCont;
 		// The scene controller
@@ -113,8 +113,6 @@ public class MainMenuController : MonoBehaviour
 		// The button sprites
 		private tk2dSprite startButtonSprite;
 		private tk2dSprite hsButtonSprite;
-		private tk2dSprite optionsButtonSprite;
-		private tk2dSprite creditsButtonSprite;
 		//
 		private bool sceneIsTransitioning = false;
 		//
@@ -134,6 +132,8 @@ public class MainMenuController : MonoBehaviour
 		//
 		private Vector3 title1ResetPos;
 		private Vector3 title2ResetPos;
+		// If the camera type has been overridden (to stretch)
+		private bool _camOverrideType = false;
 	
 		#endregion
 	
@@ -165,17 +165,15 @@ public class MainMenuController : MonoBehaviour
 		if (superTitlesAreMoving) MoveSuperTitle ();
 	}
 	
+	#endregion
+	
+	
+	#region Transform Update
 	
 	// Sets the sizes of the buttons, depending on if they are active or not
 	// Called every frame from Update ()
 	void SetButtonSizes ()
 	{
-		// Settings Button
-		if (currentActiveButton == 1)
-			settingsButton.localScale = Vector3.Lerp (settingsButton.localScale, buttonLargeScale, Time.deltaTime * buttonGrowSpeed);
-		else
-			settingsButton.localScale = Vector3.Lerp (settingsButton.localScale, buttonSmallScale, Time.deltaTime * buttonGrowSpeed);
-			
 		// Scores Button
 		if (currentActiveButton == 2)
 			scoresButton.localScale = Vector3.Lerp (scoresButton.localScale, buttonLargeScale, Time.deltaTime * buttonGrowSpeed);
@@ -187,12 +185,6 @@ public class MainMenuController : MonoBehaviour
 			playButton.localScale = Vector3.Lerp (playButton.localScale, buttonLargeScale, Time.deltaTime * buttonGrowSpeed);
 		else
 			playButton.localScale = Vector3.Lerp (playButton.localScale, buttonSmallScale, Time.deltaTime * buttonGrowSpeed);
-			
-		// Credits Button
-		if (currentActiveButton == 5)
-			creditsButton.localScale = Vector3.Lerp (creditsButton.localScale, buttonLargeScale, Time.deltaTime * buttonGrowSpeed);
-		else
-			creditsButton.localScale = Vector3.Lerp (creditsButton.localScale, buttonSmallScale, Time.deltaTime * buttonGrowSpeed);
 	}
 	
 	
@@ -217,6 +209,26 @@ public class MainMenuController : MonoBehaviour
 	void MoveSuperTitle ()
 	{
 		superTitleTransform.position = Vector3.Lerp (superTitleTransform.position, superTargetTitlePos, Time.deltaTime * 10.0f);
+	}
+	
+	#endregion
+	
+	
+	#region Options Foldout
+	
+	// Switches the camera display settings
+	// Called directly from Unity UI
+	public void SwitchCameraDisplayType ()
+	{
+		// Switch the override type
+		int type = 0;
+		if (!_camOverrideType) type = 1;
+		_camOverrideType = !_camOverrideType;
+		
+		// Tell the camera to switch modes
+		camCont.SetDisplayMode (type);
+		dataCont.SaveCamOverrideType (type);
+		audioCont.PlayButtonPressSound ();
 	}
 	
 	#endregion
@@ -265,24 +277,6 @@ public class MainMenuController : MonoBehaviour
 		// React to the button press depending on the button pressed
 		switch (button.name)
 		{	
-			// If we touched the settings button
-			case "SettingsButton":
-			
-				if (currentActiveButton == 1)
-				{
-					audioCont.PlaySound ("Button");
-					BeginTransitionToScene ();
-				}
-				else
-				{
-					currentActiveButton = 1;
-					highlighterTargetPosition = new Vector3 (highlighter.localPosition.x, optionsHighlighterYPos, highlighter.localPosition.z);
-					SetButtonsToInactiveColor ();
-					optionsButtonSprite.color = Color.white;
-				}
-				
-			break;
-			
 			// If we touched the scores button
 			case "ScoresButton":
 			
@@ -322,24 +316,6 @@ public class MainMenuController : MonoBehaviour
 				}
 				
 			break;
-			
-			// If we touched the credits button
-			case "CreditsButton":
-			
-				if (currentActiveButton == 5)
-				{
-					audioCont.PlaySound ("Button");
-					BeginTransitionToScene ();
-				}
-				else
-				{
-					currentActiveButton = 5;
-					SetButtonsToInactiveColor ();
-					creditsButtonSprite.color = Color.white;
-					highlighterTargetPosition = new Vector3 (highlighter.localPosition.x, creditsHighlighterYPos, highlighter.localPosition.z);
-				}
-				
-			break;
 		}
 	}
 	public void FBButtonPressed () { Application.OpenURL ("https://www.facebook.com/pages/Super-Sloth/272901039540746"); }
@@ -352,8 +328,6 @@ public class MainMenuController : MonoBehaviour
 	{
 		startButtonSprite.color = buttonInactiveColor;
 		hsButtonSprite.color = buttonInactiveColor;
-		optionsButtonSprite.color = buttonInactiveColor;
-		creditsButtonSprite.color = buttonInactiveColor;
 	}
 	
 	
@@ -438,10 +412,8 @@ public class MainMenuController : MonoBehaviour
 		// If we've animated the movement, we can activate the buttons n shit
 		if (didAnimate)
 		{
-			//settingsButton.gameObject.SetActive (true);
 			scoresButton.gameObject.SetActive (true);
 			playButton.gameObject.SetActive (true);
-			//creditsButton.gameObject.SetActive (true);
 			optionsMasterButton.SetActive (true);
 			facebookButton.gameObject.SetActive (true);
 			twitterButton.gameObject.SetActive (true);
@@ -490,6 +462,8 @@ public class MainMenuController : MonoBehaviour
 		transitionDropSpeed = 0;
 		transitionDropParent.position = Vector3.zero;
 		grassParentTransform.position = Vector3.zero;
+		mainTitleTransform.gameObject.GetComponent <TitleGyrate> ().isGo = true;
+		superTitleTransform.gameObject.GetComponent <TitleGyrate> ().isGo = true;
 		
 		// Finish the transition
 		Invoke ("SetSceneIsDoneTransitioning", 0.2f);
@@ -526,6 +500,17 @@ public class MainMenuController : MonoBehaviour
 		cloudsBounce.Bounce ();
 	}
 	
+	
+	// Switches the active button to the play button
+	// Called from 
+	public void SetPlayAsActiveButton ()
+	{
+		currentActiveButton = 3;
+		SetButtonsToInactiveColor ();
+		startButtonSprite.color = Color.white;
+		highlighterTargetPosition = new Vector3 (highlighter.localPosition.x, startHighlighterYPos, highlighter.localPosition.z);
+	}
+	
 	#endregion
 	
 	
@@ -539,8 +524,6 @@ public class MainMenuController : MonoBehaviour
 		transitionCont.ChangeToScene (currentActiveButton);
 		
 		//
-		//mainTitleTransform.gameObject.GetComponent <TitleGyrate> ().isGo = false;
-		//superTitleTransform.gameObject.GetComponent <TitleGyrate> ().isGo = false;
 		titlesAreMoving = false;
 		superTitlesAreMoving = false;
 		sceneIsTransitioning = true;
@@ -601,7 +584,6 @@ public class MainMenuController : MonoBehaviour
 		// Reset bools
 		isInMainMenu = false;
 		sceneIsTransitioning = false;
-		//settingsButton.gameObject.SetActive (false);
 		scoresButton.gameObject.SetActive (false);
 		playButton.gameObject.SetActive (false);
 		facebookButton.gameObject.SetActive (false);
@@ -609,12 +591,13 @@ public class MainMenuController : MonoBehaviour
 		optionsMasterButton.SetActive (false);
 		highlighterRend.enabled = false;
 		highlighterCapRend.enabled = false;
-		//creditsButton.gameObject.SetActive (false);
 		bnpIsOnScreen = false;
 		
 		//
 		mainTitleTransform.localPosition = title1ResetPos;
 		superTitleTransform.localPosition = title2ResetPos;
+		mainTitleTransform.gameObject.GetComponent <TitleGyrate> ().isGo = false;
+		superTitleTransform.gameObject.GetComponent <TitleGyrate> ().isGo = false;
 		
 		// Turn all of the main menu renderers off
 		foreach (Renderer r in mainMenuRenderers)
@@ -659,12 +642,12 @@ public class MainMenuController : MonoBehaviour
 	void BeginMovingSuperTitle () { superTitlesAreMoving = true; }
 	void BeginFadeInStartButton () 
 	{ 
+		mainTitleTransform.localPosition = title1ResetPos;
+		superTitleTransform.localPosition = title2ResetPos;
 		didAnimate = true; 
 		StartCoroutine ("DropClouds");
-		//settingsButton.gameObject.SetActive (true);
 		scoresButton.gameObject.SetActive (true);
 		playButton.gameObject.SetActive (true);
-		//creditsButton.gameObject.SetActive (true);
 		facebookButton.gameObject.SetActive (true);
 		twitterButton.gameObject.SetActive (true);
 		optionsMasterButton.SetActive (true);
@@ -686,6 +669,7 @@ public class MainMenuController : MonoBehaviour
 	private void AssignVariables ()
 	{
 		// Scripts
+		dataCont = GetComponent <DataController> ();
 		inputCont = GetComponent <InputController> ();
 		sceneCont = GetComponent <SceneController> ();
 		audioCont = GetComponent <AudioController> ();
@@ -716,8 +700,6 @@ public class MainMenuController : MonoBehaviour
 		// Sprites
 		startButtonSprite = playButton.gameObject.GetComponent <tk2dSprite> ();
 		hsButtonSprite = scoresButton.gameObject.GetComponent <tk2dSprite> ();
-		optionsButtonSprite = settingsButton.gameObject.GetComponent <tk2dSprite> ();
-		creditsButtonSprite = creditsButton.gameObject.GetComponent <tk2dSprite> ();
 	}
 	
 	#endregion

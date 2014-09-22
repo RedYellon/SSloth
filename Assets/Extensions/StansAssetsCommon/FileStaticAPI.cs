@@ -192,6 +192,7 @@ public static class FileStaticAPI
 				CreateAssetFolder(filePath);
 			}
 
+	
 			AssetDatabase.CopyAsset(GetFullAssetPath(srcAssetName), GetFullAssetPath(destAssetName));
 			AssetDatabase.Refresh();
 		}

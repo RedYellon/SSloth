@@ -8,12 +8,15 @@
 
 
 
+using System;
 using UnityEngine;
 using System.Collections;
 
 public class WWWTextureLoader : EventDispatcher {
 
 	private string _url;
+
+	public Action<Texture2D> OnLoad = delegate{}; 
 
 	public static WWWTextureLoader Create() {
 		return new GameObject("WWWTextureLoader").AddComponent<WWWTextureLoader>();
@@ -34,8 +37,11 @@ public class WWWTextureLoader : EventDispatcher {
 
 		if(www.error == null) {
 			dispatch(BaseEvent.LOADED, www.texture);
+			OnLoad(www.texture);
+
 		} else {
 			dispatch(BaseEvent.LOADED, null);
+			OnLoad(null);
 		}
 
 	}

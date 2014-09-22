@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Name: SocialSettings
   m_EditorClassIdentifier: 
   showPermitions: 1
+  ShowActions: 1
   fb_scopes_list:
   - user_about_me
   - user_friends

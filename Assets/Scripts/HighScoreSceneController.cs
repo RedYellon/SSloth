@@ -5,7 +5,7 @@
  	www.michaeljohnstephens.com
  	
  	Created:		February 26, 2014
- 	Last Edited:	June 9, 2014
+ 	Last Edited:	September 13, 2014
  	
  	Controls the high score scene.
 */
@@ -28,6 +28,8 @@ public class HighScoreSceneController : MonoBehaviour
 		public Renderer [] staticRends;
 		// The list of score slots
 		public Text [] highScoreSlots;
+		public Text [] highScoreTimeSlots;
+		public Text [] lbScoreSlots;
 		// The view leaderboards button
 		public GameObject leaderboardsButton;
 		// The tab buttons
@@ -65,6 +67,8 @@ public class HighScoreSceneController : MonoBehaviour
 			public Text firefliesSeenNum;
 			public Text mammalsSeenNum;
 			public Text factsLearnedNum;
+			public Text peakAltitudeNum;
+			public Text maxHangtimeNum;
 			
 			#endregion
 		
@@ -86,7 +90,16 @@ public class HighScoreSceneController : MonoBehaviour
 		BounceObject bounce;
 		// The menu transition controller
 		MenuBackgroundTransitionController transitionCont;
+		// The main menu controller
+		MainMenuController mainMenuCont;
 	
+		#endregion
+		
+		#region Canvasses
+		
+		// The scores n stats canvas
+		GameObject _scoresStatsCanvas;
+		
 		#endregion
 	
 		#region Private
@@ -110,6 +123,17 @@ public class HighScoreSceneController : MonoBehaviour
 		// The colors of the tab buttons
 		Color buttonTabEnabledColor;
 		Color buttonTabDisabledColor;
+		// The erase data button (trashcan)
+		private	GameObject _eraseDataButton;
+		// The number of times the user has confirmed they want to erase their data
+		private int _dataEraseConfirmationCount = 0;
+		// The screen mask used during the erase data process
+		private Renderer _eraseDataScreenMask;
+		// The warning text displayed when erasing data
+		private Text _eraseDataWarningText;
+		// The YES and NO confirmation buttons
+		private GameObject _yesEraseDataButton;
+		private GameObject _noEraseDataButton;
 	
 	#endregion
 	
@@ -152,7 +176,7 @@ public class HighScoreSceneController : MonoBehaviour
 			if (inputCont.GetTouchRaycastObject () != null)
 			{
 				// React
-				ButtonTouched (inputCont.GetTouchRaycastObject ().name);
+				//ButtonTouched (inputCont.GetTouchRaycastObject ().name);
 			}
 		}
 	}
@@ -160,30 +184,21 @@ public class HighScoreSceneController : MonoBehaviour
 	
 	//
 	//
-	private void ButtonTouched (string buttonName)
-	{
-		switch (buttonName)
-		{
-			case "BackToMainMenuButtonHS":
-				transitionCont.ChangeToScene (0);
-				audioCont.PlayButtonPressSound ();
-				StartCoroutine ("Rise");
-			break;
-			case "LeaderboardsButton":
-				audioCont.PlaySound ("Button");
-				lb.ShowGameCenter ();
-			break;
-		}
+	public void BackButtonPressed ()
+	{	
+		// Transition to main menu
+		transitionCont.ChangeToScene (0);
+		audioCont.PlayButtonPressSound ();
+		StartCoroutine ("Rise");
 	}
 	
 	
 	//
 	//
-	public void BackButtonPressed ()
-	{
-		transitionCont.ChangeToScene (0);
-		audioCont.PlayButtonPressSound ();
-		StartCoroutine ("Rise");
+	public void LBButtonPressed ()
+	{	
+		audioCont.PlaySound ("Button");
+		lb.ShowGameCenter ();
 	}
 	
 	
@@ -200,6 +215,85 @@ public class HighScoreSceneController : MonoBehaviour
 	void FadeOutResetMask ()
 	{
 		resetMaskRend.material.color = Color.Lerp (resetMaskRend.material.color, new Color (resetMaskRend.material.color.r, resetMaskRend.material.color.g, resetMaskRend.material.color.b, 0.0f), Time.deltaTime * 15.0f);
+	}
+	
+	#endregion
+	
+	
+	#region Erase Data
+	
+	// Called when the erase data button is pressed
+	// Called directly from Unity UI
+	public void EraseDataButtonPressed ()
+	{
+		// Depending on how many times the user has confirmed erase data action...
+		switch (_dataEraseConfirmationCount)
+		{
+			case 0:
+				// Activate confirmation objects
+				_eraseDataScreenMask.material.color = new Color (_eraseDataScreenMask.material.color.r, _eraseDataScreenMask.material.color.g, _eraseDataScreenMask.material.color.b, 0.85f);
+				_scoresStatsCanvas.SetActive (false);	
+				_eraseDataButton.SetActive (false);
+				_yesEraseDataButton.SetActive (true);
+				_noEraseDataButton.SetActive (true);
+				_eraseDataWarningText.text = "are you SURE you want to erase your data?";
+				audioCont.PlayButtonPressSound ();
+			break;
+			case 1:
+				_eraseDataWarningText.text = "are you REALLY sure? You can't undo this action";
+			break;
+			case 2:
+				_eraseDataWarningText.text = "okay for real it's gonna happen, but are you SURE?";
+			break;
+			case 3:
+				// Erase the data
+				_eraseDataWarningText.text = "erasing data...";
+				_yesEraseDataButton.SetActive (false);
+				_noEraseDataButton.SetActive (false);
+				mainMenuCont.SetPlayAsActiveButton ();
+				EraseData ();
+				
+				// Clean up the erase data stuff
+				Invoke ("CleanUpEraseProcess", 2.0f);
+			break;
+		}
+		
+		_dataEraseConfirmationCount ++;
+	}
+	
+	
+	// Cancels the erase data process
+	// Called directly from Unity UI
+	public void CancelEraseDataProcess ()
+	{
+		_scoresStatsCanvas.SetActive (true);
+		_eraseDataButton.SetActive (true);	
+		_eraseDataScreenMask.material.color = Color.clear;
+		_eraseDataWarningText.text = "";
+		_yesEraseDataButton.SetActive (false);
+		_noEraseDataButton.SetActive (false);
+		_dataEraseConfirmationCount = 0;
+	}
+	
+	
+	// Actually erases the game data
+	// Called from EraseDataButtonPressed ()
+	void EraseData ()
+	{
+		dataCont.EraseData ();
+	}
+	
+	
+	// Cleans up the erase data gameobjects
+	// Called from EraseDataButtonPressed ()
+	void CleanUpEraseProcess ()
+	{
+		_eraseDataScreenMask.material.color = Color.clear;
+		_eraseDataWarningText.text = "";
+		_dataEraseConfirmationCount = 0;
+		_scoresStatsCanvas.SetActive (true);
+		_eraseDataButton.SetActive (true);
+		BackButtonPressed ();
 	}
 	
 	#endregion
@@ -261,6 +355,7 @@ public class HighScoreSceneController : MonoBehaviour
 		isTransitioning = true;	
 		
 		// Begin the transition
+		//audioCont.PlaySound ("Whoosh");
 		StartCoroutine ("Drop");
 	}
 	
@@ -282,6 +377,7 @@ public class HighScoreSceneController : MonoBehaviour
 		transitionDropSpeed = 0;
 		bounce.Bounce ();
 		dustHitParticles.Play ();
+		audioCont.PlaySound ("OptionsLand");
 		isTransitioning = false;
 	}
 	
@@ -341,13 +437,26 @@ public class HighScoreSceneController : MonoBehaviour
 	//
 	private void GetHighScores ()
 	{
+		// Local scores
 		int [] highScores = dataCont.GetHighScores ();
 		for (int i = 0; i < 10; i++)
 		{
-			if (i >= 9)
-				highScoreSlots [i].text = (i + 1).ToString () + ")\t" + highScores [i].ToString ();
-			else
-				highScoreSlots [i].text = (i + 1).ToString () + ")\t\t" + highScores [i].ToString ();
+			highScoreSlots [i].text = highScores [i].ToString ();
+			if (highScoreSlots [i].text == "0")
+				highScoreSlots [i].text = "-";
+		}
+		
+		string [] highScoreTimes = dataCont.GetHighScoresTimes ();
+		for (int i = 0; i < 10; i++)
+		{
+			highScoreTimeSlots [i].text = highScoreTimes [i];
+		}
+		
+		// Leaderboard scores
+		string [] lbScores = lb.GetLeaderboardScores ();
+		for (int i = 0; i < lbScores.Length; i++)
+		{
+			lbScoreSlots [i].text = lbScores [i];
 		}
 	}
 	
@@ -390,6 +499,9 @@ public class HighScoreSceneController : MonoBehaviour
 		butterfliesSeenNum.text = dataCont.GetButterfliesSeen ().ToString ();
 		firefliesSeenNum.text = dataCont.GetFirefliesSeen ().ToString ();
 		mammalsSeenNum.text = dataCont.GetAnimalsSeen ().ToString ();
+		factsLearnedNum.text = dataCont.GetFactsLearned ().ToString ();
+		peakAltitudeNum.text = dataCont.GetPeakAir ().ToString ("F2") + " m";
+		maxHangtimeNum.text = dataCont.GetMaxHangtime ().ToString ("F2") + " sec";
 		if (dataCont.GetTimesPlayed () != 0)
 			avgScoreNum.text = (dataCont.GetTotalScore () / dataCont.GetTimesPlayed ()).ToString ();
 		else
@@ -407,11 +519,20 @@ public class HighScoreSceneController : MonoBehaviour
 		dataCont = gameObject.GetComponent <DataController> ();
 		inputCont = gameObject.GetComponent <InputController> ();
 		audioCont = gameObject.GetComponent <AudioController> ();
+		mainMenuCont = gameObject.GetComponent <MainMenuController> ();
 		lb = gameObject.GetComponent <Leaderboard> ();
-		resetMaskRend = GameObject.Find ("ScreenMask").renderer;
+		resetMaskRend = GameObject.Find ("ScreenMaskEraseData").renderer;
 		transitionCont = GetComponent <MenuBackgroundTransitionController> ();
 		buttonTabEnabledColor = statsTabButton.GetComponent <Image> ().color;
 		buttonTabDisabledColor = scoresTabButton.GetComponent <Image> ().color;
+		_scoresStatsCanvas = GameObject.Find ("ScoresStatsCanvas");
+		_eraseDataButton = GameObject.Find ("EraseDataButton");
+		_eraseDataScreenMask = GameObject.Find ("ScreenMask").renderer;
+		_yesEraseDataButton = GameObject.Find ("EraseDataYesButt");
+		_eraseDataWarningText = GameObject.Find ("EraseDataConfirmationLabel").GetComponent <Text> ();
+		_noEraseDataButton = GameObject.Find ("EraseDataNoButt");
+		_yesEraseDataButton.SetActive (false);
+		_noEraseDataButton.SetActive (false);
 	}
 	
 	#endregion

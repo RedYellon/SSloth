@@ -199,7 +199,7 @@ public class PlatformManager : MonoBehaviour
 		else if (Random.Range (0, 100) <= starPlatformSpawnChance)
 		{
 			// Silver stars
-			if (Random.Range (0, 10) <= 4)
+			if (Random.Range (0, 10) <= 3)
 			{
 				GameObject st = Instantiate (silverStarPrefab, new Vector3 (spawnPos.x - 0.1f, spawnPos.y + 1.3f, 0.0f), Quaternion.identity) as GameObject;
 				stars.Add (st.gameObject.GetComponent <StarBehavior> ());

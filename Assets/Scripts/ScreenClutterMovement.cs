@@ -40,6 +40,8 @@ public class ScreenClutterMovement : MonoBehaviour
 		
 		// The data controller
 		DataController dataCont;
+		// The audio controller
+		AudioController audioCont;
 		
 		#endregion
 		
@@ -111,6 +113,7 @@ public class ScreenClutterMovement : MonoBehaviour
 		
 		// Les GOOOOOoooooOOoOOooooOOoOoOooo
 		isGoOut = true;
+		audioCont.PlaySound ("Dexter");
 		StartCoroutine ("WaitToReturn");
 	}
 	
@@ -122,6 +125,7 @@ public class ScreenClutterMovement : MonoBehaviour
 		yield return new WaitForSeconds (holdTime);
 		isGoOut = false;
 		isComeIn = true;
+		audioCont.PlaySound ("Whoosh");
 		
 		//
 		currentWaitTime = Random.Range (timeBetween.x, timeBetween.y);
@@ -160,6 +164,7 @@ public class ScreenClutterMovement : MonoBehaviour
 	private void AssignVariables ()
 	{
 		dataCont = GameObject.Find ("&MainController").GetComponent <DataController> ();
+		audioCont = GameObject.Find ("&MainController").GetComponent <AudioController> ();
 		for (int i = 0; i < targetPositions.Length; i++)
 		{
 			targetPositions [i] = new Vector3 (targetPositions [i].x, targetPositions [i].y, trans [i].position.z);

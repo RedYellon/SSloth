@@ -42,7 +42,7 @@ public class ScoreController : MonoBehaviour
 		// The data controller
 		DataController dataCont;
 		// The GUI controller
-		GuiController guiCont;
+		DeathScreen deathScreenCont;
 		// The leaderboard script
 		Leaderboard lb;
 	
@@ -168,6 +168,7 @@ public class ScoreController : MonoBehaviour
 	//
 	public void GameEnded ()
 	{
+		starIndString = "";
 		isIncrementingScore = false;
 		scoreText.text = "";
 	}
@@ -214,15 +215,21 @@ public class ScoreController : MonoBehaviour
 			if (totalScore > hs [i])
 			{
 				List <int> mylist = new List <int> (hs);
+				List <string> scoreTimes = new List <string> (dataCont.GetHighScoresTimes ());
+				string currentTime = System.DateTime.Now.Date.ToString ("d") + ", " + System.DateTime.Now.ToString ("h:mm tt");
+				
 				mylist.Insert (i, (int) totalScore);
+				scoreTimes.Insert (i, currentTime);
+				
 				hs = mylist.ToArray ();
 				dataCont.SaveHighScoreData (hs);
+				dataCont.SaveHighScoreTimeData (scoreTimes.ToArray ());
 				
 				// If the high score was beaten, the sloth gets shades for the next round 8)
 				if (i == 0)
 				{
 					playerCont.SetIsWearingShades (true);
-					guiCont.SetMoveGlasses (true);
+					deathScreenCont.SetIsHighScore ();
 					dataCont.IncrementRecordsBroken (1);
 				}
 				
@@ -288,7 +295,7 @@ public class ScoreController : MonoBehaviour
 	{
 		EventManager.OnRoundBegin += ResetScore;
 		EventManager.OnRoundRestart += ResetScore;
-		EventManager.OnRoundEnd += AddPlayerScoreToHighScores;
+		EventManager.OnRoundEndScore += AddPlayerScoreToHighScores;
 		EventManager.OnRoundEnd += GameEnded;
 		EventManager.OnBackToMainMenuFromGame += ResetScore;
 		EventManager.OnPlayerLandFirstPlatform += BeginScoring;
@@ -301,7 +308,7 @@ public class ScoreController : MonoBehaviour
 	{
 		EventManager.OnRoundBegin -= ResetScore;
 		EventManager.OnRoundRestart -= ResetScore;
-		EventManager.OnRoundEnd -= AddPlayerScoreToHighScores;
+		EventManager.OnRoundEndScore -= AddPlayerScoreToHighScores;
 		EventManager.OnRoundEnd -= GameEnded;
 		EventManager.OnBackToMainMenuFromGame -= ResetScore;
 		EventManager.OnPlayerLandFirstPlatform -= BeginScoring;
@@ -325,7 +332,7 @@ public class ScoreController : MonoBehaviour
 	private void AssignVariables ()
 	{
 		scoreText = gameObject.GetComponent <tk2dTextMesh> ();
-		guiCont = GameObject.Find ("&MainController").GetComponent <GuiController> ();
+		deathScreenCont = GameObject.Find ("&MainController").GetComponent <DeathScreen> ();
 		dataCont = GameObject.Find ("&MainController").GetComponent <DataController> ();
 		lb = GameObject.Find ("&MainController").GetComponent <Leaderboard> ();
 		playerCont = GameObject.Find ("Player").GetComponent <PlayerController> ();

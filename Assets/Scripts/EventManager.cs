@@ -36,6 +36,8 @@ public class EventManager : MonoBehaviour
 		public static event RoundRestart OnRoundRestart;
 		
 		// When a round is ended (player dies)
+		public delegate void RoundEndScore ();
+		public static event RoundEndScore OnRoundEndScore;
 		public delegate void RoundEnd ();
 		public static event RoundEnd OnRoundEnd;
 		
@@ -109,6 +111,9 @@ public class EventManager : MonoBehaviour
 	// 
 	public void SetRoundEnd ()
 	{
+		if (OnRoundEndScore != null)
+			OnRoundEndScore ();
+			
 		if (OnRoundEnd != null)
 			OnRoundEnd ();
 	}

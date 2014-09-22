@@ -21,6 +21,7 @@ public class DataController : MonoBehaviour
 		
 		// The list of level completion states
 		private int [] highScores = new int [10];
+		private string [] highScoresTimes = new string [10];
 		// The current sound effects volume level
 		private float seVolume = 1;
 		// The current state of music volume level
@@ -48,6 +49,10 @@ public class DataController : MonoBehaviour
 			private int butterfliesSeen = 0;
 			private int firefliesSeen = 0;
 			private int animalsSeen = 0;
+			private int factsLearned = 0;
+			private string factsIndex = "";
+			private float peakAir = 0;
+			private float maxHangtime = 0;
 			
 			#endregion
 		
@@ -94,6 +99,7 @@ public class DataController : MonoBehaviour
 	public void LoadHighscoreData ()
 	{
 		highScores = PlayerPrefsX.GetIntArray ("HighScores", 0, 10);
+		highScoresTimes = PlayerPrefsX.GetStringArray ("HighScoresTimes", "", 10);
 		numberOfPlays = PlayerPrefs.GetInt ("TimesPlayed", 0);
 		numberOfPlatsHit = PlayerPrefs.GetInt ("PlatsHit", 0);
 		totalScore = PlayerPrefs.GetInt ("TotalScore", 0);
@@ -115,6 +121,10 @@ public class DataController : MonoBehaviour
 		butterfliesSeen = PlayerPrefs.GetInt ("ButterfliesSeen", 0);
 		firefliesSeen = PlayerPrefs.GetInt ("FirefliesSeen", 0);
 		animalsSeen = PlayerPrefs.GetInt ("AnimalsSeen", 0);
+		factsLearned = PlayerPrefs.GetInt ("FactsLearned", 0);
+		factsIndex = PlayerPrefs.GetString ("FactsIndex", "");
+		peakAir = PlayerPrefs.GetFloat ("PeakAir", 0);
+		maxHangtime = PlayerPrefs.GetFloat ("MaxHangtime", 0);
 	}
 	
 	
@@ -153,6 +163,10 @@ public class DataController : MonoBehaviour
 	{
 		return highScores;
 	}
+	public string [] GetHighScoresTimes ()
+	{
+		return highScoresTimes;
+	}	
 	
 	
 	//
@@ -204,6 +218,9 @@ public class DataController : MonoBehaviour
 	public int GetButterfliesSeen () { return butterfliesSeen; }
 	public int GetFirefliesSeen () { return firefliesSeen; }
 	public int GetAnimalsSeen () { return animalsSeen; }
+	public int GetFactsLearned () { return factsLearned; }
+	public float GetPeakAir () { return peakAir; }
+	public float GetMaxHangtime () { return maxHangtime; }
 	
 	
 	//
@@ -244,6 +261,13 @@ public class DataController : MonoBehaviour
 	{
 		PlayerPrefsX.SetIntArray ("HighScores", scores);
 		highScores = scores;
+	}
+	
+	
+	public void SaveHighScoreTimeData (string [] scoresTimes)
+	{
+		PlayerPrefsX.SetStringArray ("HighScoresTimes", scoresTimes);
+		highScoresTimes = scoresTimes;
 	}
 	
 	
@@ -383,6 +407,33 @@ public class DataController : MonoBehaviour
 		animalsSeen += toAdd;
 		PlayerPrefs.SetInt ("AnimalsSeen", animalsSeen);
 	}
+	public void CheckFactLearned (int factNum)
+	{
+		string fns = factNum.ToString ();
+		if (!factsIndex.Contains ("," + fns + ","))
+		{
+			factsIndex += "," + fns + ",";
+			factsLearned ++;
+			PlayerPrefs.SetInt ("FactsLearned", factsLearned);
+			PlayerPrefs.SetString ("FactsIndex", factsIndex);
+		}
+	}
+	public void CheckPeakAir (float f)
+	{
+		if (f > peakAir)
+		{
+			peakAir = f;
+			PlayerPrefs.SetFloat ("PeakAir", peakAir);
+		}
+	}
+	public void CheckMaxHangtime (float i)
+	{
+		if (i > maxHangtime)
+		{
+			maxHangtime = i;
+			PlayerPrefs.SetFloat ("MaxHangtime", maxHangtime);
+		}
+	}
 	
 	
 	//
@@ -398,9 +449,12 @@ public class DataController : MonoBehaviour
 	public void EraseData ()
 	{
 		// Create blank level data
-		/*for (int i = 0; i < 10; ++i)
+		for (int i = 0; i < 10; ++i)
 			highScores [i] = 0;
 		PlayerPrefsX.SetIntArray ("HighScores", highScores);
+		for (int i = 0; i < 10; ++i)
+			highScoresTimes [i] = "";
+		PlayerPrefsX.SetStringArray ("HighScoresTimes", highScoresTimes);
 		numberOfPlays = 0;
 		PlayerPrefs.SetInt ("TimesPlayed", 0);
 		numberOfPlatsHit = 0;
@@ -410,10 +464,54 @@ public class DataController : MonoBehaviour
 		secondsPlayed = 0;
 		PlayerPrefs.SetInt ("SecondsPlayed", 0);
 		totalScoreItemUsable = 0;
-		PlayerPrefs.SetInt ("TotalScoreItemUsable", 0);*/
+		PlayerPrefs.SetInt ("TotalScoreItemUsable", 0);
+		secondsPlayed = 0;
+		PlayerPrefs.SetInt ("SecondsPlayed", 0);
+		jumps = 0;
+		PlayerPrefs.SetInt ("Jumps", 0);
+		doubleJumps = 0;
+		PlayerPrefs.SetInt ("DoubleJumps", 0);
+		landings = 0;
+		PlayerPrefs.SetInt ("Landings", 0);
+		angryPlatsHit = 0;
+		PlayerPrefs.SetInt ("AngryPlatsHit", 0);
+		dirtyPlatsHit = 0;
+		PlayerPrefs.SetInt ("DirtyPlatsHit", 0);
+		sadPlatsHit = 0;
+		PlayerPrefs.SetInt ("SadPlatsHit", 0);
+		totalStars = 0;
+		PlayerPrefs.SetInt ("TotalStars", 0);
+		goldStars = 0;
+		PlayerPrefs.SetInt ("GoldStars", 0);
+		silverStars = 0;
+		PlayerPrefs.SetInt ("SilverStars", 0);
+		bronzeStars = 0;
+		PlayerPrefs.SetInt ("BronzeStars", 0);
+		nightsSurvived = 0;
+		PlayerPrefs.SetInt ("NightsSurvived", 0);
+		recordsBroken = 0;
+		PlayerPrefs.SetInt ("RecordsBroken", 0);
+		balloonsSeen = 0;
+		PlayerPrefs.SetInt ("BalloonsSeen", 0);
+		butterfliesSeen = 0;
+		PlayerPrefs.SetInt ("ButterfliesSeen", 0);
+		firefliesSeen = 0;
+		PlayerPrefs.SetInt ("FirefliesSeen", 0);
+		animalsSeen = 0;
+		PlayerPrefs.SetInt ("AnimalsSeen", 0);
+		totalScoreItemUsable = 0;
+		PlayerPrefs.SetInt ("TotalScoreItemUsable", 0);
+		factsLearned = 0;
+		PlayerPrefs.SetInt ("FactsLearned", 0);
+		factsIndex = "";
+		PlayerPrefs.SetString ("FactsIndex", "");
+		peakAir = 0;
+		PlayerPrefs.SetFloat ("PeakAir", 0);
+		maxHangtime = 0;
+		PlayerPrefs.SetFloat ("MaxHangtime", 0);
 		
 		
-		PlayerPrefs.DeleteAll ();
+		//PlayerPrefs.DeleteAll ();
 	}
 	
 	

@@ -10,7 +10,7 @@ using UnityEditor;
 
 public class AndroidNativeSettings : ScriptableObject {
 
-	public const string VERSION_NUMBER = "4.3";
+	public const string VERSION_NUMBER = "4.5";
 
 
 	public bool EnableGamesAPI 		= true;
@@ -18,10 +18,18 @@ public class AndroidNativeSettings : ScriptableObject {
 	public bool LoadProfileIcons 	= true;
 	public bool LoadProfileImages 	= true;
 
+	public bool LoadQuestsImages 	= true;
+	public bool LoadQuestsIcons 	= true;
+	public bool LoadEventsIcons 	= true;
+
 
 	public bool ShowStoreKitParams = false;
 	public bool ShowPSSettings = false;
 	public bool ShowActions = false;
+	public bool GCMSettingsActinve = false;
+
+
+	public string GCM_SenderId = "YOUR_SENDER_ID_HERE";
 
 
 	public string base64EncodedPublicKey = "REPLACE_WITH_YOUR_PUBLIC_KEY";
@@ -49,11 +57,16 @@ public class AndroidNativeSettings : ScriptableObject {
 					// If not found, autocreate the asset object.
 					instance = CreateInstance<AndroidNativeSettings>();
 					#if UNITY_EDITOR
-					string properPath = Path.Combine(Application.dataPath, ANSettingsPath);
+					//string properPath = Path.Combine(Application.dataPath, ANSettingsPath);
+
+					FileStaticAPI.CreateFolder(ANSettingsPath);
+
+					/*
 					if (!Directory.Exists(properPath)) {
 						AssetDatabase.CreateFolder("Extensions/", "AndroidNative");
 						AssetDatabase.CreateFolder("Extensions/AndroidNative", "Resources");
 					}
+					*/
 					
 					string fullPath = Path.Combine(Path.Combine("Assets", ANSettingsPath),
 					                               ANSettingsAssetName + ANSettingsAssetExtension

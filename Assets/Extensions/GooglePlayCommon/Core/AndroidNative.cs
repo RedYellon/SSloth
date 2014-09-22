@@ -125,6 +125,12 @@ public class AndroidNative {
 		CallActivityFunction("loadLeaderBoards");
 	}
 
+
+	public static void UpdatePlayerScore(string leaderboardId, int span, int leaderboardCollection) {
+		CallActivityFunction("updatePlayerScore", leaderboardId, span.ToString(), leaderboardCollection.ToString());
+	}
+
+
 	public static void loadPlayerCenteredScores(string leaderboardId, int span, int leaderboardCollection, int maxResults) {
 		CallActivityFunction("loadPlayerCenteredScores", leaderboardId, span.ToString(), leaderboardCollection.ToString(), maxResults.ToString());
 	}
@@ -166,7 +172,12 @@ public class AndroidNative {
 	public static void resetAchievement(string achievementId) {
 		CallActivityFunction("resetAchievement", achievementId);
 	}
-	
+
+	public static void ResetAllAchievements() {
+		CallActivityFunction("resetAllAchievements");
+	}
+
+
 	public static void resetLeaderBoard(string leaderboardId) {
 		CallActivityFunction("resetLeaderBoard", leaderboardId);
 	}
@@ -203,6 +214,31 @@ public class AndroidNative {
 	
 	public static void showInvitationBox()  {
 		CallActivityFunction("showInvitationBox");
+	}
+
+	// --------------------------------------
+	// QUESTS And Events
+	// --------------------------------------
+
+	public static void sumbitEvent(string eventId, int count) {
+		CallActivityFunction("sumbitEvent", eventId, count.ToString());
+	}
+	
+	public static void loadEvents() {
+		CallActivityFunction("loadEvents");
+	}
+
+
+	public static void showSelectedQuests(string questSelectors) {
+		CallActivityFunction("showSelectedQuests", questSelectors);
+	}
+
+	public static void acceptQuest(string questId) {
+		CallActivityFunction("acceptQuest", questId);
+	}
+
+	public static void loadQuests(string questSelectors, int sortOrder) {
+		CallActivityFunction("loadQuests", questSelectors, sortOrder.ToString());
 	}
 
 
@@ -262,11 +298,11 @@ public class AndroidNative {
 	}
 
 	public static void subscribe(string SKU) {
-		CallActivityFunction("purchase", SKU, "");
+		CallActivityFunction("subscribe", SKU, "");
 	}
 	
 	public static void subscribe(string SKU, string developerPayload) {
-		CallActivityFunction("purchase", SKU, developerPayload);
+		CallActivityFunction("subscribe", SKU, developerPayload);
 	}
 
 	
@@ -572,12 +608,12 @@ public class AndroidNative {
 	}
 
 
-	public static void ScheduleLocalNotification(string title, string message, int seconds) {
-		CallActivityFunction("ScheduleLocalNotification", title, message, seconds.ToString());
+	public static void ScheduleLocalNotification(string title, string message, int seconds, int id) {
+		CallActivityFunction("ScheduleLocalNotification", title, message, seconds.ToString(), id.ToString());
 	}
 
-	public static void CanselLocalNotification(string title, string message) {
-		CallActivityFunction("canselLocalNotification", title, message);
+	public static void CanselLocalNotification(int id) {
+		CallActivityFunction("canselLocalNotification", id.ToString());
 	}
 
 
