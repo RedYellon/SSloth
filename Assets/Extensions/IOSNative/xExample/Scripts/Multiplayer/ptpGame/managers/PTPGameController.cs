@@ -33,7 +33,8 @@ public class PTPGameController : MonoBehaviour {
 
 		instance = this;
 
-		GameCenterManager.dispatcher.addEventListener (GameCenterManager.GAME_CENTER_PLAYER_AUTHENTICATED, OnPlayerAuth);
+
+		GameCenterManager.OnAuthFinished += OnAuthFinished;
 		GameCenterManager.init ();
 
 
@@ -88,10 +89,15 @@ public class PTPGameController : MonoBehaviour {
 	//  EVENTS
 	//--------------------------------------
 
-	private void OnPlayerAuth() {
-		IOSNativePopUpManager.showMessage("Player Authed ", "ID: " + GameCenterManager.player.playerId + "\n" + "Name: " + GameCenterManager.player.displayName);
-		cleanUpScene ();
+	void OnAuthFinished (ISN_Result res) {
+		if (res.IsSucceeded) {
+			IOSNativePopUpManager.showMessage("Player Authed ", "ID: " + GameCenterManager.player.playerId + "\n" + "Name: " + GameCenterManager.player.displayName);
+			cleanUpScene ();
+		}
+
 	}
+
+
 
 	private void OnGCPlayerDisconnected(CEvent e) {
 		IOSNativePopUpManager.showMessage ("Disconnect", "Game finished");

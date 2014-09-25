@@ -1,3 +1,21 @@
+1.6:
+New Features:
+UM_GameServiceManager.instance.ResetAchievements() now works for android also
+UM_camera API improved
+Local and Push Unified Notifications API added (UM_NotificationController)
+
+
+Updates:
+AndroidNative_v4.6
+GoogleMobileAd_v3.6
+MobileNativePopups_v2.6
+IOSNative_v5.0
+GoogleAnalytics_v1.9
+
+
+1.5.2:
+Plugin instalation bug fixed
+
 1.5:
 New Features:
 Ability to enable / disable Google Ad for IOS

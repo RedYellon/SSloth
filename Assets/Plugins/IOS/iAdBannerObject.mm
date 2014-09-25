@@ -42,11 +42,17 @@
     
     [self setBannerView:[[CustomBannerView alloc] initWithFrame:CGRectZero]];
     
+    
+    //We will nit able to test lanscape add if we will remove this deprecated functionality:
+    //Apple's test ads on iPhone and iPad are portrait only. Real advertisements probably will support landscape mode.
     if(IsLandscape) {
          [self bannerView].currentContentSizeIdentifier = ADBannerContentSizeIdentifierLandscape;
     } else {
          [self bannerView].currentContentSizeIdentifier = ADBannerContentSizeIdentifierPortrait;
     }
+    
+    
+    [[self bannerView] setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
    
  
     [self bannerView].delegate = self;
@@ -166,6 +172,12 @@
         w = vc.view.frame.size.width;
     }
     
+    NSArray *vComp = [[UIDevice currentDevice].systemVersion componentsSeparatedByString:@"."];
+    if ([[vComp objectAtIndex:0] intValue] >= 8) {
+        NSLog(@"IOS 8 detected");
+        w = vc.view.frame.size.width;
+    }
+    
     if(p == 1) {
         return  (w - [self bannerView].frame.size.width) / 2;
     }
@@ -196,6 +208,15 @@
     } else {
         h = vc.view.frame.size.height;
     }
+    
+   
+    NSArray *vComp = [[UIDevice currentDevice].systemVersion componentsSeparatedByString:@"."];
+    if ([[vComp objectAtIndex:0] intValue] >= 8) {
+        NSLog(@"IOS 8 detected");
+        h = vc.view.frame.size.height;
+    }
+    
+    
     
     if(p == 1) {
         return  (h - [self bannerView].frame.size.height) / 2;

@@ -291,38 +291,26 @@ static SocialGate *_sharedInstance;
     [emailBody appendString:@"</p>"];
     
     
-    /*
-     UIImage *emailImage = NULL;
-     if(media.length != 0) {
-     NSData *imageData = [[NSData alloc] initWithBase64Encoding:media];
-     emailImage = [[UIImage alloc] initWithData:imageData];
-     }
-     
-     
-     NSData *imageData = [NSData dataWithData:UIImagePNGRepresentation(emailImage)];
-     
-     
-     //Create a base64 string representation of the data using NSData+Base64
-     NSString *base64String = [imageData base64EncodedString];
-     */
-    
-    //Add the encoded string to the emailBody string
-    //Don't forget the "<b>" tags are required, the "<p>" tags are optional
-    
     if(media.length > 0) {
-        NSLog(@"media: %@",media);
+       // NSLog(@"media: %@",media);
         [emailBody appendString:[NSString stringWithFormat:@"<p><b><img src='data:image/png;base64,%@'></b></p>",media]];
     }
    
     
     //close the HTML formatting
     [emailBody appendString:@"</body></html>"];
-    NSLog(@"emailBody: %@",emailBody);
+   // NSLog(@"emailBody: %@",emailBody);
     
     
     
     //Create the mail composer window
     MFMailComposeViewController *emailDialog = [[MFMailComposeViewController alloc] init];
+    
+    if(emailDialog == nil) {
+        UnitySendMessage("IOSSocialManager", "OnMailFailed", [ISNDataConvertor NSStringToChar:@""]);
+        return;
+    }
+    
     emailDialog.mailComposeDelegate = self;
     [emailDialog setSubject:subject];
     [emailDialog setMessageBody:emailBody isHTML:YES];

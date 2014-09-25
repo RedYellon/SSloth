@@ -22,8 +22,7 @@ static IOSNativeNotificationCenter *sharedHelper = nil;
     return sharedHelper;
 }
 
--(void) scheduleNotification:(int)time message:(NSString *)messgae sound:(bool *)sound badges: (int)badges {
-    
+-(void) scheduleNotification:(int)time message:(NSString *)messgae sound:(bool *)sound alarmID:(NSString *)alarmID badges:(int)badges {
     
     UILocalNotification* localNotification = [[UILocalNotification alloc] init];
     localNotification.fireDate = [NSDate dateWithTimeIntervalSinceNow:time];
@@ -37,9 +36,39 @@ static IOSNativeNotificationCenter *sharedHelper = nil;
         localNotification.soundName = UILocalNotificationDefaultSoundName;
     }
     
+  
+    
+    NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+    [userInfo setObject:alarmID forKey:@"AlarmKey"];
+    // Set some extra info to your alarm
+    localNotification.userInfo = userInfo;
+    
+    NSLog(@"scheduleNotification AlarmKey: %@", alarmID);
+    
     [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
     
 }
+
+- (UILocalNotification *)existingNotificationWithAlarmID:(NSString *)alarmID {
+    for (UILocalNotification *notification in [[UIApplication sharedApplication] scheduledLocalNotifications]) {
+        if ([[notification.userInfo objectForKey:@"AlarmKey"] isEqualToString:alarmID]) {
+            return notification;
+        }
+    }
+    
+    return nil;
+}
+
+- (void)cleanUpLocalNotificationWithAlarmID:(NSString *)alarmID {
+    NSLog(@"cleanUpLocalNotificationWithAlarmID AlarmKey: %@", alarmID);
+    
+    UILocalNotification *notification = [self existingNotificationWithAlarmID:alarmID];
+    if (notification) {
+          NSLog(@"notification canceled");
+        [[UIApplication sharedApplication] cancelLocalNotification:notification];
+    }
+}
+
 
 
 
@@ -60,19 +89,26 @@ static IOSNativeNotificationCenter *sharedHelper = nil;
 
 extern "C" {
     
-    void _cancelNotifications() {
+    void _ISN_CancelNotifications() {
         [[IOSNativeNotificationCenter sharedInstance] cancelNotifications];
     }
     
     
-    void _scheduleNotification (int time, char* messgae, bool* sound, int badges)  {
-        [[IOSNativeNotificationCenter sharedInstance] scheduleNotification:time message:[ISNDataConvertor charToNSString:messgae] sound:sound badges:badges];
+    void _ISN_CancelNotificationById(char* nId) {
+        NSString* alarmID = [ISNDataConvertor charToNSString:nId];
+        [[IOSNativeNotificationCenter sharedInstance] cleanUpLocalNotificationWithAlarmID:alarmID];
     }
     
-    void _showNotificationBanner (char* title, char* messgae)  {
+    
+    void  _ISN_ScheduleNotification (int time, char* messgae, bool* sound, char* nId, int badges)  {
+        NSString* alarmID = [ISNDataConvertor charToNSString:nId];
+        [[IOSNativeNotificationCenter sharedInstance] scheduleNotification:time message:[ISNDataConvertor charToNSString:messgae] sound:sound alarmID:alarmID badges:badges];
+    }
+    
+    void _ISN_ShowNotificationBanner (char* title, char* messgae)  {
         [[IOSNativeNotificationCenter sharedInstance] showNotificationBanner:[ISNDataConvertor charToNSString:title] message:[ISNDataConvertor charToNSString:messgae]];
     }
-    void _applicationIconBadgeNumber (int badges) {
+    void _ISN_ApplicationIconBadgeNumber (int badges) {
         [[IOSNativeNotificationCenter sharedInstance] applicationIconBadgeNumber:badges];
     }
 }

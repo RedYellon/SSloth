@@ -1,3 +1,8 @@
+3.6:
+Fixes For IOS8
+Google Ad SDK updated
+
+
 3.5:
 
 Fixes:

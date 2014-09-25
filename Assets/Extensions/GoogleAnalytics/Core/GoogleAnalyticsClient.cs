@@ -635,9 +635,6 @@ public class GoogleAnalyticsClient  {
 	}
 
 	public void Send() {
-		if(Application.internetReachability == NetworkReachability.NotReachable) {
-			return;
-		}
 
 		if(GoogleAnalyticsSettings.Instance.IsDisabled) {
 			return;
@@ -651,7 +648,7 @@ public class GoogleAnalyticsClient  {
 
 		#endif
 
-		//anti cash
+		//anti Cache
 		builder.Append("&z=");
 		builder.Append(UnityEngine.Random.Range(0, System.Int32.MaxValue) ^ 3424);
 
@@ -669,12 +666,26 @@ public class GoogleAnalyticsClient  {
 		#if UNITY_IPHONE || UNITY_WP8 || UNITY_METRO
 		return new WWW(DataSendUrl, data, Headers);
 		#else
+
+
 		return new WWW(DataSendUrl, data);
 		#endif
 	}
 
 
 
+
+	
+	//--------------------------------------
+	//  Get / Set
+	//--------------------------------------
+
+	public string AnalyticsHost {
+		get {
+			return DataSendUrl;
+		}
+
+	}
 
 	//--------------------------------------
 	//  PRIVATE METHODS

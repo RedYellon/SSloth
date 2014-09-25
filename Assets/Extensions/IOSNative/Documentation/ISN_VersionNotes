@@ -1,12 +1,52 @@
+5.0:
+New Features:
+GameCenterManager.issueAchievementChallenge added
+GameCenterManager.issueLeaderboardChallenge added
+Game Center Requests Caching (Beta) 
+
+Plugins Editor Settings:
+Enabling / Disabling Push Notification service now can be done from Editor Menu
+Registering your app Achievements can be now done using Editor Menu
+
+IOSCamera:
+OnImageSaved Action Added
+More Load Image options Added
+* <a href=“http://goo.gl/bdCLLA”>Read more</a>
+
+IOSNotificationController:
+OnDeviceTokenReceived Action Added
+OnRemoteNotificationReceived Action Added
+Ability to Cancel notification by Id added
+* <a href=“http://goo.gl/Z53QtD”>Read more</a>
+
+
+Refactor
+GameCenterManager events refactored:
+* C# Acton added for all GameCenterManager events
+* Event results unified
+* Fail events removed, now you can check is event was failed with event result 
+* <a href=“http://goo.gl/HjKIx5”>Read more about events update</a>
+
+
+IOS8 Updates;
+All Plugin API checked with IOS8
+iAd API updated for IOS8
+Game Center API Updated for IOS8
+
+Fixes:
+Send mail with no acc bug fixed
+TransactionServer connection test before finishing transaction added
+
+
 4.9:
 IOSVideoManager added:
 IOSVideoManager.instance.PlaySteamingVideo(string videoUrl)
 IOSVideoManager.instance.OpenYoutubeVideo(string videoUrl)
 
 IOSInAppPurchaseManager actions added:
-Action<IOSStoreKitResponse> OnTransactionComplete
-Action<ISN_Result> OnRestoreComplet
-Action<ISN_Result> OnStoreKitInitComplete 
+Action OnTransactionComplete
+Action OnRestoreComplet
+Action OnStoreKitInitComplete 
 Action<IOSStoreKitVerificationResponse> OnVerificationComplete 
 
 Click on iAd banner now will be not treated as Unity click / touch events
@@ -39,9 +79,9 @@ MAIL_FAILED;
 MAIL_SUCCESS;
 
 New Actions:
-public Action<ISN_Result> OnFacebookPostResult;
-public Action<ISN_Result> OnTwitterPostResult;
-public Action<ISN_Result> OnMailResult;
+public Action OnFacebookPostResult;
+public Action OnTwitterPostResult;
+public Action OnMailResult;
 
 
 

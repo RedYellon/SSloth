@@ -14,7 +14,8 @@ public class IOSImagePickResult : ISN_Result {
 
 		
 		byte[] decodedFromBase64 = System.Convert.FromBase64String(ImageData);
-		_image = new Texture2D(1, 1, TextureFormat.DXT5, false);
+		_image = new Texture2D(1, 1);
+		//_image = new Texture2D(1, 1, TextureFormat.DXT5, false);
 		_image.LoadImage(decodedFromBase64);
 
 	}

@@ -10,7 +10,7 @@ using UnityEditor;
 
 public class UltimateMobileSettings : ScriptableObject {
 
-	public const string VERSION_NUMBER = "1.51";
+	public const string VERSION_NUMBER = "1.6";
 	
 	private const string UMSettingsAssetName = "UltimateMobileSettings";
 	private const string UMSettingsPath = "Extensions/UltimateMobile/Resources";
@@ -26,6 +26,7 @@ public class UltimateMobileSettings : ScriptableObject {
 	public bool IsInAppSettingsOpen = false;
 	public bool IsInAppSettingsPlatfromsOpen = true;
 	public bool IsInAppSettingsProductsOpen = true;
+	public bool IsCameraAndGallerySettingsOpen = true;
 
 
 

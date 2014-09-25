@@ -11,7 +11,7 @@ using UnityEditor;
 
 public class GoogleAnalyticsSettings : ScriptableObject {
 
-	public static string VERSION_NUMBER = "1.7";
+	public static string VERSION_NUMBER = "1.9";
 
 
 

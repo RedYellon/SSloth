@@ -55,7 +55,10 @@
      <Compile Include="Assets\Extensions\AndroidNative\Enum\AndroidDialogResult.cs" />
      <Compile Include="Assets\Extensions\AndroidNative\Enum\BillingResponseCodes.cs" />
      <Compile Include="Assets\Extensions\AndroidNative\Enum\GooglePurchaseState.cs" />
+     <Compile Include="Assets\Extensions\AndroidNative\Models\Reults\AN_PackageCheckResult.cs" />
+     <Compile Include="Assets\Extensions\AndroidNative\Models\Reults\AN_Result.cs" />
      <Compile Include="Assets\Extensions\AndroidNative\Other\Analytics\AndroidGoogleAnalytics.cs" />
+     <Compile Include="Assets\Extensions\AndroidNative\Other\Enums\AN_CameraCaptureType.cs" />
      <Compile Include="Assets\Extensions\AndroidNative\Other\Features\AddressBookController.cs" />
      <Compile Include="Assets\Extensions\AndroidNative\Other\Features\AndroidAppInfoLoader.cs" />
      <Compile Include="Assets\Extensions\AndroidNative\Other\Features\AndroidCamera.cs" />
@@ -66,6 +69,8 @@
      <Compile Include="Assets\Extensions\AndroidNative\Other\Models\PackageAppInfo.cs" />
      <Compile Include="Assets\Extensions\AndroidNative\Other\Notifications\AndroidNotificationManager.cs" />
      <Compile Include="Assets\Extensions\AndroidNative\Other\Notifications\AndroidToast.cs" />
+     <Compile Include="Assets\Extensions\AndroidNative\Other\Notifications\Template\LocalNotificationTemplate.cs" />
+     <Compile Include="Assets\Extensions\AndroidNative\Other\Results\GallerySaveResult.cs" />
      <Compile Include="Assets\Extensions\AndroidNative\Other\Templates\AndroidABAddress.cs" />
      <Compile Include="Assets\Extensions\AndroidNative\Other\Templates\AndroidABChat.cs" />
      <Compile Include="Assets\Extensions\AndroidNative\Other\Templates\AndroidABEmail.cs" />
@@ -119,6 +124,7 @@
      <Compile Include="Assets\Extensions\FlashLikeEvents\Example\Scripts\FLExampleListner.cs" />
      <Compile Include="Assets\Extensions\GoogleAnalytics\Core\GoogleAnalytics.cs" />
      <Compile Include="Assets\Extensions\GoogleAnalytics\Core\GoogleAnalyticsClient.cs" />
+     <Compile Include="Assets\Extensions\GoogleAnalytics\Core\GoogleAnalyticsRequestCache.cs" />
      <Compile Include="Assets\Extensions\GoogleAnalytics\Core\GoogleAnalyticsRequestCash.cs" />
      <Compile Include="Assets\Extensions\GoogleAnalytics\Enum\GoogleAnalyticsHitType.cs" />
      <Compile Include="Assets\Extensions\GoogleAnalytics\Example\Scripts\GoogleAnalyticsUseExample.cs" />
@@ -204,6 +210,7 @@
      <Compile Include="Assets\Extensions\IOSNative\Core\IOSNativeAppEvents.cs" />
      <Compile Include="Assets\Extensions\IOSNative\Core\IOSNativeSettings.cs" />
      <Compile Include="Assets\Extensions\IOSNative\Core\IOSNativeUtility.cs" />
+     <Compile Include="Assets\Extensions\IOSNative\Core\ISN_CacheManager.cs" />
      <Compile Include="Assets\Extensions\IOSNative\Core\ISN_Error.cs" />
      <Compile Include="Assets\Extensions\IOSNative\Core\ISN_Singleton.cs" />
      <Compile Include="Assets\Extensions\IOSNative\Enum\GCBoardTimeSpan.cs" />
@@ -215,6 +222,9 @@
      <Compile Include="Assets\Extensions\IOSNative\Enum\iAdGravity.cs" />
      <Compile Include="Assets\Extensions\IOSNative\GameCenter\GameCenterManager.cs" />
      <Compile Include="Assets\Extensions\IOSNative\GameCenter\GameCenterMultiplayer.cs" />
+     <Compile Include="Assets\Extensions\IOSNative\GameCenter\Results\ISN_AcheivmentProgressResult.cs" />
+     <Compile Include="Assets\Extensions\IOSNative\GameCenter\Results\ISN_PlayerScoreLoadedResult.cs" />
+     <Compile Include="Assets\Extensions\IOSNative\GameCenter\Results\ISN_UserInfoLoadResult.cs" />
      <Compile Include="Assets\Extensions\IOSNative\GameCenter\Templates\AchievementTemplate.cs" />
      <Compile Include="Assets\Extensions\IOSNative\GameCenter\Templates\GCLeaderBoard.cs" />
      <Compile Include="Assets\Extensions\IOSNative\GameCenter\Templates\GCScore.cs" />
@@ -296,6 +306,7 @@
      <Compile Include="Assets\Extensions\MobileNativePopUps\Scripts\Platfroms\WP8Impl\PopUps\MNWP8RateUsPopUp.cs" />
      <Compile Include="Assets\Extensions\MobileNativePopUps\Scripts\Platfroms\WP8Impl\PopUps\base\BaseWP8Popup.cs" />
      <Compile Include="Assets\Extensions\StansAssetsCommon\FileStaticAPI.cs" />
+     <Compile Include="Assets\Extensions\StansAssetsCommon\SAC_Singleton.cs" />
      <Compile Include="Assets\Extensions\StansAssetsCommon\SA_ScreenShotMaker.cs" />
      <Compile Include="Assets\Extensions\StansAssetsPreviewUI\Scripts\SA_UI_Scripts\DefaultPreviewButton.cs" />
      <Compile Include="Assets\Extensions\StansAssetsPreviewUI\Scripts\SA_UI_Scripts\SALevelLoader.cs" />
@@ -336,6 +347,9 @@
      <Compile Include="Assets\Extensions\UltimateMobile\Scripts\InApps\Templates\UM_InAppProductTemplate.cs" />
      <Compile Include="Assets\Extensions\UltimateMobile\Scripts\NativeAPI\Camera\UM_Camera.cs" />
      <Compile Include="Assets\Extensions\UltimateMobile\Scripts\NativeAPI\Camera\UM_ImagePickResult.cs" />
+     <Compile Include="Assets\Extensions\UltimateMobile\Scripts\NativeAPI\Camera\UM_ImageSaveResult.cs" />
+     <Compile Include="Assets\Extensions\UltimateMobile\Scripts\NativeAPI\Notifications\UM_NotificationController.cs" />
+     <Compile Include="Assets\Extensions\UltimateMobile\Scripts\NativeAPI\Notifications\UM_PushRegistrationResult.cs" />
      <Compile Include="Assets\Extensions\UltimateMobile\Scripts\Social\UM_ShareUtility.cs" />
      <Compile Include="Assets\Extensions\UltimateMobile\Scripts\Templates\UM_BaseResult.cs" />
      <Compile Include="Assets\Extensions\WP8Native\Enum\WP8DialogResult.cs" />
@@ -493,6 +507,7 @@
      <None Include="Assets\Plugins\IOS\IOS_DATA_FILE.txt" />
      <None Include="Assets\TK2DROOT\tk2d\Shaders\goodies\PackedTextMesh.shader" />
      <None Include="Assets\Universal Sound FX\#Game Genre References\Fighting.txt" />
+     <None Include="Assets\Plugins\StansAssets\IOS\UM_IOS_INSTALATION_MARK.txt" />
      <None Include="Assets\Fonts\slothTextempty.txt" />
      <None Include="Assets\TK2DROOT\tk2d\Shaders\Blend2TexVertexColor.shader" />
      <None Include="Assets\Universal Sound FX\#Game Genre References\Platform.txt" />
@@ -502,6 +517,7 @@
      <None Include="Assets\Universal Sound FX\#Game Genre References\Real Time Stategy (RTS) Medieval.txt" />
      <None Include="Assets\Universal Sound FX\#Game Genre References\Shoot em Up.txt" />
      <None Include="Assets\Plugins\Confetti Particles\Confetti - Readme.txt" />
+     <None Include="Assets\Plugins\IOS\UM_IOS_INSTALATION_MARK.txt" />
      <None Include="Assets\Universal Sound FX\#Game Genre References\Physics.txt" />
      <None Include="Assets\TK2DROOT\tk2d\Shaders\resources\BlendVertexColor.shader" />
      <None Include="Assets\Fonts\chocolate_covered_raindrops\READ ME!!.txt" />

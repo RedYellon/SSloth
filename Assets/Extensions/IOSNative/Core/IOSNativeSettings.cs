@@ -10,15 +10,29 @@ using UnityEditor;
 
 public class IOSNativeSettings : ScriptableObject {
 
-	public const string VERSION_NUMBER = "4.9";
+	public const string VERSION_NUMBER = "5.0";
 
 	public string AppleId = "XXXXXXXXX";
 
 	public List<string> InAppProducts = new List<string>();
+	public List<string> RegistredAchievementsIds = new List<string>();
 	public List<string> DefaultStoreProductsView = new List<string>();
 
 
 	public bool checkInternetBeforeLoadRequestl = false;
+	public bool ShowStoreKitParams = false;
+	public bool ShowGCParams = false;
+	public bool ShowAchivmentsParamsParams = false;
+	public bool ShowOtherParams = false;
+	public bool ShowCameraAndGallryParams = false;
+
+
+	public bool UseGCRequestsCahing = false;
+	public bool EnablePushNotificationsAPI = false;
+
+
+	public int  MaxImageLoadSize = 512;
+	public float JPegCompressionRate = 0.8f;
 
 
 

@@ -222,28 +222,35 @@ public class GoogleAnalytics : MonoBehaviour {
 
 
 	public static void Send(string request) {
-		byte[] data = System.Text.Encoding.UTF8.GetBytes(request);
-		Instance.StartCoroutine(Instance.SendAnalytics(data, request));
+		#if UNITY_WEBPLAYER  
+			#if !UNITY_EDITOR
+				Application.ExternalCall("SendGA", Client.AnalyticsHost, request);
+			#endif
+		#else
+			byte[] data = System.Text.Encoding.UTF8.GetBytes(request);
+			Instance.StartCoroutine(Instance.SendAnalytics(data, request));
+		#endif
 	}
 
-	public static void SendSkipCash(string request) {
+	public static void SendSkipCache(string request) {
 		byte[] data = System.Text.Encoding.UTF8.GetBytes(request);
 		Client.GenerateWWW(data);
 	}
 
 		
 		
-	private IEnumerator SendAnalytics (byte[] data, string cash) {
+	private IEnumerator SendAnalytics (byte[] data, string cache) {
 		// Start a download of the given URL
 		WWW www = Client.GenerateWWW(data);
 		
 		// Wait for download to complete
 		yield return www;
 
+
 		if(www.error != null) {
-			GoogleAnalyticsRequestCash.SaveRequest(cash);
+			GoogleAnalyticsRequestCache.SaveRequest(cache);
 		} else {
-			GoogleAnalyticsRequestCash.SendChashedRequests();
+			GoogleAnalyticsRequestCache.SendChashedRequests();
 		}
 
 	}

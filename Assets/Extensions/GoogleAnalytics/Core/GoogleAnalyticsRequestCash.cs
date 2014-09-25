@@ -23,7 +23,7 @@ public class GoogleAnalyticsRequestCash  {
 		if(data != string.Empty) {
 			string[] requests = data.Split(DATA_SPLITTER [0]);
 			foreach(string request in requests) {
-				GoogleAnalytics.SendSkipCash(request);
+				//GoogleAnalytics.SendSkipCash(request);
 			}
 			
 		} 

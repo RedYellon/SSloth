@@ -14,7 +14,7 @@ using System.Collections.Generic;
 
 public class GameCenterExample : BaseIOSFeaturePreview {
 	
-	public int hiScore = 100;
+	private int hiScore = 200;
 
 	
 	private string leaderBoardId =  "your.ios.leaderbord1.id.here ";
@@ -49,11 +49,10 @@ public class GameCenterExample : BaseIOSFeaturePreview {
 			
 			
 			GameCenterManager.dispatcher.addEventListener (GameCenterManager.GAME_CENTER_LEADER_BOARD_SCORE_LOADED, OnLeaderBoarScoreLoaded);
-			
-			GameCenterManager.dispatcher.addEventListener (GameCenterManager.GAME_CENTER_PLAYER_AUTHENTICATED, OnAuth);
-			GameCenterManager.dispatcher.addEventListener (GameCenterManager.GAME_CENTER_PLAYER_AUTHENTIFICATION_FAILED, OnAuthFailed);
-			
-			
+
+
+			GameCenterManager.OnAuthFinished += OnAuthFinished;
+
 			
 			//Initializing Game Cneter class. This action will triger authentication flow
 			GameCenterManager.init();
@@ -146,6 +145,14 @@ public class GameCenterExample : BaseIOSFeaturePreview {
 			GameCenterManager.getScore(leaderBoardId2);
 		}
 
+
+		StartX += XButtonStep;
+		if(GUI.Button(new Rect(StartX, StartY, buttonWidth, buttonHeight), "Send Challenge")) {
+			GameCenterManager.issueLeaderboardChallenge(leaderBoardId2, "Here is tiny challenge for you");
+		}
+
+
+
 		StartX = XStartPos;
 		StartY+= YButtonStep;
 		StartY+= YLableStep;
@@ -171,7 +178,10 @@ public class GameCenterExample : BaseIOSFeaturePreview {
 			GameCenterManager.submitAchievement(88.66f, TEST_ACHIEVEMENT_2_ID, false);
 		}
 		
-
+		StartX += XButtonStep;
+		if(GUI.Button(new Rect(StartX, StartY, buttonWidth, buttonHeight), "Send Challenge")) {
+			GameCenterManager.issueAchievementChallenge(TEST_ACHIEVEMENT_1_ID, "Here is tiny challenge for you");
+		}
 
 	}
 	
@@ -198,28 +208,36 @@ public class GameCenterExample : BaseIOSFeaturePreview {
 	private void OnAchievementProgress(CEvent e) {
 		Debug.Log ("OnAchievementProgress");
 
-		AchievementTemplate tpl = e.data as AchievementTemplate;
-		Debug.Log (tpl.id + ":  " + tpl.progress.ToString());
+		ISN_AcheivmentProgressResult result = e.data as ISN_AcheivmentProgressResult;
+
+		if(result.IsSucceeded) {
+			AchievementTemplate tpl = result.info;
+			Debug.Log (tpl.id + ":  " + tpl.progress.ToString());
+		}
+
+
 	}
 
 	private void OnLeaderBoarScoreLoaded(CEvent e) {
-		GCScore score = e.data as GCScore;
-		IOSNativePopUpManager.showMessage("Leader Board " + score.leaderboardId, "Score: " + score.score + "\n" + "Rank:" + score.rank);
+		ISN_PlayerScoreLoadedResult result = e.data as ISN_PlayerScoreLoadedResult;
+
+		if(result.IsSucceeded) {
+			GCScore score = result.loadedScore;
+			IOSNativePopUpManager.showMessage("Leader Board " + score.leaderboardId, "Score: " + score.score + "\n" + "Rank:" + score.rank);
+		}
+
 	}
 
 
-	private void OnAuth() {
-		IOSNativePopUpManager.showMessage("Player Authed ", "ID: " + GameCenterManager.player.playerId + "\n" + "Alias: " + GameCenterManager.player.alias);
+	void OnAuthFinished (ISN_Result res) {
+		if (res.IsSucceeded) {
+			IOSNativePopUpManager.showMessage("Player Authed ", "ID: " + GameCenterManager.player.playerId + "\n" + "Alias: " + GameCenterManager.player.alias);
+		} else {
+			IOSNativePopUpManager.showMessage("Game Cneter ", "Player auntification failed");
+		}
 	}
 	
-	private void OnAuthFailed() {
-		IOSNativePopUpManager.showMessage("Game Cneter ", "Player auntification failed");
-		
-		//if you got this event it means that player canseled auntification flow. With probably mean that playr do not whant to use gamcenter in your game
-		
-	
-	}
-	
+
 	//--------------------------------------
 	//  PRIVATE METHODS
 	//--------------------------------------

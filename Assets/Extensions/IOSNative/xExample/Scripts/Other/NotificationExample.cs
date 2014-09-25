@@ -13,6 +13,9 @@ using System.Collections;
 
 public class NotificationExample : BaseIOSFeaturePreview {
 
+
+	private int lastNotificationId = 0;
+
 	//--------------------------------------
 	// INITIALIZE
 	//--------------------------------------
@@ -31,31 +34,37 @@ public class NotificationExample : BaseIOSFeaturePreview {
 		
 		StartY+= YLableStep;
 		if(GUI.Button(new Rect(StartX, StartY, buttonWidth, buttonHeight), "Schedule Notification Silet")) {
-			IOSNotificationController.instance.ScheduleNotification (15, "Your Notification Text No Sound", false, 0);
+			lastNotificationId = IOSNotificationController.instance.ScheduleNotification (5, "Your Notification Text No Sound", false);
 		}
 
 		StartX += XButtonStep;
 		if(GUI.Button(new Rect(StartX, StartY, buttonWidth, buttonHeight), "Schedule Notification")) {
-			IOSNotificationController.instance.ScheduleNotification (15, "Your Notification Text", true, 0);
+			lastNotificationId = IOSNotificationController.instance.ScheduleNotification (5, "Your Notification Text", true);
 		}
 
 
 		StartX += XButtonStep;
 		if(GUI.Button(new Rect(StartX, StartY, buttonWidth, buttonHeight), "Cansel All Notifications")) {
-			IOSNotificationController.instance.CancelNotifications();
+			IOSNotificationController.instance.CancelAllLocalNotifications();
+		}
+
+		StartX += XButtonStep;
+		if(GUI.Button(new Rect(StartX, StartY, buttonWidth, buttonHeight), "Cansel Last Notification")) {
+			IOSNotificationController.instance.CancelLocalNotificationById(lastNotificationId);
 		}
 
 
 		StartX = XStartPos;
 		StartY+= YButtonStep;
 		if(GUI.Button(new Rect(StartX, StartY, buttonWidth, buttonHeight), "Reg Device For Push Notif. ")) {
-			#if (UNITY_IPHONE && !UNITY_EDITOR) || SA_DEBUG_MODE
-			//push notifocations and RemoteNotificationType class can be used only on IOS Platfrom.
-			
+
+
+
+			#if UNITY_IPHONE
 			IOSNotificationController.instance.RegisterForRemoteNotifications (RemoteNotificationType.Alert |  RemoteNotificationType.Badge |  RemoteNotificationType.Sound);
 			IOSNotificationController.instance.addEventListener (IOSNotificationController.DEVICE_TOKEN_RECEIVED, OnTokenReived);
-			
 			#endif
+
 
 		}
 

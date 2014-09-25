@@ -42,12 +42,12 @@ public class GCScore  {
 	//--------------------------------------
 	
 	
-	public float GetFloatScore() {
-		return System.Convert.ToSingle (_score);
+	public double GetDoubleScore() {
+		return GetLongScore () / 100f;
 	}
 	
-	public int GetIntScore() {
-		return System.Convert.ToInt32 (_score);
+	public long GetLongScore() {
+		return System.Convert.ToInt64 (_score);
 	}
 	
 	

@@ -3,6 +3,11 @@ using System.Collections;
 
 public class PreviewSceneController : MonoBehaviour {
 
+	public SA_Label title;
+
+	void Awake() {
+		title.text = "Android Native Unity3d Plugin (" +  AndroidNativeSettings.VERSION_NUMBER + ")";
+	}
 
 
 	public void SendMail() {

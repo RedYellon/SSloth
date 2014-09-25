@@ -54,8 +54,7 @@ public class UM_GameServiceManager : SA_Singleton<UM_GameServiceManager> {
 
 
 
-		GameCenterManager.dispatcher.addEventListener (GameCenterManager.GAME_CENTER_PLAYER_AUTHENTICATED, 			 OnIOSAuth);
-		GameCenterManager.dispatcher.addEventListener (GameCenterManager.GAME_CENTER_PLAYER_AUTHENTIFICATION_FAILED, OnIOSAuthFailed);
+		GameCenterManager.OnAuthFinished += OnAuthFinished;
 
 		GameCenterManager.dispatcher.addEventListener (GameCenterManager.GAME_CENTER_ACHIEVEMENTS_LOADED, OnServiceDataLoaded);
 		GameCenterManager.dispatcher.addEventListener (GameCenterManager.GAME_CENTER_LEADER_BOARD_SCORE_LOADED, OnServiceDataLoaded);
@@ -138,11 +137,11 @@ public class UM_GameServiceManager : SA_Singleton<UM_GameServiceManager> {
 	}
 
 
-	public void SubmitScore(string LeaderboardId, int score) {
+	public void SubmitScore(string LeaderboardId, long score) {
 		SubmitScore(UltimateMobileSettings.Instance.GetLeaderboardById(LeaderboardId), score);
 	}
 
-	public void SubmitScore(UM_Leaderboard leaderboard, int score) {
+	public void SubmitScore(UM_Leaderboard leaderboard, long score) {
 		switch(Application.platform) {
 		case RuntimePlatform.IPhonePlayer:
 			GameCenterManager.reportScore(score, leaderboard.IOSId);
@@ -216,7 +215,7 @@ public class UM_GameServiceManager : SA_Singleton<UM_GameServiceManager> {
 			GameCenterManager.resetAchievements();
 			break;
 		case RuntimePlatform.Android:
-		
+			GooglePlayManager.instance.ResetAllAchievements();
 			break;
 		}
 	}
@@ -256,16 +255,16 @@ public class UM_GameServiceManager : SA_Singleton<UM_GameServiceManager> {
 	
 
 
-	public int GetCurrentPlayerScore(string leaderBoardId) {
+	public long GetCurrentPlayerScore(string leaderBoardId) {
 		return GetCurrentPlayerScore(UltimateMobileSettings.Instance.GetLeaderboardById(leaderBoardId));
 	} 
 
-	public int GetCurrentPlayerScore(UM_Leaderboard leaderboard) {
+	public long GetCurrentPlayerScore(UM_Leaderboard leaderboard) {
 		switch(Application.platform) {
 		case RuntimePlatform.IPhonePlayer:
 			GCLeaderBoard board =  GameCenterManager.GetLeaderBoard(leaderboard.IOSId);
 			if(board != null) {
-				return board.GetCurrentPlayerScore(GCBoardTimeSpan.ALL_TIME, GCCollectionType.GLOBAL).GetIntScore();
+				return board.GetCurrentPlayerScore(GCBoardTimeSpan.ALL_TIME, GCCollectionType.GLOBAL).GetLongScore();
 			} else {
 				return 0;
 			}
@@ -377,14 +376,15 @@ public class UM_GameServiceManager : SA_Singleton<UM_GameServiceManager> {
 	// IOS Events
 	//--------------------------------------
 
-	private void OnIOSAuth() {
-		OnServiceConnected();
 
-	}
 
-	private void OnIOSAuthFailed() {
-		_ConnectionSate = UM_ConnectionState.DISCONNECTED;
-		dispatch(PLAYER_DISCONNECTED);
+	private void OnAuthFinished (ISN_Result res) {
+		if(res.IsSucceeded) {
+			OnServiceConnected();
+		} else {
+			_ConnectionSate = UM_ConnectionState.DISCONNECTED;
+			dispatch(PLAYER_DISCONNECTED);
+		}
 	}
 
 	//--------------------------------------

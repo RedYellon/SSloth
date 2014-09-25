@@ -8,7 +8,6 @@
 #import "ISNDataConvertor.h"
 
 
-
 @implementation TransactionServer
 
 NSString* lastTransaction = @"";
@@ -122,8 +121,20 @@ NSString* lastTransaction = @"";
 - (void)completeTransaction:(SKPaymentTransaction *)transaction {
     NSLog(@"completeTransaction...");
     
-    [self provideContent:transaction];
-    [[SKPaymentQueue defaultQueue] finishTransaction: transaction];
+    
+    Reachability* reachability = [Reachability reachabilityWithHostName:@"www.apple.com"];
+    NetworkStatus remoteHostStatus = [reachability currentReachabilityStatus];
+    
+    if(remoteHostStatus == NotReachable) {
+        NSLog(@"apple.com not reachable, sending tracnsactio finish canseled");
+    } else {
+        NSLog(@"apple.com reachable sending tracnsactio finish");
+        [self provideContent:transaction];
+        [[SKPaymentQueue defaultQueue] finishTransaction: transaction];
+    }
+    
+    
+   
     
 }
 

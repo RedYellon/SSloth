@@ -9,7 +9,6 @@
 #import <Foundation/Foundation.h>
 #include "ISNDataConvertor.h"
 #if UNITY_VERSION < 450
-#import
 #include "iPhone_View.h"
 #endif
 

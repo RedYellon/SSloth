@@ -23,6 +23,11 @@ public class AndroidNativeSettingsEditor : Editor {
 
 	private const string version_info_file = "Plugins/StansAssets/Versions/AN_VersionInfo.txt"; 
 
+
+	void Awake() {
+		ApplaySettings();
+	}
+
 	public override void OnInspectorGUI() {
 		settings = target as AndroidNativeSettings;
 
@@ -38,6 +43,9 @@ public class AndroidNativeSettingsEditor : Editor {
 		BillingSettings();
 		EditorGUILayout.Space();
 		GCM ();
+		EditorGUILayout.Space();
+		Other ();
+
 
 		EditorGUILayout.Space();
 		SocialPlatfromSettingsEditor.FacebookSettings();
@@ -47,6 +55,8 @@ public class AndroidNativeSettingsEditor : Editor {
 
 
 		AboutGUI();
+
+
 	
 
 		if(GUI.changed) {
@@ -118,29 +128,10 @@ public class AndroidNativeSettingsEditor : Editor {
 
 		if(IsInstalled) {
 			if(!IsUpToDate) {
+
+				DrawUpdate();
+
 				EditorGUILayout.HelpBox("Update Required \nResources version: " + DataVersion + " Plugin version: " + AndroidNativeSettings.VERSION_NUMBER, MessageType.Warning);
-
-				if(Version <= 4.4f) {
-					EditorGUILayout.HelpBox("New version contains AndroidManifest.xml chnages, Please remove Assets/Plugins/Android/AndroidManifest.xml file before update or add manualy File Sharing Block from Assets/Plugins/StansAssets/Android/AndroidManifest.xml", MessageType.Warning);
-				
-					EditorGUILayout.BeginHorizontal();
-					EditorGUILayout.Space();
-
-					if(GUILayout.Button("Remove AndroidManifest and Update to " + AndroidNativeSettings.VERSION_NUMBER,  GUILayout.Width(250))) {
-
-						string file = "AndroidManifest.xml";
-						FileStaticAPI.DeleteFile(PluginsInstalationUtil.ANDROID_DESTANATION_PATH + file);
-
-						PluginsInstalationUtil.Android_UpdatePlugin();
-						UpdateVersionInfo();
-					}
-					
-
-					EditorGUILayout.Space();
-					EditorGUILayout.EndHorizontal();
-					EditorGUILayout.Space();
-				}
-			
 
 				EditorGUILayout.BeginHorizontal();
 				EditorGUILayout.Space();
@@ -164,6 +155,54 @@ public class AndroidNativeSettingsEditor : Editor {
 
 		EditorGUILayout.Space();
 
+	}
+
+
+	private void DrawUpdate() {
+		if(Version <= 4.4f) {
+			EditorGUILayout.HelpBox("AndroidManifest.xml was updated in 4.5 \nNew version contains AndroidManifest.xml chnages, Please remove Assets/Plugins/Android/AndroidManifest.xml file before update or add manualy File Sharing Block from Assets/Plugins/StansAssets/Android/AndroidManifest.xml", MessageType.Warning);
+			
+			EditorGUILayout.BeginHorizontal();
+			EditorGUILayout.Space();
+			
+			if(GUILayout.Button("Remove AndroidManifest and Update to " + AndroidNativeSettings.VERSION_NUMBER,  GUILayout.Width(250))) {
+				
+				string file = "AndroidManifest.xml";
+				FileStaticAPI.DeleteFile(PluginsInstalationUtil.ANDROID_DESTANATION_PATH + file);
+				
+				PluginsInstalationUtil.Android_UpdatePlugin();
+				UpdateVersionInfo();
+			}
+			
+			
+			EditorGUILayout.Space();
+			EditorGUILayout.EndHorizontal();
+			EditorGUILayout.Space();
+			
+		}
+
+
+		if(Version <= 4.5f) {
+			EditorGUILayout.HelpBox("AndroidManifest.xml was updated in 4.6 \nNew version contains AndroidManifest.xml chnages, Please remove Assets/Plugins/Android/AndroidManifest.xml file before update or add manualy %APP_BUNDLE_ID% tockens from Assets/Plugins/StansAssets/Android/AndroidManifest.xml", MessageType.Warning);
+			
+			EditorGUILayout.BeginHorizontal();
+			EditorGUILayout.Space();
+			
+			if(GUILayout.Button("Remove AndroidManifest and Update to " + AndroidNativeSettings.VERSION_NUMBER,  GUILayout.Width(250))) {
+				
+				string file = "AndroidManifest.xml";
+				FileStaticAPI.DeleteFile(PluginsInstalationUtil.ANDROID_DESTANATION_PATH + file);
+				
+				PluginsInstalationUtil.Android_UpdatePlugin();
+				UpdateVersionInfo();
+			}
+			
+			
+			EditorGUILayout.Space();
+			EditorGUILayout.EndHorizontal();
+			EditorGUILayout.Space();
+			
+		}
 	}
 
 	private void Actions() {
@@ -265,6 +304,7 @@ public class AndroidNativeSettingsEditor : Editor {
 			EditorGUILayout.BeginHorizontal();
 			EditorGUILayout.LabelField(Base64KeyLabel);
 			settings.base64EncodedPublicKey	 	= EditorGUILayout.TextField(settings.base64EncodedPublicKey);
+			settings.base64EncodedPublicKey 	= settings.base64EncodedPublicKey.Trim();
 			EditorGUILayout.EndHorizontal();
 
 
@@ -277,6 +317,7 @@ public class AndroidNativeSettingsEditor : Editor {
 			foreach(string str in settings.InAppProducts) {
 				EditorGUILayout.BeginHorizontal();
 				settings.InAppProducts[i]	 	= EditorGUILayout.TextField(settings.InAppProducts[i]);
+				settings.InAppProducts[i]		= settings.InAppProducts[i].Trim();
 				if(GUILayout.Button("Remove",  GUILayout.Width(80))) {
 					settings.InAppProducts.Remove(str);
 					break;
@@ -299,16 +340,60 @@ public class AndroidNativeSettingsEditor : Editor {
 	}
 
 
+
+
 	private void GCM() {
 		AndroidNativeSettings.Instance.GCMSettingsActinve = EditorGUILayout.Foldout(AndroidNativeSettings.Instance.GCMSettingsActinve, "Google Cloud Messaging  Settings");
 		if (AndroidNativeSettings.Instance.GCMSettingsActinve) {
 			EditorGUILayout.BeginHorizontal();
 			EditorGUILayout.LabelField("Sender Id");
 			settings.GCM_SenderId	 	= EditorGUILayout.TextField(settings.GCM_SenderId);
+			settings.GCM_SenderId		= settings.GCM_SenderId.Trim();
 			EditorGUILayout.EndHorizontal();
 		}
+	}
 
+
+
+	private void Other() {
+		AndroidNativeSettings.Instance.ShowCameraAndGalleryParams = EditorGUILayout.Foldout(AndroidNativeSettings.Instance.ShowCameraAndGalleryParams, "Camera And Gallery");
+		if (AndroidNativeSettings.Instance.ShowCameraAndGalleryParams) {
+			CameraAndGalleryParams();
+		}
+	}
+
+	private void CameraAndGalleryParams() {
+		EditorGUILayout.BeginHorizontal();
+		EditorGUILayout.LabelField("Camera Capture Mode");
+		settings.CameraCaptureMode	 	= (AN_CameraCaptureType) EditorGUILayout.EnumPopup(settings.CameraCaptureMode);
+		EditorGUILayout.EndHorizontal();
 		
+		
+		EditorGUILayout.BeginHorizontal();
+		EditorGUILayout.LabelField("Max Loaded Image Size");
+		settings.MaxImageLoadSize	 	= EditorGUILayout.IntField(settings.MaxImageLoadSize);
+		EditorGUILayout.EndHorizontal();
+		
+		
+		
+		GUI.enabled = !settings.UseProductNameAsFolderName;
+		if(settings.UseProductNameAsFolderName) {
+			settings.GalleryFolderName = PlayerSettings.productName.Trim();
+		}
+		
+		EditorGUILayout.BeginHorizontal();
+		EditorGUILayout.LabelField("App Gallery Folder");
+		settings.GalleryFolderName	 	= EditorGUILayout.TextField(settings.GalleryFolderName);
+		settings.GalleryFolderName		= settings.GalleryFolderName.Trim();
+		settings.GalleryFolderName		= settings.GalleryFolderName.Trim('/');
+		EditorGUILayout.EndHorizontal();
+		
+		GUI.enabled = true;
+		
+		EditorGUILayout.BeginHorizontal();
+		EditorGUILayout.LabelField("Use Product Name As Folder Name");
+		settings.UseProductNameAsFolderName	 	= EditorGUILayout.Toggle(settings.UseProductNameAsFolderName);
+		EditorGUILayout.EndHorizontal();
 	}
 
 
@@ -331,6 +416,12 @@ public class AndroidNativeSettingsEditor : Editor {
 		EditorGUILayout.LabelField(label, GUILayout.Width(180), GUILayout.Height(16));
 		EditorGUILayout.SelectableLabel(value, GUILayout.Height(16));
 		EditorGUILayout.EndHorizontal();
+	}
+
+	private void ApplaySettings() {
+		if(AndroidNativeSettings.Instance.UseProductNameAsFolderName) {
+			AndroidNativeSettings.Instance.GalleryFolderName = PlayerSettings.productName;
+		}
 	}
 
 

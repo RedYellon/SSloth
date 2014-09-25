@@ -113,12 +113,12 @@ public class GooglePlayManager : SA_Singleton<GooglePlayManager> {
 		AndroidNative.showLeaderBoardById (leaderboardId);
 	}
 	
-	public void submitScore(string leaderboardName, int score) {
+	public void submitScore(string leaderboardName, long score) {
 		if (!GooglePlayConnection.CheckState ()) { return; }
 		AndroidNative.submitScore (leaderboardName, score);
 	}
 
-	public void submitScoreById(string leaderboardId, int score) {
+	public void submitScoreById(string leaderboardId, long score) {
 		if (!GooglePlayConnection.CheckState ()) { return; }
 		AndroidNative.submitScoreById (leaderboardId, score);
 	}
@@ -464,7 +464,7 @@ public class GooglePlayManager : SA_Singleton<GooglePlayManager> {
 
 
 				
-				int score = System.Convert.ToInt32(storeData[i]);
+			 	long score = System.Convert.ToInt64(storeData[i]);
 				int rank = System.Convert.ToInt32(storeData[i + 1]);
 
 
@@ -521,7 +521,7 @@ public class GooglePlayManager : SA_Singleton<GooglePlayManager> {
 				int start = i + 2;
 				for(int j = 0; j < 6; j++) {
 
-					int score = System.Convert.ToInt32(storeData[start]);
+					long score = System.Convert.ToInt64(storeData[start]);
 					int rank = System.Convert.ToInt32(storeData[start + 1]);
 
 					GPBoardTimeSpan 	timeSpan 		= (GPBoardTimeSpan)  System.Convert.ToInt32(storeData[start + 2]);
@@ -568,7 +568,7 @@ public class GooglePlayManager : SA_Singleton<GooglePlayManager> {
 
 			string leaderboardId = storeData[3];
 
-			int score = System.Convert.ToInt32(storeData[4]);
+			long score = System.Convert.ToInt64(storeData[4]);
 			int rank = System.Convert.ToInt32(storeData[5]);
 
 			GPLeaderBoard lb;

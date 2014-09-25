@@ -1,3 +1,38 @@
+4.6:
+New Features:
+Build Post Processing added
+AndroidNativeUtility.instance.RunPackage(string packageName);
+AndroidNativeUtility.instance.CheckIsPackageInstalled(string packageName);
+You can red more <a href=“http://goo.gl/3nONYI”>here</a> about new AndroidNativeUtility features.
+
+SPFacebook C# Actions Added
+AndroidTwitterManager C# Actions Added
+
+Google Play Leaderboards not accept and return long instead int
+
+Saving To Gallery:
+You now can specify gallery folder for your game
+SaveImageToGalalry - image name param added
+SaveScreenshotToGallery - image name param added
+OnImageSaved Event / Action added + you can retrieve image Uri
+
+Local Notifications:
+Notifications Id Factory added
+Ability To cancel all notifications
+Ability to get pending notifications list
+Now you can find out notification id, which was used to launch the app
+<a href=“http://goo.gl/07Be2r”>Read More</a>
+
+
+
+Fixes:
+Gallery Refresh After Photo added fixes
+ 
+
+New PlayMaker Actions:
+AN_RunAp
+
+
 4.5:
 
 Updates:

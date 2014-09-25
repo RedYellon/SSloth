@@ -27,8 +27,9 @@ public class LbCustomGUIExample : MonoBehaviour {
 
 	void Awake() {
 
-		GameCenterManager.dispatcher.addEventListener (GameCenterManager.GAME_CENTER_PLAYER_AUTHENTICATED, OnAuth);
-		GameCenterManager.dispatcher.addEventListener (GameCenterManager.GAME_CENTER_PLAYER_AUTHENTIFICATION_FAILED, OnAuthFailed);
+		GameCenterManager.OnAuthFinished += OnAuthFinished;
+
+
 
 		GameCenterManager.dispatcher.addEventListener (GameCenterManager.GAME_CENTER_LEADER_BOARD_SCORE_LIST_LOADED, OnScoreListLoaded);
 
@@ -81,7 +82,7 @@ public class LbCustomGUIExample : MonoBehaviour {
 				GCScore score = loadedLeaderBoard.GetScore(i, GCBoardTimeSpan.ALL_TIME, diplayCollection);
 				if(score != null) {
 					GUI.Label(new Rect(10,  90 + 70 * i, 100, 40), i.ToString(), boardStyle);
-					GUI.Label(new Rect(100, 90 + 70 * i, 100, 40), score.GetIntScore().ToString() , boardStyle);
+					GUI.Label(new Rect(100, 90 + 70 * i, 100, 40), score.GetLongScore().ToString() , boardStyle);
 					GUI.Label(new Rect(200, 90 + 70 * i, 100, 40), score.playerId, boardStyle);
 
 
@@ -121,14 +122,14 @@ public class LbCustomGUIExample : MonoBehaviour {
 
 
 
+	void OnAuthFinished (ISN_Result res) {
+		if (res.IsSucceeded) {
+			IOSNativePopUpManager.showMessage("Player Authed ", "ID: " + GameCenterManager.player.playerId + "\n" + "Name: " + GameCenterManager.player.displayName);
+		} else {
+			IOSNativePopUpManager.showMessage("Game Cneter ", "Player auntification failed");
+		}
+	}
 
-	private void OnAuth() {
-		IOSNativePopUpManager.showMessage("Player Authed ", "ID: " + GameCenterManager.player.playerId + "\n" + "Name: " + GameCenterManager.player.displayName);
-	}
-	
-	private void OnAuthFailed() {
-		IOSNativePopUpManager.showMessage("Game Cneter ", "Player auntification failed");
-		
-		//if you got this event it means that player canseled auntification flow. With probably mean that playr do not whant to use gamcenter in your game
-	}
+
+
 }

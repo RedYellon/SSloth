@@ -12,8 +12,7 @@ public class NativeIOSActionsExample : BaseIOSFeaturePreview {
 		IOSSharedApplication.instance.addEventListener(IOSSharedApplication.URL_SCHEME_NOT_FOUND, UrlNotFound);
 
 
-		//Example how to use action instead of events
-		IOSCamera.instance.OnImagePicked += OnImage;
+	
 	}
 
 
@@ -71,24 +70,30 @@ public class NativeIOSActionsExample : BaseIOSFeaturePreview {
 		
 		StartY+= YLableStep;
 		if(GUI.Button(new Rect(StartX, StartY, buttonWidth + 10, buttonHeight), "Save Screenshot To Camera Roll")) {
+			IOSCamera.instance.OnImageSaved += OnImageSaved;
 			IOSCamera.instance.SaveScreenshotToCameraRoll();
 		}
 
 
 		StartX += XButtonStep;
 		if(GUI.Button(new Rect(StartX, StartY, buttonWidth, buttonHeight), "Save Texture To Camera Roll")) {
+			IOSCamera.instance.OnImageSaved += OnImageSaved;
 			IOSCamera.instance.SaveTextureToCameraRoll(hello_texture);
 		}
 
 
 		StartX += XButtonStep;
 		if(GUI.Button(new Rect(StartX, StartY, buttonWidth, buttonHeight), "Get Image From Album")) {
+			IOSCamera.instance.OnImagePicked += OnImage;
 			IOSCamera.instance.GetImageFromAlbum();
+
 		}
 
 		StartX += XButtonStep;
 		if(GUI.Button(new Rect(StartX, StartY, buttonWidth, buttonHeight), "Get Image From Camera")) {
+			IOSCamera.instance.OnImagePicked += OnImage;
 			IOSCamera.instance.GetImageFromCamera();
+
 		}
 
 		StartX = XStartPos;
@@ -121,6 +126,20 @@ public class NativeIOSActionsExample : BaseIOSFeaturePreview {
 	private void OnImage (IOSImagePickResult result) {
 		if(result.IsSucceeded) {
 			darawTexgture = result.image;
+			IOSMessage.Create("Success", "Image Successfully Loaded, Image size: " + result.image.width + "x" + result.image.height);
+		} else {
+			IOSMessage.Create("Success", "Image Load Failed");
+		}
+
+		IOSCamera.instance.OnImagePicked -= OnImage;
+	}
+
+	private void OnImageSaved (ISN_Result result) {
+		IOSCamera.instance.OnImageSaved -= OnImageSaved;
+		if(result.IsSucceeded) {
+			IOSMessage.Create("Success", "Image Successfully saved to Camera Roll");
+		} else {
+			IOSMessage.Create("Success", "Image Save Failed");
 		}
 	}
 }

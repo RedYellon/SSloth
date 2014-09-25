@@ -265,6 +265,7 @@ public class Leaderboard : MonoBehaviour
 				_lbStrings [i] = sc [i].score.ToString () + "\t (" + sc [i].playerId + ")";
 			}
 		}
+		/*
 		else if (Application.platform == RuntimePlatform.IPhonePlayer)
 		{
 			GCLeaderBoard lb = GameCenterManager.GetLeaderBoard ("lb3");
@@ -273,7 +274,7 @@ public class Leaderboard : MonoBehaviour
 				GCScore gc = lb.GetScore ((i + 1), GCBoardTimeSpan.ALL_TIME, GCCollectionType.GLOBAL);
 				_lbStrings [i] = gc.score.ToString () + "\t (" + gc.playerId + ")";
 			}
-		}
+		}*/
 		
 		
 		/*

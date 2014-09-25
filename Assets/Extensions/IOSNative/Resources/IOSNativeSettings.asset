@@ -13,5 +13,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AppleId: 830746781
   InAppProducts: []
+  RegistredAchievementsIds:
+  - sloth1
+  - sloth2
+  - sloth3
+  - sloth4
+  - sloth5
   DefaultStoreProductsView: []
   checkInternetBeforeLoadRequestl: 0
+  ShowStoreKitParams: 0
+  ShowGCParams: 1
+  ShowAchivmentsParamsParams: 0
+  ShowOtherParams: 0
+  ShowCameraAndGallryParams: 0
+  UseGCRequestsCahing: 0
+  EnablePushNotificationsAPI: 0
+  MaxImageLoadSize: 512
+  JPegCompressionRate: .800000012

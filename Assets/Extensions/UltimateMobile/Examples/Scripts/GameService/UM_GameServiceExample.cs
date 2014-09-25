@@ -108,7 +108,7 @@ public class UM_GameServiceExample : BaseIOSFeaturePreview {
 		
 		StartX += XButtonStep;
 		if(GUI.Button(new Rect(StartX, StartY, buttonWidth, buttonHeight), "Get Score LB 1")) {
-			int s = UM_GameServiceManager.instance.GetCurrentPlayerScore(leaderBoardId);
+			long s = UM_GameServiceManager.instance.GetCurrentPlayerScore(leaderBoardId);
 			UM_ExampleStatusBar.text = "GetCurrentPlayerScore from  " + leaderBoardId + " is: " + s;
 		}
 
@@ -133,7 +133,7 @@ public class UM_GameServiceExample : BaseIOSFeaturePreview {
 
 		StartX += XButtonStep;
 		if(GUI.Button(new Rect(StartX, StartY, buttonWidth, buttonHeight), "Get Score LB 2")) {
-			int s = UM_GameServiceManager.instance.GetCurrentPlayerScore(leaderBoardId2);
+			long s = UM_GameServiceManager.instance.GetCurrentPlayerScore(leaderBoardId2);
 			UM_ExampleStatusBar.text = "GetCurrentPlayerScore from  " + leaderBoardId2 + " is: " + s;
 		}
 

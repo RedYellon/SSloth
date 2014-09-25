@@ -60,6 +60,16 @@ public class GoogleAnalyticsSettingsEditor : Editor {
 		}
 
 
+
+		
+
+
+	
+
+
+
+		Messages();
+		EditorGUILayout.Space();
 		Accounts();
 		EditorGUILayout.Space();
 		GeneralOptions();
@@ -75,6 +85,22 @@ public class GoogleAnalyticsSettingsEditor : Editor {
 		if(GUI.changed) {
 			DirtyEditor();
 		}
+	}
+
+	private void Messages() {
+		#if UNITY_WEBPLAYER  
+		EditorGUILayout.HelpBox("Sending analytics in Editor is disabled because you using Web Player Mode. To find out more about analytics usgae in web player, please click the link bellow", MessageType.Warning);
+		EditorGUILayout.BeginHorizontal();
+		
+		EditorGUILayout.Space();
+		if(GUILayout.Button("Using With Web Player",  GUILayout.Width(150))) {
+			Application.OpenURL("http://goo.gl/5lbHLd");
+		}
+
+		EditorGUILayout.EndHorizontal();
+
+		#endif
+
 	}
 
 

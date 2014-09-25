@@ -158,11 +158,13 @@ public class GoogleMobileAdSettingsEditor : Editor {
 			EditorGUILayout.BeginHorizontal();
 			EditorGUILayout.LabelField(IOS_UnitAdId);
 			settings.IOS_BannersUnitId	 	= EditorGUILayout.TextField(settings.IOS_BannersUnitId);
+			settings.IOS_BannersUnitId		= settings.IOS_BannersUnitId.Trim();
 			EditorGUILayout.EndHorizontal();
 			
 			EditorGUILayout.BeginHorizontal();
 			EditorGUILayout.LabelField(IOS_InterstAdId);
 			settings.IOS_InterstisialsUnitId	 	= EditorGUILayout.TextField(settings.IOS_InterstisialsUnitId);
+			settings.IOS_InterstisialsUnitId		= settings.IOS_InterstisialsUnitId.Trim();
 			EditorGUILayout.EndHorizontal();
 		}
 
@@ -172,11 +174,13 @@ public class GoogleMobileAdSettingsEditor : Editor {
 			EditorGUILayout.BeginHorizontal();
 			EditorGUILayout.LabelField(Android_UnitAdId);
 			settings.Android_BannersUnitId	 	= EditorGUILayout.TextField(settings.Android_BannersUnitId);
+			settings.Android_BannersUnitId		= settings.Android_BannersUnitId.Trim();
 			EditorGUILayout.EndHorizontal();
 			
 			EditorGUILayout.BeginHorizontal();
 			EditorGUILayout.LabelField(Android_InterstAdId);
 			settings.Android_InterstisialsUnitId	 	= EditorGUILayout.TextField(settings.Android_InterstisialsUnitId);
+			settings.Android_InterstisialsUnitId		= settings.Android_InterstisialsUnitId.Trim();
 			EditorGUILayout.EndHorizontal();
 		}
 
@@ -187,11 +191,13 @@ public class GoogleMobileAdSettingsEditor : Editor {
 			EditorGUILayout.BeginHorizontal();
 			EditorGUILayout.LabelField(WP8_UnitAdId);
 			settings.WP8_BannersUnitId	 	= EditorGUILayout.TextField(settings.WP8_BannersUnitId);
+			settings.WP8_BannersUnitId		= settings.WP8_BannersUnitId.Trim();
 			EditorGUILayout.EndHorizontal();
 			
 			EditorGUILayout.BeginHorizontal();
 			EditorGUILayout.LabelField(WP8_InterstAdId);
 			settings.WP8_InterstisialsUnitId	 	= EditorGUILayout.TextField(settings.WP8_InterstisialsUnitId);
+			settings.WP8_InterstisialsUnitId		= settings.WP8_InterstisialsUnitId.Trim();
 			EditorGUILayout.EndHorizontal();
 		}
 	}

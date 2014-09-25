@@ -23,9 +23,11 @@ public class IOSCamera : ISN_Singleton<IOSCamera> {
 
 	//Actions
 	public Action<IOSImagePickResult> OnImagePicked = delegate{};
+	public Action<ISN_Result> OnImageSaved = delegate{};
 
 	//Events
 	public const string  IMAGE_PICKED = "image_picked";
+	public const string  IMAGE_SAVED = "image_picked";
 
 
 
@@ -40,10 +42,20 @@ public class IOSCamera : ISN_Singleton<IOSCamera> {
 	[DllImport ("__Internal")]
 	private static extern void _ISN_GetImageFromAlbum();
 
+	[DllImport ("__Internal")]
+	private static extern void _ISN_InitCamerAPI(float compressionRate, int maxSize);
+
 
 	#endif
 
 
+	void Awake() {
+		DontDestroyOnLoad(gameObject);
+
+		#if (UNITY_IPHONE && !UNITY_EDITOR) || SA_DEBUG_MODE
+		_ISN_InitCamerAPI(IOSNativeSettings.Instance.JPegCompressionRate, IOSNativeSettings.Instance.MaxImageLoadSize);
+		#endif
+	}
 
 
 
@@ -79,17 +91,27 @@ public class IOSCamera : ISN_Singleton<IOSCamera> {
 
 	private void OnImagePickedEvent(string data) {
 
-
 		IOSImagePickResult result =  new IOSImagePickResult(data);
-
-
 
 		dispatch(IMAGE_PICKED, result);
 		if(OnImagePicked != null) {
 			OnImagePicked(result);
 		}
 
+	}
 
+	private void OnImageSaveFailed() {
+		ISN_Result result =  new ISN_Result(false);
+
+		dispatch(IMAGE_SAVED, result);
+		OnImageSaved(result);
+	}
+
+	private void OnImageSaveSuccess() {
+		ISN_Result result =  new ISN_Result(true);
+		
+		dispatch(IMAGE_SAVED, result);
+		OnImageSaved(result);
 	}
 
 	

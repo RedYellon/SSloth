@@ -105,6 +105,9 @@ public class IOSInAppPurchaseManager : EventDispatcher {
 
 
 	public void buyProduct(string productId) {
+
+		#if !UNITY_EDITOR
+
 		if(!_IsStoreLoaded) {
 
 			Debug.LogWarning("buyProduct shouldn't be called before store kit initialized"); 
@@ -118,6 +121,8 @@ public class IOSInAppPurchaseManager : EventDispatcher {
 		}
 
 		IOSNativeMarketBridge.buyProduct(productId);
+
+		#endif
 	}
 	
 	public void addProductId(string productId) {
@@ -137,6 +142,7 @@ public class IOSInAppPurchaseManager : EventDispatcher {
 
 		return null;
 	}
+
 	
 	public void restorePurchases() {
 

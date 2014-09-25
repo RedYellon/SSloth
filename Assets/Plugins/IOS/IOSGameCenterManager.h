@@ -19,7 +19,7 @@
 
 
 
-- (void) reportScore: (int) score forCategory: (NSString*) category;
+- (void) reportScore: (long) score forCategory: (NSString*) category;
 
 - (void) authenticateLocalPlayer;
 - (void) showLeaderBoard: (NSString*)leaderBoradrId scope: (int) scope;
@@ -29,7 +29,10 @@
 
 
 - (void) sendLeaderboardChallenge:(NSString*) leaderBoradrId message:(NSString*) message playerIds: (NSArray*) playerIds;
+- (void) sendLeaderboardChallengeWithFriendsPicker:(NSString *)leaderBoradrId message:(NSString *)message;
+    
 - (void) sendAchievementChallenge:(NSString*) achievementId  message:(NSString*) message playerIds: (NSArray*) playerIds;
+- (void) sendAchievementChallengeWithFriendsPicker:(NSString *)achievementId message:(NSString *)message;
 
 
 - (void) showAchievements;

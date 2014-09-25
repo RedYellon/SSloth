@@ -1,4 +1,4 @@
-#define CODE_DISABLED
+//#define CODE_DISABLED
 
 using UnityEngine;
 using UnityEditor;
@@ -33,6 +33,16 @@ public class GoogleMobileAdPostProcess  {
 		string MessageUI = "MessageUI.framework";
 		if(!ISDSettings.Instance.frameworks.Contains(MessageUI)) {
 			ISDSettings.Instance.frameworks.Add(MessageUI);
+		}
+
+		string EventKit = "EventKit.framework";
+		if(!ISDSettings.Instance.frameworks.Contains(EventKit)) {
+			ISDSettings.Instance.frameworks.Add(EventKit);
+		}
+
+		string EventKitUI = "EventKitUI.framework";
+		if(!ISDSettings.Instance.frameworks.Contains(EventKitUI)) {
+			ISDSettings.Instance.frameworks.Add(EventKitUI);
 		}
 
 		string linkerFlasg = "-ObjC";

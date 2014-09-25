@@ -148,7 +148,16 @@
 	self.earnedAchievementCache= NULL;
 	[GKAchievement resetAchievementsWithCompletionHandler: ^(NSError *error)  {
         
-		UnitySendMessage("GameCenterManager", "onAchievementsReset", "");
+        if(error != nil) {
+            NSLog(@"resetAchievements failed: %@", error.description);
+            UnitySendMessage("GameCenterManager", "onAchievementsResetFailed", "");
+        } else {
+            NSLog(@"resetAchievements complete");
+            UnitySendMessage("GameCenterManager", "onAchievementsReset", "");
+
+        }
+        
+		
         
 	}];
 }

@@ -7,6 +7,7 @@
 #import <Foundation/Foundation.h>
 #import "StoreKit/StoreKit.h"
 #import "NSData+Base64.h"
+#import "Reachability.h"
 
 @interface TransactionServer : NSObject <SKPaymentTransactionObserver>
 

@@ -24,12 +24,32 @@ static ISNCamera *_sharedInstance;
 }
 
 - (void) saveToCameraRoll:(NSString *)media {
+     NSLog(@"saveToCameraRoll");
     NSData *imageData = [[NSData alloc] initWithBase64Encoding:media];
     UIImage *image = [[UIImage alloc] initWithData:imageData];
     
-    UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil);
+
+    UIImageWriteToSavedPhotosAlbum(image,
+                                   self, // send the message to 'self' when calling the callback
+                                   @selector(thisImage:hasBeenSavedInPhotoAlbumWithError:usingContextInfo:), // the selector to tell the method to call on completion
+                                   NULL); // you generally won't need a contextInfo here
+   
 
 }
+
+- (void)thisImage:(UIImage *)image hasBeenSavedInPhotoAlbumWithError:(NSError *)error usingContextInfo:(void*)ctxInfo {
+    if (error) {
+         NSLog(@"image not saved: %@", error.description);
+        UnitySendMessage("IOSCamera", "OnImageSaveFailed", [ISNDataConvertor NSStringToChar:@""]);
+       
+    } else {
+        NSLog(@"image saved");
+        UnitySendMessage("IOSCamera", "OnImageSaveSuccess", [ISNDataConvertor NSStringToChar:@""]);
+    }
+    
+
+}
+
 
 -(void) GetImageFromAlbum {
    [self GetImage:UIImagePickerControllerSourceTypeSavedPhotosAlbum];
@@ -51,8 +71,9 @@ static ISNCamera *_sharedInstance;
     
     
 
+    [vc presentViewController:picker animated:YES completion:nil];
+//	[vc presentModalViewController:picker animated:YES ];
     
-	[vc presentModalViewController:picker animated:YES];
     
    
 
@@ -61,7 +82,8 @@ static ISNCamera *_sharedInstance;
 
 -(void) imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     UIViewController *vc =  UnityGetGLViewController();
-    [vc dismissModalViewControllerAnimated:YES];
+    [vc dismissViewControllerAnimated:YES completion:nil];
+    //[vc dismissModalViewControllerAnimated:YES];
     
     UIImage *photo = [info objectForKey:UIImagePickerControllerOriginalImage];
     
@@ -70,10 +92,11 @@ static ISNCamera *_sharedInstance;
          NSLog(@"no photo");
     } else {
         
-        if(photo.size.width > 1024) {
-           CGSize s = CGSizeMake(1024, 1024);
+        NSLog(@"MaxImageSize: %i", [self MaxImageSize]);
+        if(photo.size.width > [self MaxImageSize]) {
+           CGSize s = CGSizeMake([self MaxImageSize], [self MaxImageSize]);
             
-            CGFloat new_height = 1024 / (photo.size.width / photo.size.height);
+            CGFloat new_height = [self MaxImageSize] / (photo.size.width / photo.size.height);
             s.height = new_height;
 
             
@@ -84,7 +107,10 @@ static ISNCamera *_sharedInstance;
         
         
         
-        NSData *imageData = UIImagePNGRepresentation(photo);
+        //NSData *imageData =  UIImagePNGRepresentation(photo);
+        
+        NSLog(@"ImageCompressionRate: %f", [self ImageCompressionRate]);
+        NSData *imageData = UIImageJPEGRepresentation(photo, [self ImageCompressionRate]);
         encodedImage = [imageData base64Encoding];
     }
     
@@ -110,7 +136,8 @@ static ISNCamera *_sharedInstance;
 
 -(void) imagePickerControllerDidCancel:(UIImagePickerController *)picker {
     UIViewController *vc =  UnityGetGLViewController();
-    [vc dismissModalViewControllerAnimated:YES];
+    [vc dismissViewControllerAnimated:YES completion:nil];
+    //[vc dismissModalViewControllerAnimated:YES];
     
     UnitySendMessage("IOSCamera", "OnImagePickedEvent", [ISNDataConvertor NSStringToChar:@""]);
 }
@@ -136,6 +163,11 @@ extern "C" {
     
     void _ISN_GetImageFromAlbum() {
         [[ISNCamera sharedInstance] GetImageFromAlbum];
+    }
+    
+    void _ISN_InitCamerAPI(float compressionRate, int maxSize) {
+        [[ISNCamera sharedInstance] setImageCompressionRate:compressionRate];
+        [[ISNCamera sharedInstance] setMaxImageSize:maxSize];
     }
 
 }

@@ -82,7 +82,7 @@ public class AndroidSocialNativeExample : MonoBehaviour {
 		tex.ReadPixels( new Rect(0, 0, width, height), 0, 0 );
 		tex.Apply();
 		
-		AndroidSocialGate.StartShareIntent("Hello Share Intent", "This is my text to share", tex,  "face");
+		AndroidSocialGate.StartShareIntent("Hello Share Intent", "This is my text to share", tex,  "facebook.katana");
 		
 		Destroy(tex);
 		

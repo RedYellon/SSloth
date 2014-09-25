@@ -8,31 +8,42 @@ public class AnOtherFeaturesPreview : MonoBehaviour {
 
 
 
-	void Awake() {
-		AndroidCamera.instance.OnImagePicked += OnImagePicked;
-	}
+
 
 	public void SaveToGalalry() {
+		AndroidCamera.instance.OnImageSaved += OnImageSaved;
 		AndroidCamera.instance.SaveImageToGalalry(helloWorldTexture);
-		AndroidNative.showMessage("Saved", "Image saved to gallery");
-		SA_StatusBar.text =  "Image saved to gallery";
+
 	}
 
 	public void SaveScreenshot() {
+		AndroidCamera.instance.OnImageSaved += OnImageSaved;
 		AndroidCamera.instance.SaveScreenshotToGallery();
-		AndroidNative.showMessage("Saved", "Screenshot saved to gallery");
-		SA_StatusBar.text =  "Screenshot saved to gallery";
+
 	}
 
 
 	public void GetImageFromGallery() {
+		AndroidCamera.instance.OnImagePicked += OnImagePicked;
 		AndroidCamera.instance.GetImageFromGallery();
 	}
 	
 	
 	
 	public void GetImageFromCamera() {
+		AndroidCamera.instance.OnImagePicked += OnImagePicked;
 		AndroidCamera.instance.GetImageFromCamera();
+	}
+
+
+
+	public void CheckAppInstalation() {
+		AndroidNativeUtility.instance.OnPackageCheckResult += OnPackageCheckResult;
+		AndroidNativeUtility.instance.CheckIsPackageInstalled("com.google.android.youtube");
+	}
+
+	public void RunApp() {
+		AndroidNativeUtility.instance.RunPackage("com.google.android.youtube");
 	}
 
 
@@ -60,6 +71,22 @@ public class AnOtherFeaturesPreview : MonoBehaviour {
 
 	}
 
+
+
+
+
+	void OnPackageCheckResult (AN_PackageCheckResult res) {
+		if(res.IsSucceeded) {
+			AndroidNative.showMessage("On Package Check Result" , "Application  " + res.packageName + " is installed on this device");
+		} else {
+			AndroidNative.showMessage("On Package Check Result" , "Application  " + res.packageName + " is not installed on this device");
+		}
+
+		AndroidNativeUtility.instance.OnPackageCheckResult -= OnPackageCheckResult;
+	}
+
+
+
 	void OnContactsLoaded () {
 		AddressBookController.instance.OnContactsLoadedAction -= OnContactsLoaded;
 		AndroidNative.showMessage("On Contacts Loaded" , "Andress book has " + AddressBookController.instance.contacts.Count + " Contacts");
@@ -71,6 +98,22 @@ public class AnOtherFeaturesPreview : MonoBehaviour {
 		if(result.IsSucceeded) {
 			image.renderer.material.mainTexture = result.image;
 		}
+
+		AndroidCamera.instance.OnImagePicked -= OnImagePicked;
+	}
+
+	void OnImageSaved (GallerySaveResult result) {
+
+		AndroidCamera.instance.OnImageSaved -= OnImageSaved;
+
+		if(result.IsSucceeded) {
+			AndroidNative.showMessage("Saved", "Image saved to gallery \n" + "Path: " + result.imagePath);
+			SA_StatusBar.text =  "Image saved to gallery";
+		} else {
+			AndroidNative.showMessage("Failed", "Image save to gallery failed");
+			SA_StatusBar.text =  "Image save to gallery failed";
+		}
+
 	}
 
 	private void OnPackageInfoLoaded() {

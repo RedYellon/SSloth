@@ -16,7 +16,7 @@ public class GPScore  {
 
 
 	private int _rank = 0;
-	private int _score = 0;
+	private long _score = 0;
 
 	private string _playerId;
 	private string _leaderboardId;
@@ -31,7 +31,7 @@ public class GPScore  {
 	//--------------------------------------
 
 
-	public GPScore(int vScore, int vRank, GPBoardTimeSpan vTimeSpan, GPCollectionType sCollection, string lid, string pid) {
+	public GPScore(long vScore, int vRank, GPBoardTimeSpan vTimeSpan, GPCollectionType sCollection, string lid, string pid) {
 		_score = vScore;
 		_rank = vRank;
 
@@ -44,9 +44,11 @@ public class GPScore  {
 
 	}
 
-	public void UpdateScore(int vScore) {
+
+	public void UpdateScore(long vScore) {
 		_score = vScore;
 	}
+
 
 
 	//--------------------------------------
@@ -61,7 +63,7 @@ public class GPScore  {
 	}
 
 
-	public int score {
+	public long score {
 		get {
 			return _score;
 		}

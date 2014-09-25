@@ -11,6 +11,7 @@
 
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class NotoficationsExample : MonoBehaviour {
 
@@ -21,7 +22,7 @@ public class NotoficationsExample : MonoBehaviour {
 
 
 
-	private int NotificationId = 0;
+	private int LastNotificationId = 0;
 
 
 
@@ -41,15 +42,23 @@ public class NotoficationsExample : MonoBehaviour {
 	}
 
 	private void Local() {
-		NotificationId++;
-		AndroidNotificationManager.ScheduleLocalNotification("Hello", "This is local notification", 5, NotificationId);
+		LastNotificationId = AndroidNotificationManager.instance.ScheduleLocalNotification("Hello", "This is local notification", 5);
 
 
 	
 	}
 
-	private void CanselLocal() {
-		AndroidNotificationManager.CanselLocalNotification(NotificationId);
+	private void LoadLaunchNotification (){
+		AndroidNotificationManager.instance.OnNotificationIdLoaded += OnNotificationIdLoaded;
+		AndroidNotificationManager.instance.LocadAppLaunchNotificationId();
+	}
+
+	private void CancelLocal() {
+		AndroidNotificationManager.instance.CancelLocalNotification(LastNotificationId);
+	}
+
+	private void CancelAll() {
+		AndroidNotificationManager.instance.CancelAllLocalNotifications();
 	}
 
 
@@ -61,6 +70,11 @@ public class NotoficationsExample : MonoBehaviour {
 		GoogleCloudMessageService.instance.LoadLastMessage();
 	}
 
+
+	private void LocalNitificationsListExample() {
+//		List<LocalNotificationTemplate> PendingNotofications;
+	//	PendingNotofications = AndroidNotificationManager.instance.LoadPendingNotifications();
+	}
 	
 	//--------------------------------------
 	//  GET/SET
@@ -70,8 +84,13 @@ public class NotoficationsExample : MonoBehaviour {
 	//  EVENTS
 	//--------------------------------------
 
+
 	private void OnRegFailed() {
 		AndroidNative.showMessage ("Reg Failed", "GCM Registration failed :(");
+	}
+
+	private void OnNotificationIdLoaded (int notificationid){
+		AndroidNative.showMessage ("Loaded", "App was laucnhed with notification id: " + notificationid);
 	}
 	
 	private void OnRegstred() {

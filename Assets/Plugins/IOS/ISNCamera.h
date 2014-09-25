@@ -9,12 +9,14 @@
 #import <Foundation/Foundation.h>
 #include "ISNDataConvertor.h"
 #if UNITY_VERSION < 450
-#import
 #include "iPhone_View.h"
 #endif
 
 
 @interface ISNCamera : NSObject<UIImagePickerControllerDelegate, UINavigationControllerDelegate>
+
+@property float ImageCompressionRate;
+@property int MaxImageSize;
 
 + (id)   sharedInstance;
 - (void) saveToCameraRoll:(NSString*)media;

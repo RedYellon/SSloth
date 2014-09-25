@@ -16,6 +16,7 @@ MonoBehaviour:
   IsInAppSettingsOpen: 0
   IsInAppSettingsPlatfromsOpen: 1
   IsInAppSettingsProductsOpen: 1
+  IsCameraAndGallerySettingsOpen: 1
   Leaderboards:
   - id: 1.4lb
     IsOpen: 0

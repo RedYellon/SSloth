@@ -113,11 +113,11 @@ public class AndroidNative {
 	}
 
 
-	public static void submitScore(string leaderboardName, int score) {
+	public static void submitScore(string leaderboardName, long score) {
 		CallActivityFunction("submitScore", leaderboardName, score.ToString());
 	}
 
-	public static void submitScoreById(string leaderboardId, int score) {
+	public static void submitScoreById(string leaderboardId, long score) {
 		CallActivityFunction("submitScoreById", leaderboardId, score.ToString());
 	}
 
@@ -598,6 +598,10 @@ public class AndroidNative {
 		CallActivityFunction("isPackageInstalled", packagename);
 	}
 
+	public static void runPackage(string packagename) {
+		CallActivityFunction("runPackage", packagename);
+	}
+
 	public static void loadGoogleAccountNames() {
 		CallActivityFunction("loadGoogleAccountNames");
 	}
@@ -605,6 +609,10 @@ public class AndroidNative {
 
 	public static void ShowToastNotification(string text, int duration) {
 		CallActivityFunction("ShowToastNotification", text, duration.ToString());
+	}
+
+	public static void requestCurrentAppLaunchNotificationId() { 
+		CallActivityFunction("requestCurrentAppLaunchNotificationId");
 	}
 
 
@@ -617,8 +625,12 @@ public class AndroidNative {
 	}
 
 
-	public static void SaveToGalalry(string ImageData) {
-		CallActivityFunction("SaveToGalalry", ImageData);
+	public static void InitCameraAPI(string folderName, int maxSize, int mode) {
+		CallActivityFunction("InitCameraAPI", folderName, maxSize.ToString(), mode.ToString());
+	}
+
+	public static void SaveToGalalry(string ImageData, string name) {
+		CallActivityFunction("SaveToGalalry", ImageData, name);
 	}
 
 

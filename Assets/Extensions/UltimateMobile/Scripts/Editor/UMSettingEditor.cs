@@ -35,6 +35,8 @@ public class UMSettingEditor : Editor {
 		EditorGUILayout.Space();
 		AdSettings();
 		EditorGUILayout.Space();
+		OtherSettings();
+		EditorGUILayout.Space();
 		AboutGUI();
 
 	
@@ -66,12 +68,13 @@ public class UMSettingEditor : Editor {
 
 
 	private const string version_info_file = "Plugins/StansAssets/Versions/UM_VersionInfo.txt"; 
+	private const string ios_install_mark_file = PluginsInstalationUtil.IOS_DESTANATION_PATH + "UM_IOS_INSTALATION_MARK.txt";
 
 
 	public static bool IsInstalled {
 		get {
 
-			if(FileStaticAPI.IsFileExists(PluginsInstalationUtil.ANDROID_DESTANATION_PATH + "androidnative.jar") && FileStaticAPI.IsFileExists(PluginsInstalationUtil.IOS_DESTANATION_PATH + "IOS_DATA_FILE.txt")) {
+			if(FileStaticAPI.IsFileExists(PluginsInstalationUtil.ANDROID_DESTANATION_PATH + "androidnative.jar") && FileStaticAPI.IsFileExists(ios_install_mark_file)) {
 				return true;
 			} else {
 				return false;
@@ -122,6 +125,7 @@ public class UMSettingEditor : Editor {
 			if(GUILayout.Button("Install Plugin",  GUILayout.Width(120))) {
 				PluginsInstalationUtil.Android_InstallPlugin();
 				PluginsInstalationUtil.IOS_InstallPlugin();
+				FileStaticAPI.CreateFile(ios_install_mark_file);
 				UpdateVersionInfo();
 			}
 			GUI.color = c;
@@ -140,6 +144,7 @@ public class UMSettingEditor : Editor {
 				if(GUILayout.Button("Update to " + UltimateMobileSettings.VERSION_NUMBER,  GUILayout.Width(250))) {
 					PluginsInstalationUtil.Android_UpdatePlugin();
 					PluginsInstalationUtil.IOS_UpdatePlugin();
+
 					UpdateVersionInfo();
 				}
 				
@@ -247,18 +252,21 @@ public class UMSettingEditor : Editor {
 								EditorGUILayout.BeginHorizontal();
 								EditorGUILayout.LabelField(LID);
 								leaderbaord.id	 	= EditorGUILayout.TextField(leaderbaord.id);
+								leaderbaord.id		= leaderbaord.id.Trim();
 								EditorGUILayout.EndHorizontal();
 								
 								
 								EditorGUILayout.BeginHorizontal();
 								EditorGUILayout.LabelField(IOSLID);
 								leaderbaord.IOSId	 	= EditorGUILayout.TextField(leaderbaord.IOSId);
+								leaderbaord.IOSId 		= leaderbaord.IOSId.Trim();
 								EditorGUILayout.EndHorizontal();
 								
 								
 								EditorGUILayout.BeginHorizontal();
 								EditorGUILayout.LabelField(ANDROIDLID);
 								leaderbaord.AndroidId	 	= EditorGUILayout.TextField(leaderbaord.AndroidId);
+								leaderbaord.AndroidId		= leaderbaord.AndroidId.Trim();
 								EditorGUILayout.EndHorizontal();
 								
 								EditorGUILayout.BeginHorizontal();
@@ -304,18 +312,21 @@ public class UMSettingEditor : Editor {
 								EditorGUILayout.BeginHorizontal();
 								EditorGUILayout.LabelField(AID);
 								achievement.id	 	= EditorGUILayout.TextField(achievement.id);
+								achievement.id		= achievement.id.Trim();
 								EditorGUILayout.EndHorizontal();
 								
 								
 								EditorGUILayout.BeginHorizontal();
 								EditorGUILayout.LabelField(ALID);
 								achievement.IOSId	 	= EditorGUILayout.TextField(achievement.IOSId);
+								achievement.IOSId		= achievement.IOSId.Trim();
 								EditorGUILayout.EndHorizontal();
 								
 								
 								EditorGUILayout.BeginHorizontal();
 								EditorGUILayout.LabelField(ANDROIDAID);
 								achievement.AndroidId	 	= EditorGUILayout.TextField(achievement.AndroidId);
+								achievement.AndroidId		= achievement.AndroidId.Trim();
 								EditorGUILayout.EndHorizontal();
 
 								EditorGUILayout.BeginHorizontal();
@@ -386,11 +397,13 @@ public class UMSettingEditor : Editor {
 					EditorGUILayout.BeginHorizontal();
 					EditorGUILayout.LabelField(IOS_UnitAdId);
 					GoogleMobileAdSettings.Instance.IOS_BannersUnitId	 	= EditorGUILayout.TextField(GoogleMobileAdSettings.Instance.IOS_BannersUnitId);
+					GoogleMobileAdSettings.Instance.IOS_BannersUnitId		= GoogleMobileAdSettings.Instance.IOS_BannersUnitId.Trim();
 					EditorGUILayout.EndHorizontal();
 					
 					EditorGUILayout.BeginHorizontal();
 					EditorGUILayout.LabelField(IOS_InterstAdId);
 					GoogleMobileAdSettings.Instance.IOS_InterstisialsUnitId	 	= EditorGUILayout.TextField(GoogleMobileAdSettings.Instance.IOS_InterstisialsUnitId);
+					GoogleMobileAdSettings.Instance.IOS_InterstisialsUnitId 	= GoogleMobileAdSettings.Instance.IOS_InterstisialsUnitId.Trim();
 					EditorGUILayout.EndHorizontal();
 				}
 			}
@@ -400,11 +413,13 @@ public class UMSettingEditor : Editor {
 				EditorGUILayout.BeginHorizontal();
 				EditorGUILayout.LabelField(Android_UnitAdId);
 				GoogleMobileAdSettings.Instance.Android_BannersUnitId	 	= EditorGUILayout.TextField(GoogleMobileAdSettings.Instance.Android_BannersUnitId);
+				GoogleMobileAdSettings.Instance.Android_BannersUnitId		= GoogleMobileAdSettings.Instance.Android_BannersUnitId.Trim();
 				EditorGUILayout.EndHorizontal();
 				
 				EditorGUILayout.BeginHorizontal();
 				EditorGUILayout.LabelField(Android_InterstAdId);
 				GoogleMobileAdSettings.Instance.Android_InterstisialsUnitId	 	= EditorGUILayout.TextField(GoogleMobileAdSettings.Instance.Android_InterstisialsUnitId);
+				GoogleMobileAdSettings.Instance.Android_InterstisialsUnitId		= GoogleMobileAdSettings.Instance.Android_InterstisialsUnitId.Trim();
 				EditorGUILayout.EndHorizontal();
 			}
 			
@@ -423,11 +438,13 @@ public class UMSettingEditor : Editor {
 					EditorGUILayout.BeginHorizontal();
 					EditorGUILayout.LabelField(WP8_UnitAdId);
 					GoogleMobileAdSettings.Instance.WP8_BannersUnitId	 	= EditorGUILayout.TextField(GoogleMobileAdSettings.Instance.WP8_BannersUnitId);
+					GoogleMobileAdSettings.Instance.WP8_BannersUnitId		= GoogleMobileAdSettings.Instance.WP8_BannersUnitId.Trim();
 					EditorGUILayout.EndHorizontal();
 					
 					EditorGUILayout.BeginHorizontal();
 					EditorGUILayout.LabelField(WP8_InterstAdId);
 					GoogleMobileAdSettings.Instance.WP8_InterstisialsUnitId	 	= EditorGUILayout.TextField(GoogleMobileAdSettings.Instance.WP8_InterstisialsUnitId);
+					GoogleMobileAdSettings.Instance.WP8_InterstisialsUnitId 	= GoogleMobileAdSettings.Instance.WP8_InterstisialsUnitId.Trim();
 					EditorGUILayout.EndHorizontal();
 				}
 			}
@@ -467,6 +484,7 @@ public class UMSettingEditor : Editor {
 						EditorGUILayout.BeginHorizontal();
 						EditorGUILayout.LabelField(InAppID);
 						p.id	 	= EditorGUILayout.TextField(p.id);
+						p.id 		= p.id.Trim();
 						EditorGUILayout.EndHorizontal();
 
 
@@ -481,16 +499,19 @@ public class UMSettingEditor : Editor {
 						EditorGUILayout.BeginHorizontal();
 						EditorGUILayout.LabelField(IOSSKU);
 						p.IOSId	 	= EditorGUILayout.TextField(p.IOSId);
+						p.IOSId		= p.IOSId.Trim();
 						EditorGUILayout.EndHorizontal();
 
 						EditorGUILayout.BeginHorizontal();
 						EditorGUILayout.LabelField(AndroidSKU);
 						p.AndroidId	 	= EditorGUILayout.TextField(p.AndroidId);
+						p.AndroidId		= p.AndroidId.Trim();
 						EditorGUILayout.EndHorizontal();
 					
 						EditorGUILayout.BeginHorizontal();
 						EditorGUILayout.LabelField(WP8SKU);
 						p.WP8Id	 	= EditorGUILayout.TextField(p.WP8Id);
+						p.WP8Id		= p.WP8Id.Trim();
 						EditorGUILayout.EndHorizontal();
 
 
@@ -537,6 +558,7 @@ public class UMSettingEditor : Editor {
 				EditorGUILayout.BeginHorizontal();
 				EditorGUILayout.LabelField(Base64KeyLabel);
 				AndroidNativeSettings.Instance.base64EncodedPublicKey	 	= EditorGUILayout.TextField(AndroidNativeSettings.Instance.base64EncodedPublicKey);
+				AndroidNativeSettings.Instance.base64EncodedPublicKey		= AndroidNativeSettings.Instance.base64EncodedPublicKey.Trim();
 				EditorGUILayout.EndHorizontal();
 
 				EditorGUI.indentLevel = 1;
@@ -550,6 +572,16 @@ public class UMSettingEditor : Editor {
 	}
 
 
+	private void OtherSettings() {
+
+
+		UltimateMobileSettings.Instance.IsCameraAndGallerySettingsOpen = EditorGUILayout.Foldout(UltimateMobileSettings.Instance.IsCameraAndGallerySettingsOpen, "Camera And Gallery");
+		if (UltimateMobileSettings.Instance.IsCameraAndGallerySettingsOpen) {
+
+		}
+
+
+	}
 
 
 
@@ -575,6 +607,9 @@ public class UMSettingEditor : Editor {
 	private static void DirtyEditor() {
 		#if UNITY_EDITOR
 		EditorUtility.SetDirty(UltimateMobileSettings.Instance);
+		EditorUtility.SetDirty(AndroidNativeSettings.Instance);
+		EditorUtility.SetDirty(GoogleMobileAdSettings.Instance);
+		EditorUtility.SetDirty(IOSNativeSettings.Instance);
 		#endif
 	}
 	

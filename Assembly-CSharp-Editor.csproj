@@ -176,6 +176,7 @@
      <None Include="Assets\Plugins\IOS\IOS_DATA_FILE.txt" />
      <None Include="Assets\TK2DROOT\tk2d\Shaders\goodies\PackedTextMesh.shader" />
      <None Include="Assets\Universal Sound FX\#Game Genre References\Fighting.txt" />
+     <None Include="Assets\Plugins\StansAssets\IOS\UM_IOS_INSTALATION_MARK.txt" />
      <None Include="Assets\Fonts\slothTextempty.txt" />
      <None Include="Assets\TK2DROOT\tk2d\Shaders\Blend2TexVertexColor.shader" />
      <None Include="Assets\Universal Sound FX\#Game Genre References\Platform.txt" />
@@ -185,6 +186,7 @@
      <None Include="Assets\Universal Sound FX\#Game Genre References\Real Time Stategy (RTS) Medieval.txt" />
      <None Include="Assets\Universal Sound FX\#Game Genre References\Shoot em Up.txt" />
      <None Include="Assets\Plugins\Confetti Particles\Confetti - Readme.txt" />
+     <None Include="Assets\Plugins\IOS\UM_IOS_INSTALATION_MARK.txt" />
      <None Include="Assets\Universal Sound FX\#Game Genre References\Physics.txt" />
      <None Include="Assets\TK2DROOT\tk2d\Shaders\resources\BlendVertexColor.shader" />
      <None Include="Assets\Fonts\chocolate_covered_raindrops\READ ME!!.txt" />

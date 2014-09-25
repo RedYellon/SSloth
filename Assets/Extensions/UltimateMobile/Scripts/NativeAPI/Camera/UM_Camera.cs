@@ -5,10 +5,12 @@ using System.Collections;
 public class UM_Camera : SA_Singleton<UM_Camera> {
 
 	//Actions
-	public Action<UM_ImagePickResult> OnImagePicked;
+	public Action<UM_ImagePickResult> OnImagePicked = delegate{};
+	public Action<UM_ImageSaveResult> OnImageSaved = delegate{};
 	
 	//Events
 	public const string  IMAGE_PICKED = "image_picked";
+	public const string  IMAGE_SAVED = "image_saved";
 
 
 
@@ -17,6 +19,9 @@ public class UM_Camera : SA_Singleton<UM_Camera> {
 
 		AndroidCamera.instance.OnImagePicked += OnAndroidImagePicked;
 		IOSCamera.instance.OnImagePicked += OnIOSImagePicked;
+
+		AndroidCamera.instance.OnImageSaved += OnAndroidImageSaved;
+		IOSCamera.instance.OnImageSaved += OnIOSImageSaved;
 	}
 
 	public void SaveImageToGalalry(Texture2D image) {
@@ -86,5 +91,20 @@ public class UM_Camera : SA_Singleton<UM_Camera> {
 		}
 		
 		dispatch(IMAGE_PICKED, result);
+	}
+
+	void OnAndroidImageSaved (GallerySaveResult res) {
+
+		UM_ImageSaveResult result = new UM_ImageSaveResult(res.imagePath, res.IsSucceeded);
+		OnImageSaved(result);
+		dispatch(IMAGE_SAVED, result);
+	}
+
+
+
+	void OnIOSImageSaved (ISN_Result res) {
+		UM_ImageSaveResult result = new UM_ImageSaveResult(string.Empty, res.IsSucceeded);
+		OnImageSaved(result);
+		dispatch(IMAGE_SAVED, result);
 	}
 }

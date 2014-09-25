@@ -101,13 +101,22 @@ public class JSHelper : MonoBehaviour {
 	}
 
 	private void OnLeaderBoarScoreLoaded(CEvent e) {
-		GCScore score = e.data as GCScore;
-		IOSNativePopUpManager.showMessage("Leader Board " + score.leaderboardId, "Score: " + score.score);
+		ISN_PlayerScoreLoadedResult result = e.data as ISN_PlayerScoreLoadedResult;
+		
+		if(result.IsSucceeded) {
+			GCScore score = result.loadedScore;
+			IOSNativePopUpManager.showMessage("Leader Board " + score.leaderboardId, "Score: " + score.score + "\n" + "Rank:" + score.rank);
+		}
+		
 	}
 
 
-	private void OnAuth() {
-		IOSNativePopUpManager.showMessage("Player Authed ", "ID: " + GameCenterManager.player.playerId + "\n" + "Name: " + GameCenterManager.player.displayName);
+	private void OnAuth(CEvent e) {
+		ISN_Result r = e.data as ISN_Result;
+		if (r.IsSucceeded) {
+			IOSNativePopUpManager.showMessage("Player Authed ", "ID: " + GameCenterManager.player.playerId + "\n" + "Name: " + GameCenterManager.player.displayName);
+		}
+
 	}
 	
 }

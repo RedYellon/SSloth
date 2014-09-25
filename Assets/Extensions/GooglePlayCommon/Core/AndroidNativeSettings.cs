@@ -10,7 +10,7 @@ using UnityEditor;
 
 public class AndroidNativeSettings : ScriptableObject {
 
-	public const string VERSION_NUMBER = "4.5";
+	public const string VERSION_NUMBER = "4.6";
 
 
 	public bool EnableGamesAPI 		= true;
@@ -23,7 +23,16 @@ public class AndroidNativeSettings : ScriptableObject {
 	public bool LoadEventsIcons 	= true;
 
 
+
+	public bool UseProductNameAsFolderName = true;
+	public string GalleryFolderName = string.Empty;
+	public int MaxImageLoadSize = 512;
+	public AN_CameraCaptureType CameraCaptureMode;
+
+
+
 	public bool ShowStoreKitParams = false;
+	public bool ShowCameraAndGalleryParams = false;
 	public bool ShowPSSettings = false;
 	public bool ShowActions = false;
 	public bool GCMSettingsActinve = false;

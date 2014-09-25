@@ -34,18 +34,18 @@ public class PluginsInstalationUtil : MonoBehaviour {
 		
 
 		
-		FileStaticAPI.CopyFile(ANDROID_SOURCE_PATH + "libs/android-support-v4.jar", 			ANDROID_DESTANATION_PATH + "libs/android-support-v4.jar");
+		FileStaticAPI.CopyAsset(ANDROID_SOURCE_PATH + "libs/android-support-v4.jar", 			ANDROID_DESTANATION_PATH + "libs/android-support-v4.jar");
 		
 		
 		
-		FileStaticAPI.CopyFile(ANDROID_SOURCE_PATH + "libs/android-support-v4.jar", 			ANDROID_DESTANATION_PATH + "libs/android-support-v4.jar");
-		FileStaticAPI.CopyFile(ANDROID_SOURCE_PATH + "libs/google-play-services.jar", 			ANDROID_DESTANATION_PATH + "libs/google-play-services.jar");
-		FileStaticAPI.CopyFile(ANDROID_SOURCE_PATH + "libs/httpclient-4.3.1.jar", 				ANDROID_DESTANATION_PATH + "libs/httpclient-4.3.1.jar");
-		FileStaticAPI.CopyFile(ANDROID_SOURCE_PATH + "libs/libGoogleAnalyticsServices.jar", 	ANDROID_DESTANATION_PATH + "libs/libGoogleAnalyticsServices.jar");
-		FileStaticAPI.CopyFile(ANDROID_SOURCE_PATH + "libs/signpost-commonshttp4-1.2.1.2.jar", ANDROID_DESTANATION_PATH + "libs/signpost-commonshttp4-1.2.1.2.jar");
-		FileStaticAPI.CopyFile(ANDROID_SOURCE_PATH + "libs/signpost-core-1.2.1.2.jar", 		ANDROID_DESTANATION_PATH + "libs/signpost-core-1.2.1.2.jar");
-		FileStaticAPI.CopyFile(ANDROID_SOURCE_PATH + "libs/twitter4j-core-3.0.5.jar", 			ANDROID_DESTANATION_PATH + "libs/twitter4j-core-3.0.5.jar");
-		FileStaticAPI.CopyFile(ANDROID_SOURCE_PATH + "libs/image-chooser-library-1.3.0.jar", 	ANDROID_DESTANATION_PATH + "libs/image-chooser-library-1.3.0.jar");
+		FileStaticAPI.CopyAsset(ANDROID_SOURCE_PATH + "libs/android-support-v4.jar", 			ANDROID_DESTANATION_PATH + "libs/android-support-v4.jar");
+		FileStaticAPI.CopyAsset(ANDROID_SOURCE_PATH + "libs/google-play-services.jar", 			ANDROID_DESTANATION_PATH + "libs/google-play-services.jar");
+		FileStaticAPI.CopyAsset(ANDROID_SOURCE_PATH + "libs/httpclient-4.3.1.jar", 				ANDROID_DESTANATION_PATH + "libs/httpclient-4.3.1.jar");
+		FileStaticAPI.CopyAsset(ANDROID_SOURCE_PATH + "libs/libGoogleAnalyticsServices.jar", 	ANDROID_DESTANATION_PATH + "libs/libGoogleAnalyticsServices.jar");
+		FileStaticAPI.CopyAsset(ANDROID_SOURCE_PATH + "libs/signpost-commonshttp4-1.2.1.2.jar", ANDROID_DESTANATION_PATH + "libs/signpost-commonshttp4-1.2.1.2.jar");
+		FileStaticAPI.CopyAsset(ANDROID_SOURCE_PATH + "libs/signpost-core-1.2.1.2.jar", 		ANDROID_DESTANATION_PATH + "libs/signpost-core-1.2.1.2.jar");
+		FileStaticAPI.CopyAsset(ANDROID_SOURCE_PATH + "libs/twitter4j-core-3.0.5.jar", 			ANDROID_DESTANATION_PATH + "libs/twitter4j-core-3.0.5.jar");
+		FileStaticAPI.CopyAsset(ANDROID_SOURCE_PATH + "libs/image-chooser-library-1.3.0.jar", 	ANDROID_DESTANATION_PATH + "libs/image-chooser-library-1.3.0.jar");
 		
 		
 		
@@ -55,26 +55,21 @@ public class PluginsInstalationUtil : MonoBehaviour {
 		string file;
 		file = "res/values/" + "analytics.xml";
 		if(!FileStaticAPI.IsFileExists(ANDROID_DESTANATION_PATH + file)) {
-			FileStaticAPI.CopyFile(ANDROID_SOURCE_PATH + file, 	ANDROID_DESTANATION_PATH + file);
+			FileStaticAPI.CopyAsset(ANDROID_SOURCE_PATH + file, 	ANDROID_DESTANATION_PATH + file);
 		}
 		
 		
 		file = "res/values/" + "ids.xml";
 		if(!FileStaticAPI.IsFileExists(ANDROID_DESTANATION_PATH + file)) {
-			FileStaticAPI.CopyFile(ANDROID_SOURCE_PATH + file, 	ANDROID_DESTANATION_PATH + file);
+			FileStaticAPI.CopyAsset(ANDROID_SOURCE_PATH + file, 	ANDROID_DESTANATION_PATH + file);
 		}
-
-		file = "res/xml/" + "file_paths.xml";
-		if(!FileStaticAPI.IsFileExists(ANDROID_DESTANATION_PATH + file)) {
-			FileStaticAPI.CopyFile(ANDROID_SOURCE_PATH + file, 	ANDROID_DESTANATION_PATH + file);
-		}
-
+		
 		
 		file = "res/values/" + "version.xml";
 		FileStaticAPI.CopyFile(ANDROID_SOURCE_PATH + file, 	ANDROID_DESTANATION_PATH + file);
 		
 		file = "androidnative.jar";
-		FileStaticAPI.CopyFile(ANDROID_SOURCE_PATH + file, 	ANDROID_DESTANATION_PATH + file);
+		FileStaticAPI.CopyAsset(ANDROID_SOURCE_PATH + file, 	ANDROID_DESTANATION_PATH + file);
 		
 
 		
@@ -82,7 +77,7 @@ public class PluginsInstalationUtil : MonoBehaviour {
 		
 		file = "AndroidManifest.xml";
 		if(!FileStaticAPI.IsFileExists(ANDROID_DESTANATION_PATH + file)) {
-			FileStaticAPI.CopyFile(ANDROID_SOURCE_PATH + file, 	ANDROID_DESTANATION_PATH + file);
+			FileStaticAPI.CopyAsset(ANDROID_SOURCE_PATH + file, 	ANDROID_DESTANATION_PATH + file);
 			
 			
 		} else {
@@ -103,9 +98,6 @@ public class PluginsInstalationUtil : MonoBehaviour {
 					break;
 					
 				}
-			} else {
-			
-				
 			}
 		}
 		

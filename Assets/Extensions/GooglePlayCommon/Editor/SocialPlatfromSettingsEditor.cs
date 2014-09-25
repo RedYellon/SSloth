@@ -261,6 +261,7 @@ public class SocialPlatfromSettingsEditor : Editor {
 			if(GUILayout.Button("Add",  GUILayout.Width(100))) {
 				
 				if(newPermition != string.Empty) {
+					newPermition = newPermition.Trim();
 					if(!SocialPlatfromSettings.Instance.fb_scopes_list.Contains(newPermition)) {
 						SocialPlatfromSettings.Instance.fb_scopes_list.Add(newPermition);
 					}
@@ -281,11 +282,13 @@ public class SocialPlatfromSettingsEditor : Editor {
 		EditorGUILayout.BeginHorizontal();
 		EditorGUILayout.LabelField(TConsumerKey);
 		SocialPlatfromSettings.Instance.TWITTER_CONSUMER_KEY	 	= EditorGUILayout.TextField(SocialPlatfromSettings.Instance.TWITTER_CONSUMER_KEY);
+		SocialPlatfromSettings.Instance.TWITTER_CONSUMER_KEY 		= SocialPlatfromSettings.Instance.TWITTER_CONSUMER_KEY.Trim();
 		EditorGUILayout.EndHorizontal();
 
 		EditorGUILayout.BeginHorizontal();
 		EditorGUILayout.LabelField(TConsumerSecret);
 		SocialPlatfromSettings.Instance.TWITTER_CONSUMER_SECRET	 	= EditorGUILayout.TextField(SocialPlatfromSettings.Instance.TWITTER_CONSUMER_SECRET);
+		SocialPlatfromSettings.Instance.TWITTER_CONSUMER_SECRET	 	= SocialPlatfromSettings.Instance.TWITTER_CONSUMER_SECRET.Trim();
 		EditorGUILayout.EndHorizontal();
 	}
 

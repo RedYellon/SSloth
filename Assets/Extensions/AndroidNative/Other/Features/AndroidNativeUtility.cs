@@ -1,10 +1,16 @@
+using System;
 using UnityEngine;
 using System.Collections;
 
 public class AndroidNativeUtility : SA_Singleton<AndroidNativeUtility> {
 
-	public static string PACKAGE_FOUND 		= "package_found";
-	public static string PACKAGE_NOT_FOUND	=  "package_not_found";
+
+	//Events
+	public static string PACKAGE_CHECK_RESPONCE = "package_check_responce";
+
+
+	//Actions
+	public Action<AN_PackageCheckResult> OnPackageCheckResult = delegate{};
 
 	
 	//--------------------------------------
@@ -22,7 +28,10 @@ public class AndroidNativeUtility : SA_Singleton<AndroidNativeUtility> {
 	
 	public void CheckIsPackageInstalled(string packageName) {
 		AndroidNative.isPackageInstalled(packageName);
+	}
 
+	public void RunPackage(string packageName) {
+		AndroidNative.runPackage(packageName);
 	}
 
 	public void LoadGoogleAccountNames() {
@@ -54,11 +63,15 @@ public class AndroidNativeUtility : SA_Singleton<AndroidNativeUtility> {
 	//--------------------------------------
 
 	private void OnPacakgeFound(string packageName) {
-		dispatch(PACKAGE_FOUND, packageName);
+		AN_PackageCheckResult result = new AN_PackageCheckResult(packageName, true);
+		OnPackageCheckResult(result);
+		dispatch(PACKAGE_CHECK_RESPONCE, result);
 	}
 
 	private void OnPacakgeNotFound(string packageName) {
-		dispatch(PACKAGE_NOT_FOUND, packageName);
+		AN_PackageCheckResult result = new AN_PackageCheckResult(packageName, false);
+		OnPackageCheckResult(result);
+		dispatch(PACKAGE_CHECK_RESPONCE, result);
 	}
 
 

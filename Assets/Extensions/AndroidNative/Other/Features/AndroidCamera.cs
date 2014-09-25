@@ -4,28 +4,39 @@ using System.Collections;
 
 public class AndroidCamera : SA_Singleton<AndroidCamera>  {
 
-
 	//Actions
-	public Action<AndroidImagePickResult> OnImagePicked;
+	public Action<AndroidImagePickResult> OnImagePicked = delegate{};
+	public Action<GallerySaveResult> OnImageSaved = delegate{};
 	
 	//Events
 	public const string  IMAGE_PICKED = "image_picked";
+	public const string  IMAGE_SAVED = "image_saved";
 
 
 
-	public void SaveImageToGalalry(Texture2D image) {
-		if(image != null) {
-			byte[] val = image.EncodeToPNG();
-			string mdeia = System.Convert.ToBase64String (val);
-			AndroidNative.SaveToGalalry(mdeia);
-		}  else {
-			Debug.LogWarning("AndroidCamera::SaveToGalalry:  image is null");
-		}
+	private static string _lastImageName = string.Empty;
 
+	void Awake() {
+
+		int mode = (int) AndroidNativeSettings.Instance.CameraCaptureMode;
+		AndroidNative.InitCameraAPI(AndroidNativeSettings.Instance.GalleryFolderName, AndroidNativeSettings.Instance.MaxImageLoadSize, mode);
 	}
 
 
-	public void SaveScreenshotToGallery() {
+
+	public void SaveImageToGalalry(Texture2D image, String name = "Screenshot") {
+		if(image != null) {
+			byte[] val = image.EncodeToPNG();
+			string mdeia = System.Convert.ToBase64String (val);
+			AndroidNative.SaveToGalalry(mdeia, name);
+		}  else {
+			Debug.LogWarning("AndroidCamera::SaveToGalalry:  image is null");
+		}
+	}
+
+
+	public void SaveScreenshotToGallery(String name = "") {
+		_lastImageName = name;
 		SA_ScreenShotMaker.instance.OnScreenshotReady += OnScreenshotReady;
 		SA_ScreenShotMaker.instance.GetScreenshot();
 	}
@@ -59,11 +70,25 @@ public class AndroidCamera : SA_Singleton<AndroidCamera>  {
 
 	}
 
+	private void OnImageSavedEvent(string data) {
+		GallerySaveResult res =  new GallerySaveResult(data, true);
+
+		OnImageSaved(res);
+		dispatch(IMAGE_SAVED, res);
+	}
+
+	private void OnImageSaveFailedEvent(string data) {
+		GallerySaveResult res =  new GallerySaveResult("", false);
+		
+		OnImageSaved(res);
+		dispatch(IMAGE_SAVED, res);
+	}
+
 
 
 	private void OnScreenshotReady(Texture2D tex) {
 		SA_ScreenShotMaker.instance.OnScreenshotReady -= OnScreenshotReady;
-		SaveImageToGalalry(tex);
+		SaveImageToGalalry(tex, _lastImageName);
 
 	}
 }

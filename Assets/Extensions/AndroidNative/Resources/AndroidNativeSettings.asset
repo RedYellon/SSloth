@@ -18,7 +18,12 @@ MonoBehaviour:
   LoadQuestsImages: 1
   LoadQuestsIcons: 1
   LoadEventsIcons: 1
+  UseProductNameAsFolderName: 1
+  GalleryFolderName: Super Sloth
+  MaxImageLoadSize: 512
+  CameraCaptureMode: 0
   ShowStoreKitParams: 0
+  ShowCameraAndGalleryParams: 0
   ShowPSSettings: 0
   ShowActions: 0
   GCMSettingsActinve: 0

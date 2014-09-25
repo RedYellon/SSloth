@@ -6,14 +6,7 @@ public class UM_NativeAPIExample : BaseIOSFeaturePreview {
 	public Texture2D hello_texture;
 	public Texture2D darawTexgture = null;
 
-
-	void Awake() {
-
-
-		//Example how to use action instead of events
-		UM_Camera.instance.OnImagePicked += OnImage;
-	}
-
+	
 
 
 	void OnGUI() {
@@ -37,11 +30,13 @@ public class UM_NativeAPIExample : BaseIOSFeaturePreview {
 
 		StartX += XButtonStep;
 		if(GUI.Button(new Rect(StartX, StartY, buttonWidth, buttonHeight), "Get Image From Album")) {
+			UM_Camera.instance.OnImagePicked += OnImage;
 			UM_Camera.instance.GetImageFromGallery();
 		}
 
 		StartX += XButtonStep;
 		if(GUI.Button(new Rect(StartX, StartY, buttonWidth, buttonHeight), "Get Image From Camera")) {
+			UM_Camera.instance.OnImagePicked += OnImage;
 			UM_Camera.instance.GetImageFromCamera();
 		}
 
@@ -65,5 +60,7 @@ public class UM_NativeAPIExample : BaseIOSFeaturePreview {
 		if(result.IsSucceeded) {
 			darawTexgture = result.image;
 		}
+
+		UM_Camera.instance.OnImagePicked -= OnImage;
 	}
 }

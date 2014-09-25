@@ -17,7 +17,7 @@ public class GoogleAnalyticsMenu : EditorWindow {
 
 	#if UNITY_EDITOR
 
-	[MenuItem("Window/Google Analytics/Edit Settings")]
+	[MenuItem("Window/Google Analytics/Edit Settings", false, 1)]
 	public static void Edit() {
 		Selection.activeObject = GoogleAnalyticsSettings.Instance;
 	}
