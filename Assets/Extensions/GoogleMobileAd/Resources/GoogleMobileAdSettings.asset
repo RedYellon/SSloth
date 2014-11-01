@@ -17,3 +17,8 @@ MonoBehaviour:
   Android_BannersUnitId: 
   WP8_InterstisialsUnitId: 
   WP8_BannersUnitId: 
+  IsIOSSettinsOpened: 1
+  IsAndroidSettinsOpened: 1
+  IsWP8SettinsOpened: 1
+  IsTestSettinsOpened: 1
+  testDevices: []

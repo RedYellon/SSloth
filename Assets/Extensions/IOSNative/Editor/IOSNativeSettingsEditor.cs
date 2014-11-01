@@ -17,6 +17,7 @@ public class IOSNativeSettingsEditor : Editor {
 
 	GUIContent SKPVDLabel = new GUIContent("Store Products View [?]:", "YThe SKStoreProductViewController class makes it possible to integrate purchasing from Apple’s iTunes, App and iBooks stores directly into iOS 6 applications with minimal coding work.");
 	GUIContent CheckInternetLabel = new GUIContent("Check Internet Connection[?]:", "If set to true Internet connection will be checked before sending load request. Request will be sent automatically if network became available");
+	GUIContent SendBillingFakeActions = new GUIContent("Send Fake Action In Editor[?]:", "Fake connect and purchase events will be fired in editor, can be useful for testing implementation in Editor");
 
 	GUIContent UseGCCaching  = new GUIContent("Use Requests Caching[?]:", "Requests to Game Cneter will be cached if no internet connection avaliable. Requests will be resented on next Game Center connect event");
 
@@ -36,8 +37,24 @@ public class IOSNativeSettingsEditor : Editor {
 		string IOSNotificationControllerContent = FileStaticAPI.Read("Extensions/IOSNative/Notifications/IOSNotificationController.cs");
 		string DeviceTokenListnerContent = FileStaticAPI.Read("Extensions/IOSNative/Notifications/DeviceTokenListner.cs");
 
-		string DTL_Line = DeviceTokenListnerContent.Substring(0, DeviceTokenListnerContent.IndexOf(System.Environment.NewLine));
-		string INC_Line = IOSNotificationControllerContent.Substring(0, IOSNotificationControllerContent.IndexOf(System.Environment.NewLine));
+
+		int endlineIndex;
+		endlineIndex = DeviceTokenListnerContent.IndexOf(System.Environment.NewLine);
+		if(endlineIndex == -1) {
+			endlineIndex = DeviceTokenListnerContent.IndexOf("\n");
+		}
+		string DTL_Line = DeviceTokenListnerContent.Substring(0, endlineIndex);
+
+
+
+		endlineIndex = IOSNotificationControllerContent.IndexOf(System.Environment.NewLine);
+		if(endlineIndex == -1) {
+			endlineIndex = IOSNotificationControllerContent.IndexOf("\n");
+		}
+		string INC_Line = IOSNotificationControllerContent.Substring(0, endlineIndex);
+
+
+
 
 		if(IOSNativeSettings.Instance.EnablePushNotificationsAPI) {
 			IOSNotificationControllerContent 	= IOSNotificationControllerContent.Replace(INC_Line, "#define PUSH_ENABLED");
@@ -53,7 +70,23 @@ public class IOSNativeSettingsEditor : Editor {
 
 	public override void OnInspectorGUI()  {
 
-		#if !UNITY_WEBPLAYER
+
+		#if UNITY_WEBPLAYER
+		EditorGUILayout.HelpBox("Editing IOS Native Settings not avaliable with web player platfrom. Please swith to any other platfrom under Build Seting menu", MessageType.Warning);
+		EditorGUILayout.BeginHorizontal();
+		EditorGUILayout.Space();
+		if(GUILayout.Button("Switch To IOS Platfrom",  GUILayout.Width(150))) {
+			EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTarget.iPhone);
+		}
+		EditorGUILayout.EndHorizontal();
+
+		if(Application.isEditor) {
+			return;
+		}
+
+		#endif
+
+
 		settings = target as IOSNativeSettings;
 
 		GUI.changed = false;
@@ -77,16 +110,7 @@ public class IOSNativeSettingsEditor : Editor {
 		if(GUI.changed) {
 			DirtyEditor();
 		}
-		#else
-		EditorGUILayout.HelpBox("Editing IOS Native Settings not avaliable with web player platfrom. Please swith to any other platfrom under Build Seting menu", MessageType.Warning);
-		EditorGUILayout.BeginHorizontal();
-		EditorGUILayout.Space();
-		if(GUILayout.Button("Switch To IOS Platfrom",  GUILayout.Width(150))) {
-			EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTarget.iPhone);
-		}
-		EditorGUILayout.EndHorizontal();
 
-		#endif
 	}
 
 
@@ -107,7 +131,10 @@ public class IOSNativeSettingsEditor : Editor {
 		EditorGUILayout.BeginHorizontal();
 		EditorGUILayout.LabelField(AppleIdLabel);
 		settings.AppleId	 	= EditorGUILayout.TextField(settings.AppleId);
-		settings.AppleId		= settings.AppleId.Trim();
+		if(settings.AppleId.Length > 0) {
+			settings.AppleId		= settings.AppleId.Trim();
+		}
+
 		EditorGUILayout.EndHorizontal();
 
 
@@ -117,17 +144,28 @@ public class IOSNativeSettingsEditor : Editor {
 
 	}
 
-	private void CameraAndGallery() {
+	public static void CameraAndGallery() {
 		EditorGUILayout.BeginHorizontal();
 		EditorGUILayout.LabelField("Max Loaded Image Size");
 		IOSNativeSettings.Instance.MaxImageLoadSize	 	= EditorGUILayout.IntField(IOSNativeSettings.Instance.MaxImageLoadSize);
 		EditorGUILayout.EndHorizontal();
 
 		EditorGUILayout.BeginHorizontal();
+		EditorGUILayout.LabelField("Loaded Image Format");
+		IOSNativeSettings.Instance.GalleryImageFormat	 	= (IOSGallaeryLoadImageFormat) EditorGUILayout.EnumPopup(IOSNativeSettings.Instance.GalleryImageFormat);
+		EditorGUILayout.EndHorizontal();
+
+
+		if(IOSNativeSettings.Instance.GalleryImageFormat == IOSGallaeryLoadImageFormat.JPEG) {
+			GUI.enabled = true;
+		} else {
+			GUI.enabled = false;
+		}
+		EditorGUILayout.BeginHorizontal();
 		EditorGUILayout.LabelField("JPEG Compression Rate");
 		IOSNativeSettings.Instance.JPegCompressionRate	 	= EditorGUILayout.Slider(IOSNativeSettings.Instance.JPegCompressionRate, 0f, 1f);
 		EditorGUILayout.EndHorizontal();
-
+		GUI.enabled = true;
 
 	}
 
@@ -147,7 +185,10 @@ public class IOSNativeSettingsEditor : Editor {
 				foreach(string str in IOSNativeSettings.Instance.RegistredAchievementsIds) {
 					EditorGUILayout.BeginHorizontal();
 					IOSNativeSettings.Instance.RegistredAchievementsIds[i]	 	= EditorGUILayout.TextField(IOSNativeSettings.Instance.RegistredAchievementsIds[i]);
-					IOSNativeSettings.Instance.RegistredAchievementsIds[i]		= IOSNativeSettings.Instance.RegistredAchievementsIds[i].Trim();
+					if(IOSNativeSettings.Instance.RegistredAchievementsIds[i].Length > 0) {
+						IOSNativeSettings.Instance.RegistredAchievementsIds[i]		= IOSNativeSettings.Instance.RegistredAchievementsIds[i].Trim();
+					}
+
 					if(GUILayout.Button("Remove",  GUILayout.Width(80))) {
 						IOSNativeSettings.Instance.RegistredAchievementsIds.Remove(str);
 						break;
@@ -163,14 +204,31 @@ public class IOSNativeSettingsEditor : Editor {
 					IOSNativeSettings.Instance.RegistredAchievementsIds.Add("");
 				}
 				EditorGUILayout.EndHorizontal();
+
+
+				EditorGUILayout.BeginHorizontal();
+				EditorGUILayout.LabelField(UseGCCaching);
+				IOSNativeSettings.Instance.UseGCRequestsCahing = EditorGUILayout.Toggle(IOSNativeSettings.Instance.UseGCRequestsCahing);
+				EditorGUILayout.EndHorizontal();
+				
+				
+				EditorGUILayout.BeginHorizontal();
+				EditorGUILayout.LabelField("Save  progress in PlayerPrefs[?]");
+				IOSNativeSettings.Instance.UsePPForAchievements = EditorGUILayout.Toggle(IOSNativeSettings.Instance.UsePPForAchievements);
+				EditorGUILayout.EndHorizontal();
+
+				EditorGUILayout.BeginHorizontal();
+				EditorGUILayout.Space();
+				if(GUILayout.Button("Read More",  GUILayout.Width(100))) {
+					Application.OpenURL("http://goo.gl/3nq260");
+				}
+				EditorGUILayout.EndHorizontal();
+
 			}
 
 			EditorGUI.indentLevel--;
 
-			EditorGUILayout.BeginHorizontal();
-			EditorGUILayout.LabelField(UseGCCaching);
-			IOSNativeSettings.Instance.UseGCRequestsCahing = EditorGUILayout.Toggle(IOSNativeSettings.Instance.UseGCRequestsCahing);
-			EditorGUILayout.EndHorizontal();
+
 
 
 		}
@@ -216,7 +274,10 @@ public class IOSNativeSettingsEditor : Editor {
 			foreach(string str in settings.InAppProducts) {
 				EditorGUILayout.BeginHorizontal();
 				settings.InAppProducts[i]	 	= EditorGUILayout.TextField(settings.InAppProducts[i]);
-				settings.InAppProducts[i]		= settings.InAppProducts[i].Trim();
+				if(settings.InAppProducts[i].Length > 0) {
+					settings.InAppProducts[i]		= settings.InAppProducts[i].Trim();
+				}
+			
 				if(GUILayout.Button("Remove",  GUILayout.Width(80))) {
 					settings.InAppProducts.Remove(str);
 					break;
@@ -235,11 +296,23 @@ public class IOSNativeSettingsEditor : Editor {
 
 
 			EditorGUILayout.Space();
-			
+
+
+			EditorGUILayout.BeginHorizontal();
+			EditorGUILayout.LabelField(SendBillingFakeActions);
+			settings.SendFakeEventsInEditor = EditorGUILayout.Toggle(settings.SendFakeEventsInEditor);
+			EditorGUILayout.EndHorizontal();
+
+
 			EditorGUILayout.BeginHorizontal();
 			EditorGUILayout.LabelField(CheckInternetLabel);
 			settings.checkInternetBeforeLoadRequestl = EditorGUILayout.Toggle(settings.checkInternetBeforeLoadRequestl);
 			EditorGUILayout.EndHorizontal();
+
+
+
+
+
 
 			EditorGUILayout.Space();
 			EditorGUILayout.Space();
@@ -256,7 +329,10 @@ public class IOSNativeSettingsEditor : Editor {
 			foreach(string str in settings.DefaultStoreProductsView) {
 				EditorGUILayout.BeginHorizontal();
 				settings.DefaultStoreProductsView[i]	 	= EditorGUILayout.TextField(settings.DefaultStoreProductsView[i]);
-				settings.DefaultStoreProductsView[i]		= settings.DefaultStoreProductsView[i].Trim();
+				if(settings.DefaultStoreProductsView[i].Length > 0) {
+					settings.DefaultStoreProductsView[i]		= settings.DefaultStoreProductsView[i].Trim();
+				}
+
 				if(GUILayout.Button("Remove",  GUILayout.Width(80))) {
 					settings.DefaultStoreProductsView.Remove(str);
 					break;

@@ -28,9 +28,6 @@ public class DeviceTokenListner : MonoBehaviour {
 	void Awake() {
 		DontDestroyOnLoad (gameObject);
 
-
-		//Remove this line after uncommenting FixedUpdate function.
-		IOSMessage.Create("Push registration disabled", "Uncomment 'FixedUpdate' function inside DeviceTokenListner class");
 	}
 
 

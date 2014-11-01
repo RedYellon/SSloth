@@ -9,6 +9,8 @@
 
 
 using UnityEngine;
+using System;
+using UnionAssets.FLE;
 using System.Collections;
 using System.Collections.Generic;
 #if (UNITY_IPHONE && !UNITY_EDITOR) || SA_DEBUG_MODE
@@ -32,11 +34,18 @@ public class iAdBannerController : EventDispatcher {
 	private static extern void _IADShowInterstitialAd();
 	#endif
 
+
+
 	private static int _nextId = 0;
 	private static iAdBannerController _instance;
-
 	private Dictionary<int, iAdBanner> _banners; 
 
+	//Actions
+	public Action InterstitialDidFailWithErrorAction 	= delegate {};
+	public Action InterstitialAdWillLoadAction 			= delegate {};
+	public Action InterstitialAdDidLoadAction 			= delegate {};
+	public Action InterstitialAdDidFinishAction			= delegate {};
+	
 
 	
 	//--------------------------------------
@@ -214,23 +223,24 @@ public class iAdBannerController : EventDispatcher {
 
 
 
-
-
-
 	private void interstitialdidFailWithError(string data) {
 		dispatch(iAdEvent.INTERSTITIAL_DID_FAIL_WITH_ERROR);
+		InterstitialDidFailWithErrorAction();
 	}
 
 	private void interstitialAdWillLoad(string data) {
 		dispatch(iAdEvent.INTERSTITIAL_AD_WILL_LOAD);
+		InterstitialAdWillLoadAction();
 	}
 
 	private void interstitialAdDidLoad(string data) {
 		dispatch(iAdEvent.INTERSTITIAL_AD_DID_LOAD);
+		InterstitialAdDidLoadAction();
 	}
 
 	private void interstitialAdActionDidFinish(string data) {
 		dispatch(iAdEvent.INTERSTITIAL_AD_ACTION_DID_FINISH);
+		InterstitialAdDidFinishAction();
 	}
 
 

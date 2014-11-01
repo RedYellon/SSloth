@@ -5,6 +5,10 @@ public class UM_AdManager : SA_Singleton<UM_AdManager> {
 
 	private  bool _IsInited = false ;
 
+	void Awake() {
+		DontDestroyOnLoad(gameObject);
+	}
+
 	public  void Init() {
 
 

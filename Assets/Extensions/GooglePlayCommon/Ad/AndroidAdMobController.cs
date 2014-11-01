@@ -7,6 +7,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -20,6 +21,14 @@ public class AndroidAdMobController : SA_Singleton<AndroidAdMobController>, Goog
 	private string _BannersUunitId;
 	private string _InterstisialUnitId;
 
+
+	//Actions
+	private Action _OnInterstitialLoaded 			= delegate {};
+	private Action _OnInterstitialFailedLoading 	= delegate {};
+	private Action _OnInterstitialOpened 			= delegate {};
+	private Action _OnInterstitialClosed 			= delegate {};
+	private Action _OnInterstitialLeftApplication  	= delegate {};
+	private Action<string> _OnAdInAppRequest		= delegate {};
 
 
 
@@ -287,14 +296,74 @@ public class AndroidAdMobController : SA_Singleton<AndroidAdMobController>, Goog
 	}
 
 
+	//--------------------------------------
+	//  Actions 
+	//--------------------------------------
+
+	public Action OnInterstitialLoaded {
+		get {
+			return _OnInterstitialLoaded;
+		}
+
+		set {
+			_OnInterstitialLoaded = value;
+		}
+	}
+
+	public Action OnInterstitialFailedLoading {
+		get {
+			return _OnInterstitialFailedLoading;
+		}
+		
+		set {
+			_OnInterstitialFailedLoading = value;
+		}
+	}
 
 
-	//--------------------------------------
-	//  EVENTS 
-	//--------------------------------------
+	public Action OnInterstitialOpened {
+		get {
+			return _OnInterstitialOpened;
+		}
+		
+		set {
+			_OnInterstitialOpened = value;
+		}
+	}
+
+	public Action OnInterstitialClosed {
+		get {
+			return _OnInterstitialClosed;
+		}
+		
+		set {
+			_OnInterstitialClosed = value;
+		}
+	}
+
+
+	public Action OnInterstitialLeftApplication {
+		get {
+			return _OnInterstitialLeftApplication;
+		}
+		
+		set {
+			_OnInterstitialLeftApplication = value;
+		}
+	}
+
+
+	public Action<string> OnAdInAppRequest {
+		get {
+			return _OnAdInAppRequest;
+		}
+		
+		set {
+			_OnAdInAppRequest = value;
+		}
+	}
 	
 
-	
 	//--------------------------------------
 	//  EVENTS BANNER AD
 	//--------------------------------------
@@ -358,22 +427,27 @@ public class AndroidAdMobController : SA_Singleton<AndroidAdMobController>, Goog
 
 	
 	private void OnInterstitialAdLoaded()  {
+		_OnInterstitialLoaded();
 		dispatch(GoogleMobileAdEvents.ON_INTERSTITIAL_AD_LOADED);
 	}
 	
 	private void OnInterstitialAdFailedToLoad() {
+		_OnInterstitialFailedLoading();
 		dispatch(GoogleMobileAdEvents.ON_INTERSTITIAL_AD_FAILED_LOADING);
 	}
 	
 	private void OnInterstitialAdOpened() {
+		_OnInterstitialOpened();
 		dispatch(GoogleMobileAdEvents.ON_INTERSTITIAL_AD_OPENED);
 	}
 	
 	private void OnInterstitialAdClosed() {
+		_OnInterstitialClosed();
 		dispatch(GoogleMobileAdEvents.ON_INTERSTITIAL_AD_CLOSED);
 	}
 	
 	private void OnInterstitialAdLeftApplication() {
+		_OnInterstitialLeftApplication();
 		dispatch(GoogleMobileAdEvents.ON_INTERSTITIAL_AD_LEFT_APPLICATION);
 	}
 	
@@ -382,6 +456,7 @@ public class AndroidAdMobController : SA_Singleton<AndroidAdMobController>, Goog
 	//--------------------------------------
 
 	private void OnInAppPurchaseRequested(string productId) {
+		_OnAdInAppRequest(productId);
 		dispatch(GoogleMobileAdEvents.ON_AD_IN_APP_REQUEST, productId);
 	}
 

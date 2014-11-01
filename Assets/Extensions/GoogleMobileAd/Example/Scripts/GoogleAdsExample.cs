@@ -9,19 +9,11 @@
 
 
 using UnityEngine;
+using UnionAssets.FLE;
 using System.Collections;
 
 public class GoogleAdsExample : MonoBehaviour {
-
-
-
 	
-	//replace with your ids
-
-
-
-
-
 
 	private GUIStyle style;
 	private GUIStyle style2;
@@ -48,6 +40,8 @@ public class GoogleAdsExample : MonoBehaviour {
 		GoogleMobileAd.TagForChildDirectedTreatment(false);
 		
 		//Causes a device to receive test ads. The deviceId can be obtained by viewing the device log output after creating a new ad
+		//Fill your test device in the plugin setting, or you can add your device using example code bellow
+
 		GoogleMobileAd.AddTestDevice("733770c317dcbf4675fe870d3df9ca42");
 
 
@@ -55,6 +49,10 @@ public class GoogleAdsExample : MonoBehaviour {
 		//More eventts ot explore under GoogleMobileAdEvents class
 		GoogleMobileAd.addEventListener(GoogleMobileAdEvents.ON_INTERSTITIAL_AD_LOADED, OnInterstisialsLoaded);
 		GoogleMobileAd.addEventListener(GoogleMobileAdEvents.ON_INTERSTITIAL_AD_OPENED, OnInterstisialsOpen);
+
+		//Actions use Example
+
+		GoogleMobileAd.OnInterstitialLoaded += OnInterstitialLoaded;
 
 		//listening for InApp Event
 		//You will only receive in-app purchase (IAP) ads if you specifically configure an IAP ad campaign in the AdMob front end.
@@ -87,7 +85,6 @@ public class GoogleAdsExample : MonoBehaviour {
 	//--------------------------------------
 
 	void OnGUI() {
-
 		float StartY = 20;
 		float StartX = 10;
 		GUI.Label(new Rect(StartX, StartY, Screen.width, 40), "Interstisal Example", style);
@@ -235,7 +232,16 @@ public class GoogleAdsExample : MonoBehaviour {
 
 		StartY+= 40;
 		if(GUI.Button(new Rect(StartX, StartY, 150, 50), "Smart Banner")) {
+
 			banner2 =GoogleMobileAd.CreateAdBanner(TextAnchor.LowerLeft, GADBannerSize.SMART_BANNER);
+
+			//listening for banner to load example using C# actions:
+			banner2.OnLoadedAction += OnBannerLoadedAction;
+
+
+			//By setting this flsg to fals we will prevent banner to show when it's loaded
+			//e will listner for OnLoadedAction event and show it by our selfs instead
+			banner2.ShowOnLoad = false;
 		}
 
 
@@ -312,7 +318,7 @@ public class GoogleAdsExample : MonoBehaviour {
 		//getting product id
 		string productId = (string) e.data;
 		Debug.Log ("In App Request for product Id: " + productId + " received");
-		
+
 		
 		//Then you should perfrom purchase  for this product id, using this or another game billing plugin
 		//Once the purchase is complete, you should call RecordInAppResolution with one of the constants defined in GADInAppResolution:
@@ -321,6 +327,19 @@ public class GoogleAdsExample : MonoBehaviour {
 		
 	}
 
+	
+	//--------------------------------------
+	//  ACTIONS
+	//--------------------------------------
+
+	private void OnInterstitialLoaded () {
+		Debug.Log("OnInterstitialLoaded catched with C# Actions usage");
+	}
+
+	private void OnBannerLoadedAction (GoogleMobileAdBanner banner) {
+		banner.OnLoadedAction -= OnBannerLoadedAction;
+		banner.Show();
+	}
 
 	
 	//--------------------------------------
@@ -330,5 +349,7 @@ public class GoogleAdsExample : MonoBehaviour {
 	//--------------------------------------
 	//  DESTROY
 	//--------------------------------------
+
+
 
 }

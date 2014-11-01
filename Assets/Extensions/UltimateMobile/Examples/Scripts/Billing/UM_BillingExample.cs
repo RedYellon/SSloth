@@ -9,12 +9,13 @@
 
 
 using UnityEngine;
+using UnionAssets.FLE;
 using System.Collections;
 using System.Collections.Generic;
 
 public class UM_BillingExample : BaseIOSFeaturePreview {
 
-	public const string CONSUMABLE_PRODUCT_ID 		=	"ConsumableExample";
+	public const string CONSUMABLE_PRODUCT_ID 		=  GPaymnetManagerExample.ANDROID_TEST_PURCHASED;	//"ConsumableExample";
 	public const string NON_CONSUMABLE_PRODUCT_ID 	=	"NonConsumableExample";
 
 	//--------------------------------------
@@ -27,6 +28,8 @@ public class UM_BillingExample : BaseIOSFeaturePreview {
 
 	void Awake() {
 		UM_ExampleStatusBar.text = "Unified billing exmple scene loaded";
+
+
 
 		UM_InAppPurchaseManager.instance.addEventListener(UM_InAppPurchaseManager.ON_PURCHASE_FLOW_FINISHED, OnPurchaseFinished);
 		UM_InAppPurchaseManager.instance.addEventListener(UM_InAppPurchaseManager.ON_BILLING_CONNECT_FINISHED, OnConnectFinished);
@@ -46,6 +49,9 @@ public class UM_BillingExample : BaseIOSFeaturePreview {
 
 
 		if(GUI.Button(new Rect(StartX, StartY, buttonWidth, buttonHeight), "Init")) {
+
+			//subscribign on intit fisigh action
+			UM_InAppPurchaseManager.OnBillingConnectFinishedAction += OnBillingConnectFinishedAction;
 			UM_InAppPurchaseManager.instance.Init();
 			UM_ExampleStatusBar.text = "Initializing billing...";
 		}
@@ -61,6 +67,7 @@ public class UM_BillingExample : BaseIOSFeaturePreview {
 		StartX = XStartPos;
 		StartY+= YButtonStep;
 		if(GUI.Button(new Rect(StartX, StartY, buttonWidth, buttonHeight), "Buy Consumable Item")) {
+			UM_InAppPurchaseManager.OnPurchaseFlowFinishedAction += OnPurchaseFlowFinishedAction;
 			UM_InAppPurchaseManager.instance.Purchase(CONSUMABLE_PRODUCT_ID);
 
 			UM_ExampleStatusBar.text = "Start purchsing " + CONSUMABLE_PRODUCT_ID + " product";
@@ -122,6 +129,24 @@ public class UM_BillingExample : BaseIOSFeaturePreview {
 		}
 	}
 
+	private void OnPurchaseFlowFinishedAction (UM_PurchaseResult result) {
+		UM_InAppPurchaseManager.OnPurchaseFlowFinishedAction -= OnPurchaseFlowFinishedAction;
+		if(result.isSuccess) {
+			Debug.Log("Product " + result.product.id + " purchase Success");
+		} else  {
+				Debug.Log("Product " + result.product.id + " purchase Failed");
+		}
+	}
+
+	private void OnBillingConnectFinishedAction (UM_BillingConnectionResult result) {
+		UM_InAppPurchaseManager.OnBillingConnectFinishedAction -= OnBillingConnectFinishedAction;
+		if(result.isSuccess) {
+			Debug.Log("Connected");
+		} else {
+			Debug.Log("Failed to connect");
+		}
+	}
+
 
 	
 	//--------------------------------------
@@ -131,6 +156,7 @@ public class UM_BillingExample : BaseIOSFeaturePreview {
 	//--------------------------------------
 	//  DESTROY
 	//--------------------------------------
+
 
 
 }

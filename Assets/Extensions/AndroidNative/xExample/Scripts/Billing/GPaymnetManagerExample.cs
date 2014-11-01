@@ -10,6 +10,7 @@
  
 
 using UnityEngine;
+using UnionAssets.FLE;
 using System.Collections;
 
 public class GPaymnetManagerExample : MonoBehaviour {
@@ -49,8 +50,11 @@ public class GPaymnetManagerExample : MonoBehaviour {
 		//initilaizing store
 		AndroidInAppPurchaseManager.instance.addEventListener (AndroidInAppPurchaseManager.ON_BILLING_SETUP_FINISHED, OnBillingConnected);
 
-		////you may use loadStore function without parametr if you have filled base64EncodedPublicKey in plugin settings
+		//you may use loadStore function without parametr if you have filled base64EncodedPublicKey in plugin settings
 		AndroidInAppPurchaseManager.instance.loadStore();
+
+		//or You can pass base64EncodedPublicKey using scirption:
+		//AndroidInAppPurchaseManager.instance.loadStore(YOU_BASE_64_KEY_HERE);
 
 
 

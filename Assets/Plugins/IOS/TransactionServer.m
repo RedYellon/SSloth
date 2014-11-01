@@ -23,6 +23,10 @@ NSString* lastTransaction = @"";
                 break;
             case SKPaymentTransactionStateRestored:
                 [self restoreTransaction:transaction];
+                break;
+            case SKPaymentTransactionStateDeferred:
+                [self reportDeferredState:transaction];
+                break;
             default:
                 break;
         }
@@ -31,7 +35,7 @@ NSString* lastTransaction = @"";
 
 
 -(void) verifyLastPurchase:(NSString *)verificationURL {
-    NSLog(@"url: %@",verificationURL);
+    NSLog(@"ISN: url: %@",verificationURL);
     
     
     NSURL *url = [NSURL URLWithString:verificationURL];
@@ -95,16 +99,28 @@ NSString* lastTransaction = @"";
 }
 
 
+- (void)reportDeferredState:(SKPaymentTransaction *)transaction {
+    NSLog(@"ISN: Transaction  Deferred for: %@", transaction.payment.productIdentifier);
 
-- (void)provideContent:(SKPaymentTransaction *)transaction {
+    UnitySendMessage("IOSInAppPurchaseManager", "onProductStateDeferred", [ISNDataConvertor NSStringToChar:transaction.payment.productIdentifier]);
+}
+
+- (void)provideContent:(SKPaymentTransaction *)transaction  isRestored:(BOOL)isRestored{
     
-    NSLog(@"provideContent for: %@", transaction.payment.productIdentifier);
+    NSLog(@"ISN: provideContent for: %@", transaction.payment.productIdentifier);
 
     lastTransaction = [self encodeBase64:(uint8_t *)transaction.transactionReceipt.bytes length:transaction.transactionReceipt.length];
     
     NSMutableString * data = [[NSMutableString alloc] init];
     
     [data appendString:transaction.payment.productIdentifier];
+    [data appendString:@"|"];
+    if(isRestored) {
+        [data appendString:@"0"];
+    } else {
+        [data appendString:@"1"];
+    }
+    
     [data appendString:@"|"];
     [data appendString: [self getReceipt:transaction]];
     
@@ -119,17 +135,18 @@ NSString* lastTransaction = @"";
 
 
 - (void)completeTransaction:(SKPaymentTransaction *)transaction {
-    NSLog(@"completeTransaction...");
+    NSLog(@"ISN: completeTransaction...");
     
     
-    Reachability* reachability = [Reachability reachabilityWithHostName:@"www.apple.com"];
+    
+    ISN_Reachability* reachability = [ISN_Reachability reachabilityWithHostName:@"www.apple.com"];
     NetworkStatus remoteHostStatus = [reachability currentReachabilityStatus];
     
     if(remoteHostStatus == NotReachable) {
-        NSLog(@"apple.com not reachable, sending tracnsactio finish canseled");
+        NSLog(@"ISN: apple.com not reachable, sending tracnsactio finish canseled");
     } else {
-        NSLog(@"apple.com reachable sending tracnsactio finish");
-        [self provideContent:transaction];
+        NSLog(@"ISN: apple.com reachable sending tracnsactio finish");
+        [self provideContent:transaction isRestored:false];
         [[SKPaymentQueue defaultQueue] finishTransaction: transaction];
     }
     
@@ -139,25 +156,28 @@ NSString* lastTransaction = @"";
 }
 
 - (void)restoreTransaction:(SKPaymentTransaction *)transaction {
-    NSLog(@"restoreTransaction...");
+    NSLog(@"ISN: restoreTransaction...");
     
-    [self provideContent:transaction];
-    [[SKPaymentQueue defaultQueue] finishTransaction: transaction];
+   [self provideContent:transaction isRestored:true];
+   [[SKPaymentQueue defaultQueue] finishTransaction: transaction];
     
 }
 
 - (void)failedTransaction:(SKPaymentTransaction *)transaction {
-    NSLog(@"Transaction Failed with code : %i", transaction.error.code);
+    NSLog(@"ISN: Transaction Failed with code : %i", transaction.error.code);
+    NSLog(@"ISN: Transaction error: %@", transaction.error.description);
     
-    if(transaction.error.localizedDescription != NULL) {
-          NSLog(@"Transaction error: %@", transaction.error.localizedDescription);
-    }
-  
     if(transaction.error.code != SKErrorPaymentCancelled) {
         
         UIAlertView *alert = [[UIAlertView alloc] init];
         [alert setTitle:@"Transaction Error"];
-        [alert setMessage:transaction.error.localizedDescription];
+        
+        if(transaction.error.localizedDescription != NULL) {
+            [alert setMessage:transaction.error.localizedDescription];
+        } else {
+            [alert setMessage:transaction.error.description];
+        }
+        
         [alert addButtonWithTitle:@"Ok"];
         [alert setDelegate:NULL];
         [alert show];
@@ -172,7 +192,15 @@ NSString* lastTransaction = @"";
     
     [data appendString:transaction.payment.productIdentifier];
     [data appendString:@"|"];
-    [data appendString:transaction.error.localizedDescription];
+    
+    
+    if(transaction.error.localizedDescription != NULL) {
+         [data appendString:transaction.error.localizedDescription];
+    } else {
+         [data appendString:transaction.error.description];
+    }
+    
+   
     
     NSString *str = [[data copy] autorelease];
     UnitySendMessage("IOSInAppPurchaseManager", "onTransactionFailed", [ISNDataConvertor NSStringToChar:str]);
@@ -183,29 +211,28 @@ NSString* lastTransaction = @"";
 
 
 - (void)paymentQueue:(SKPaymentQueue *)queue restoreCompletedTransactionsFailedWithError:(NSError *)error {
-    NSLog(@"%@",error);
+    NSLog(@"ISN: paymentQueue %@",error);
     UnitySendMessage("IOSInAppPurchaseManager", "onRestoreTransactionFailed", [ISNDataConvertor NSStringToChar:@""]);
 }
 
 - (void) paymentQueueRestoreCompletedTransactionsFinished:(SKPaymentQueue *)queue
 {
-    NSLog(@"received restored transactions: %i", queue.transactions.count);
+    NSLog(@"ISN: received restored transactions: %i", queue.transactions.count);
     
     if (queue.transactions.count == 0) {
-        NSLog(@"Nothing to restore, fail event sanded");
+        NSLog(@"ISN: Nothing to restore, fail event sanded");
         UnitySendMessage("IOSInAppPurchaseManager", "onRestoreTransactionFailed", [ISNDataConvertor NSStringToChar:@""]);
         return;
     }
     
     for (SKPaymentTransaction *transaction in queue.transactions) {
         NSString *productID = transaction.payment.productIdentifier;
-        NSLog(@"restored: %@",productID);
+        NSLog(@"ISN: restored: %@",productID);
     }
     
     UnitySendMessage("IOSInAppPurchaseManager", "onRestoreTransactionComplete", [ISNDataConvertor NSStringToChar:@""]);
     
 }
-
 
 
 @end

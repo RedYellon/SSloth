@@ -29,10 +29,14 @@ public class iAdUseExample : MonoBehaviour {
 
 	void Start() {
 
-		iAdBannerController.instance.addEventListener(iAdEvent.INTERSTITIAL_AD_DID_LOAD, OnInterstisialsLoaded);
 
+		//using events example
+		iAdBannerController.instance.addEventListener(iAdEvent.INTERSTITIAL_AD_DID_LOAD, OnInterstisialsLoaded);
 		iAdBannerController.instance.addEventListener(iAdEvent.INTERSTITIAL_AD_ACTION_DID_FINISH, OnInterstisialsFinish);
 
+
+		//using actions example
+		iAdBannerController.instance.InterstitialAdDidFinishAction += InterstitialAdDidFinishAction;
 
 		InitStyles();
 	}
@@ -61,6 +65,8 @@ public class iAdUseExample : MonoBehaviour {
 
 
 	void Update() {
+
+		/*
 		if(Input.GetMouseButtonDown(0)) {
 			Debug.Log("click");
 			Debug.Log(Input.mousePosition);
@@ -71,6 +77,7 @@ public class iAdUseExample : MonoBehaviour {
 			Debug.Log(Input.GetTouch(0).position); 
 
 		}
+		*/
 	}
 	
 	void OnGUI() {
@@ -203,11 +210,21 @@ public class iAdUseExample : MonoBehaviour {
 		IsInterstisialsAdReady = true;
 	}
 
+
+
 	private void OnInterstisialsFinish() {
+		Debug.Log("OnInterstisialsFinish events fired");
 		IsInterstisialsAdReady = false;
 	}
 
 
+	//--------------------------------------
+	//  Actions 
+	//--------------------------------------
+
+	private void InterstitialAdDidFinishAction () {
+		Debug.Log("OnInterstisialsFinish action fired");
+	}
 	
 	//--------------------------------------
 	//  PRIVATE METHODS

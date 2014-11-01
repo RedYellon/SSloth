@@ -10,9 +10,11 @@ using UnityEditor;
 
 public class AndroidNativeSettings : ScriptableObject {
 
-	public const string VERSION_NUMBER = "4.6";
+	public const string VERSION_NUMBER = "4.8";
+	public const string GOOGLE_PLAY_SDK_VERSION_NUMBER = "6111000";
 
 
+	public bool EnablePlusAPI 		= true;
 	public bool EnableGamesAPI 		= true;
 	public bool EnableAppStateAPI 	= true;
 	public bool LoadProfileIcons 	= true;

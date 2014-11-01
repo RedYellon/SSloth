@@ -252,21 +252,28 @@ public class UMSettingEditor : Editor {
 								EditorGUILayout.BeginHorizontal();
 								EditorGUILayout.LabelField(LID);
 								leaderbaord.id	 	= EditorGUILayout.TextField(leaderbaord.id);
-								leaderbaord.id		= leaderbaord.id.Trim();
+								if(leaderbaord.id.Length > 0) {
+									leaderbaord.id		= leaderbaord.id.Trim();
+								}
+
 								EditorGUILayout.EndHorizontal();
 								
 								
 								EditorGUILayout.BeginHorizontal();
 								EditorGUILayout.LabelField(IOSLID);
 								leaderbaord.IOSId	 	= EditorGUILayout.TextField(leaderbaord.IOSId);
-								leaderbaord.IOSId 		= leaderbaord.IOSId.Trim();
+								if(leaderbaord.IOSId.Length > 0) {
+									leaderbaord.IOSId 		= leaderbaord.IOSId.Trim();
+								}
 								EditorGUILayout.EndHorizontal();
 								
 								
 								EditorGUILayout.BeginHorizontal();
 								EditorGUILayout.LabelField(ANDROIDLID);
 								leaderbaord.AndroidId	 	= EditorGUILayout.TextField(leaderbaord.AndroidId);
-								leaderbaord.AndroidId		= leaderbaord.AndroidId.Trim();
+								if(leaderbaord.AndroidId.Length > 0) {
+									leaderbaord.AndroidId 		= leaderbaord.AndroidId.Trim();
+								}
 								EditorGUILayout.EndHorizontal();
 								
 								EditorGUILayout.BeginHorizontal();
@@ -312,21 +319,29 @@ public class UMSettingEditor : Editor {
 								EditorGUILayout.BeginHorizontal();
 								EditorGUILayout.LabelField(AID);
 								achievement.id	 	= EditorGUILayout.TextField(achievement.id);
-								achievement.id		= achievement.id.Trim();
+								if(achievement.id.Length > 0) {
+									achievement.id 		= achievement.id.Trim();
+								}
+							
 								EditorGUILayout.EndHorizontal();
 								
 								
 								EditorGUILayout.BeginHorizontal();
 								EditorGUILayout.LabelField(ALID);
 								achievement.IOSId	 	= EditorGUILayout.TextField(achievement.IOSId);
-								achievement.IOSId		= achievement.IOSId.Trim();
+								if(achievement.IOSId.Length > 0) {
+									achievement.IOSId 		= achievement.IOSId.Trim();
+								}
 								EditorGUILayout.EndHorizontal();
 								
 								
 								EditorGUILayout.BeginHorizontal();
 								EditorGUILayout.LabelField(ANDROIDAID);
 								achievement.AndroidId	 	= EditorGUILayout.TextField(achievement.AndroidId);
-								achievement.AndroidId		= achievement.AndroidId.Trim();
+
+								if(achievement.AndroidId.Length > 0) {
+									achievement.AndroidId 		= achievement.AndroidId.Trim();
+								}
 								EditorGUILayout.EndHorizontal();
 
 								EditorGUILayout.BeginHorizontal();
@@ -397,13 +412,20 @@ public class UMSettingEditor : Editor {
 					EditorGUILayout.BeginHorizontal();
 					EditorGUILayout.LabelField(IOS_UnitAdId);
 					GoogleMobileAdSettings.Instance.IOS_BannersUnitId	 	= EditorGUILayout.TextField(GoogleMobileAdSettings.Instance.IOS_BannersUnitId);
-					GoogleMobileAdSettings.Instance.IOS_BannersUnitId		= GoogleMobileAdSettings.Instance.IOS_BannersUnitId.Trim();
+
+					if(GoogleMobileAdSettings.Instance.IOS_BannersUnitId.Length > 0) {
+						GoogleMobileAdSettings.Instance.IOS_BannersUnitId		= GoogleMobileAdSettings.Instance.IOS_BannersUnitId.Trim();
+					}
+
 					EditorGUILayout.EndHorizontal();
 					
 					EditorGUILayout.BeginHorizontal();
 					EditorGUILayout.LabelField(IOS_InterstAdId);
 					GoogleMobileAdSettings.Instance.IOS_InterstisialsUnitId	 	= EditorGUILayout.TextField(GoogleMobileAdSettings.Instance.IOS_InterstisialsUnitId);
-					GoogleMobileAdSettings.Instance.IOS_InterstisialsUnitId 	= GoogleMobileAdSettings.Instance.IOS_InterstisialsUnitId.Trim();
+					if(GoogleMobileAdSettings.Instance.IOS_InterstisialsUnitId.Length > 0) {
+						GoogleMobileAdSettings.Instance.IOS_InterstisialsUnitId		= GoogleMobileAdSettings.Instance.IOS_InterstisialsUnitId.Trim();
+					}
+
 					EditorGUILayout.EndHorizontal();
 				}
 			}
@@ -413,13 +435,19 @@ public class UMSettingEditor : Editor {
 				EditorGUILayout.BeginHorizontal();
 				EditorGUILayout.LabelField(Android_UnitAdId);
 				GoogleMobileAdSettings.Instance.Android_BannersUnitId	 	= EditorGUILayout.TextField(GoogleMobileAdSettings.Instance.Android_BannersUnitId);
-				GoogleMobileAdSettings.Instance.Android_BannersUnitId		= GoogleMobileAdSettings.Instance.Android_BannersUnitId.Trim();
+				if(GoogleMobileAdSettings.Instance.Android_BannersUnitId.Length > 0) {
+					GoogleMobileAdSettings.Instance.Android_BannersUnitId		= GoogleMobileAdSettings.Instance.Android_BannersUnitId.Trim();
+				}
+
 				EditorGUILayout.EndHorizontal();
 				
 				EditorGUILayout.BeginHorizontal();
 				EditorGUILayout.LabelField(Android_InterstAdId);
 				GoogleMobileAdSettings.Instance.Android_InterstisialsUnitId	 	= EditorGUILayout.TextField(GoogleMobileAdSettings.Instance.Android_InterstisialsUnitId);
-				GoogleMobileAdSettings.Instance.Android_InterstisialsUnitId		= GoogleMobileAdSettings.Instance.Android_InterstisialsUnitId.Trim();
+				if(GoogleMobileAdSettings.Instance.Android_InterstisialsUnitId.Length > 0) {
+					GoogleMobileAdSettings.Instance.Android_InterstisialsUnitId		= GoogleMobileAdSettings.Instance.Android_InterstisialsUnitId.Trim();
+				}
+
 				EditorGUILayout.EndHorizontal();
 			}
 			
@@ -438,13 +466,18 @@ public class UMSettingEditor : Editor {
 					EditorGUILayout.BeginHorizontal();
 					EditorGUILayout.LabelField(WP8_UnitAdId);
 					GoogleMobileAdSettings.Instance.WP8_BannersUnitId	 	= EditorGUILayout.TextField(GoogleMobileAdSettings.Instance.WP8_BannersUnitId);
-					GoogleMobileAdSettings.Instance.WP8_BannersUnitId		= GoogleMobileAdSettings.Instance.WP8_BannersUnitId.Trim();
+					if(GoogleMobileAdSettings.Instance.WP8_BannersUnitId.Length > 0) {
+						GoogleMobileAdSettings.Instance.WP8_BannersUnitId		= GoogleMobileAdSettings.Instance.WP8_BannersUnitId.Trim();
+					}
+
 					EditorGUILayout.EndHorizontal();
 					
 					EditorGUILayout.BeginHorizontal();
 					EditorGUILayout.LabelField(WP8_InterstAdId);
 					GoogleMobileAdSettings.Instance.WP8_InterstisialsUnitId	 	= EditorGUILayout.TextField(GoogleMobileAdSettings.Instance.WP8_InterstisialsUnitId);
-					GoogleMobileAdSettings.Instance.WP8_InterstisialsUnitId 	= GoogleMobileAdSettings.Instance.WP8_InterstisialsUnitId.Trim();
+					if(GoogleMobileAdSettings.Instance.WP8_InterstisialsUnitId.Length > 0) {
+						GoogleMobileAdSettings.Instance.WP8_InterstisialsUnitId		= GoogleMobileAdSettings.Instance.WP8_InterstisialsUnitId.Trim();
+					}
 					EditorGUILayout.EndHorizontal();
 				}
 			}
@@ -484,7 +517,9 @@ public class UMSettingEditor : Editor {
 						EditorGUILayout.BeginHorizontal();
 						EditorGUILayout.LabelField(InAppID);
 						p.id	 	= EditorGUILayout.TextField(p.id);
-						p.id 		= p.id.Trim();
+						if(p.id.Length > 0) {
+							p.id 		= p.id.Trim();
+						}
 						EditorGUILayout.EndHorizontal();
 
 
@@ -499,19 +534,28 @@ public class UMSettingEditor : Editor {
 						EditorGUILayout.BeginHorizontal();
 						EditorGUILayout.LabelField(IOSSKU);
 						p.IOSId	 	= EditorGUILayout.TextField(p.IOSId);
-						p.IOSId		= p.IOSId.Trim();
+
+						if(p.IOSId.Length > 0) {
+							p.IOSId 		= p.IOSId.Trim();
+						}
 						EditorGUILayout.EndHorizontal();
 
 						EditorGUILayout.BeginHorizontal();
 						EditorGUILayout.LabelField(AndroidSKU);
 						p.AndroidId	 	= EditorGUILayout.TextField(p.AndroidId);
-						p.AndroidId		= p.AndroidId.Trim();
+						if(p.AndroidId.Length > 0) {
+							p.AndroidId 		= p.AndroidId.Trim();
+						}
+	
 						EditorGUILayout.EndHorizontal();
 					
 						EditorGUILayout.BeginHorizontal();
 						EditorGUILayout.LabelField(WP8SKU);
 						p.WP8Id	 	= EditorGUILayout.TextField(p.WP8Id);
-						p.WP8Id		= p.WP8Id.Trim();
+
+						if(p.WP8Id.Length > 0) {
+							p.WP8Id 		= p.WP8Id.Trim();
+						}
 						EditorGUILayout.EndHorizontal();
 
 
@@ -553,12 +597,18 @@ public class UMSettingEditor : Editor {
 			settings.IsInAppSettingsPlatfromsOpen = EditorGUILayout.Foldout(settings.IsInAppSettingsPlatfromsOpen, "Platfroms Settings");
 			if(settings.IsInAppSettingsPlatfromsOpen) {
 
+
 				EditorGUILayout.LabelField("Android:");
 				EditorGUI.indentLevel = 2;
 				EditorGUILayout.BeginHorizontal();
 				EditorGUILayout.LabelField(Base64KeyLabel);
 				AndroidNativeSettings.Instance.base64EncodedPublicKey	 	= EditorGUILayout.TextField(AndroidNativeSettings.Instance.base64EncodedPublicKey);
-				AndroidNativeSettings.Instance.base64EncodedPublicKey		= AndroidNativeSettings.Instance.base64EncodedPublicKey.Trim();
+
+				if(AndroidNativeSettings.Instance.base64EncodedPublicKey.Length > 0) {
+					AndroidNativeSettings.Instance.base64EncodedPublicKey		= AndroidNativeSettings.Instance.base64EncodedPublicKey.Trim();
+				}
+
+
 				EditorGUILayout.EndHorizontal();
 
 				EditorGUI.indentLevel = 1;
@@ -578,6 +628,60 @@ public class UMSettingEditor : Editor {
 		UltimateMobileSettings.Instance.IsCameraAndGallerySettingsOpen = EditorGUILayout.Foldout(UltimateMobileSettings.Instance.IsCameraAndGallerySettingsOpen, "Camera And Gallery");
 		if (UltimateMobileSettings.Instance.IsCameraAndGallerySettingsOpen) {
 
+			EditorGUI.indentLevel++;
+			UltimateMobileSettings.Instance.IsCameraAndGalleryIOSSettingsOpen = EditorGUILayout.Foldout(settings.IsCameraAndGalleryIOSSettingsOpen, "IOS");
+			if(UltimateMobileSettings.Instance.IsCameraAndGalleryIOSSettingsOpen) {
+				IOSNativeSettingsEditor.CameraAndGallery();
+			}
+
+			UltimateMobileSettings.Instance.IsCameraAndGalleryAndroidSettingsOpen = EditorGUILayout.Foldout(settings.IsCameraAndGalleryAndroidSettingsOpen, "Android");
+			if(UltimateMobileSettings.Instance.IsCameraAndGalleryAndroidSettingsOpen) {
+				AndroidNativeSettingsEditor.CameraAndGalleryParams();
+			}
+			EditorGUI.indentLevel--;
+		}
+
+
+
+		UltimateMobileSettings.Instance.IsLPSettingsOpen = EditorGUILayout.Foldout(UltimateMobileSettings.Instance.IsLPSettingsOpen, "Local And Push Notifications");
+		if (UltimateMobileSettings.Instance.IsLPSettingsOpen) {
+			
+			EditorGUI.indentLevel++;
+			UltimateMobileSettings.Instance.IsLP_IOS_SettingsOpen = EditorGUILayout.Foldout(settings.IsLP_IOS_SettingsOpen, "IOS");
+			if(UltimateMobileSettings.Instance.IsLP_IOS_SettingsOpen) {
+				EditorGUILayout.HelpBox("No Settings Required", MessageType.None);
+				EditorGUILayout.BeginHorizontal();
+				EditorGUILayout.Space();
+				if(GUILayout.Button("IOS Push Notifications Guide",  GUILayout.Width(200))) {
+					Application.OpenURL("http://goo.gl/3CCJ9Q");
+				}
+				EditorGUILayout.EndHorizontal();
+			}
+			
+			UltimateMobileSettings.Instance.IsLP_Android_SettingsOpen = EditorGUILayout.Foldout(settings.IsLP_Android_SettingsOpen, "Android");
+			if(UltimateMobileSettings.Instance.IsLP_Android_SettingsOpen) {
+
+
+				EditorGUILayout.BeginHorizontal();
+				EditorGUILayout.LabelField("GCM Sender Id");
+				AndroidNativeSettings.Instance.GCM_SenderId	 	= EditorGUILayout.TextField(AndroidNativeSettings.Instance.GCM_SenderId);
+				if(AndroidNativeSettings.Instance.GCM_SenderId.Length > 0) {
+					AndroidNativeSettings.Instance.GCM_SenderId		= AndroidNativeSettings.Instance.GCM_SenderId.Trim();
+				}
+				
+				EditorGUILayout.EndHorizontal();
+
+
+				EditorGUILayout.BeginHorizontal();
+				EditorGUILayout.Space();
+				if(GUILayout.Button("Android Push Notifications Guide",  GUILayout.Width(200))) {
+					Application.OpenURL("http://goo.gl/F0Jkfv");
+				}
+				EditorGUILayout.EndHorizontal();
+
+			}
+
+			EditorGUI.indentLevel--;
 		}
 
 

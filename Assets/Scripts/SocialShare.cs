@@ -50,7 +50,7 @@ public sealed class SocialShare : MonoBehaviour
 		MobileNativeRateUs ratePopUp = new MobileNativeRateUs ("Feeling slothy?", "Rate Super Sloth and support future updates!");
 		ratePopUp.SetAppleId ("830746781");
 		ratePopUp.SetAndroidAppUrl ("https://play.google.com/store/apps/details?id=com.ougda.supersloth");
-		ratePopUp.addEventListener (BaseEvent.COMPLETE, OnRatePopUpClose);
+		//ratePopUp.addEventListener (BaseEvent.COMPLETE, OnRatePopUpClose);
 		
 		ratePopUp.Start ();
 	}
@@ -297,7 +297,7 @@ public sealed class SocialShare : MonoBehaviour
 	
 	
 	#region Rating Callbacks
-	
+	/*
 	//
 	//
 	private void OnRatePopUpClose (CEvent e) 
@@ -321,7 +321,7 @@ public sealed class SocialShare : MonoBehaviour
 		
 		//string result = e.data.ToString ();
 		//new MobileNativeMessage ("Result", result + " button pressed");
-	}
+	}*/
 	
 	#endregion
 }

@@ -7,11 +7,15 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 using UnityEngine;
+using System;
+using UnionAssets.FLE;
 using System.Collections;
 using System.Collections.Generic;
 
 public class WP8Message : WP8PopupBase {
 		
+
+	public Action OnComplete = delegate {};
 	//--------------------------------------
 	// INITIALIZE
 	//--------------------------------------
@@ -46,6 +50,7 @@ public class WP8Message : WP8PopupBase {
 	//--------------------------------------
 	
 	public void onPopUpCallBack() {
+		OnComplete();
 		dispatch(BaseEvent.COMPLETE);
 		Destroy(gameObject);
 	}

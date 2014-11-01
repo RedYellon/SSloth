@@ -9,6 +9,7 @@
 
 
 using UnityEngine;
+using UnionAssets.FLE;
 using System.Collections;
 
 public class WPN_TextureLoader : EventDispatcher {

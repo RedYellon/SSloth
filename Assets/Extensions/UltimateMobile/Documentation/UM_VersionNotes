@@ -1,3 +1,40 @@
+1.8:
+Refactor:
+Flash Like event system now use own namespace: UnionAssets.FLE
+
+Fixes:
+Purchase cancele, NPE fixed
+Installation minor fix
+
+Read more about update
+http://goo.gl/5W4yFQ
+
+1.7:
+
+New:
+UM Camera and Gallery API preview scene
+UM Local And Push Notifications preview scene
+Editor GUI for Gallery a Notifications
+
+Fixes:
+UM Preview scene fixes
+Editor Settings GUI Fixes
+Gem Service and Ad API minor fixes
+
+Updates:
+UM_InAppPurchaseManager, actions added + minor fixes
+Camera API and Local/Push Notifications documentation updated
+
+AndroidNative_v4.7
+GoogleMobileAd_v3.7
+MobileNativePopups_v2.7
+IOSNative_v5.1
+GoogleAnalytics_v2.0
+WP8Native_v1.3
+
+
+
+
 1.6:
 New Features:
 UM_GameServiceManager.instance.ResetAchievements() now works for android also

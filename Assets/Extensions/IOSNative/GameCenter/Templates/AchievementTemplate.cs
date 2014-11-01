@@ -13,6 +13,26 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class AchievementTemplate  {
+
+
+
 	public string id;
-	public float progress;
+	public float _progress;
+
+
+
+	public float progress {
+		get {
+			if(IOSNativeSettings.Instance.UsePPForAchievements) {
+				return GameCenterManager.getAchievementProgress(id);
+			} else {
+				return _progress;
+			}
+
+		}
+
+		set {
+			_progress = value;
+		}
+	}
 }

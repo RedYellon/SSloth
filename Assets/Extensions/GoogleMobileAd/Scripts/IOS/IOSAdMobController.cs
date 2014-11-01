@@ -11,6 +11,7 @@
 
 
 using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -79,6 +80,13 @@ public class IOSAdMobController : SA_Singleton<IOSAdMobController>, GoogleMobile
 	#endif
 
 
+	//Actions
+	private Action _OnInterstitialLoaded 			= delegate {};
+	private Action _OnInterstitialFailedLoading 	= delegate {};
+	private Action _OnInterstitialOpened 			= delegate {};
+	private Action _OnInterstitialClosed 			= delegate {};
+	private Action _OnInterstitialLeftApplication  	= delegate {};
+	private Action<string> _OnAdInAppRequest		= delegate {};
 		
 
 	//--------------------------------------
@@ -227,8 +235,10 @@ public class IOSAdMobController : SA_Singleton<IOSAdMobController>, GoogleMobile
 		if(ids.Length == 0) {
 			return;
 		}
-		
+
+
 		#if (UNITY_IPHONE && !UNITY_EDITOR && !CODE_DISABLED) || SA_DEBUG_MODE
+		Debug.Log(string.Join(DEVICES_SEPARATOR, ids));
 		_GADAddTestDevices(string.Join(DEVICES_SEPARATOR, ids));
 		#endif
 	}
@@ -359,7 +369,73 @@ public class IOSAdMobController : SA_Singleton<IOSAdMobController>, GoogleMobile
 		}
 	}
 
-
+	
+	//--------------------------------------
+	//  Actions 
+	//--------------------------------------
+	
+	public Action OnInterstitialLoaded {
+		get {
+			return _OnInterstitialLoaded;
+		}
+		
+		set {
+			_OnInterstitialLoaded = value;
+		}
+	}
+	
+	public Action OnInterstitialFailedLoading {
+		get {
+			return _OnInterstitialFailedLoading;
+		}
+		
+		set {
+			_OnInterstitialFailedLoading = value;
+		}
+	}
+	
+	
+	public Action OnInterstitialOpened {
+		get {
+			return _OnInterstitialOpened;
+		}
+		
+		set {
+			_OnInterstitialOpened = value;
+		}
+	}
+	
+	public Action OnInterstitialClosed {
+		get {
+			return _OnInterstitialClosed;
+		}
+		
+		set {
+			_OnInterstitialClosed = value;
+		}
+	}
+	
+	
+	public Action OnInterstitialLeftApplication {
+		get {
+			return _OnInterstitialLeftApplication;
+		}
+		
+		set {
+			_OnInterstitialLeftApplication = value;
+		}
+	}
+	
+	
+	public Action<string> OnAdInAppRequest {
+		get {
+			return _OnAdInAppRequest;
+		}
+		
+		set {
+			_OnAdInAppRequest = value;
+		}
+	}
 
 	//--------------------------------------
 	//  EVENTS BANNER AD
@@ -420,22 +496,27 @@ public class IOSAdMobController : SA_Singleton<IOSAdMobController>, GoogleMobile
 	
 	
 	private void OnInterstitialAdLoaded()  {
+		_OnInterstitialLoaded();
 		dispatch(GoogleMobileAdEvents.ON_INTERSTITIAL_AD_LOADED);
 	}
 	
 	private void OnInterstitialAdFailedToLoad() {
+		_OnInterstitialFailedLoading();
 		dispatch(GoogleMobileAdEvents.ON_INTERSTITIAL_AD_FAILED_LOADING);
 	}
 	
 	private void OnInterstitialAdOpened() {
+		_OnInterstitialOpened();
 		dispatch(GoogleMobileAdEvents.ON_INTERSTITIAL_AD_OPENED);
 	}
 	
 	private void OnInterstitialAdClosed() {
+		_OnInterstitialClosed();
 		dispatch(GoogleMobileAdEvents.ON_INTERSTITIAL_AD_CLOSED);
 	}
 	
 	private void OnInterstitialAdLeftApplication() {
+		_OnInterstitialLeftApplication();
 		dispatch(GoogleMobileAdEvents.ON_INTERSTITIAL_AD_LEFT_APPLICATION);
 	}
 
@@ -444,6 +525,7 @@ public class IOSAdMobController : SA_Singleton<IOSAdMobController>, GoogleMobile
 	//--------------------------------------
 	
 	private void OnInAppPurchaseRequested(string productId) {
+		_OnAdInAppRequest(productId);
 		dispatch(GoogleMobileAdEvents.ON_AD_IN_APP_REQUEST, productId);
 	}
 

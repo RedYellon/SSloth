@@ -19,7 +19,7 @@
 	<DebugType>full</DebugType>
 	<Optimize>false</Optimize>
 	<OutputPath>Temp\bin\Debug\</OutputPath>
-	<DefineConstants>DEBUG;TRACE;UNITY_4_6_0;UNITY_4_6;UNITY_IPHONE;ENABLE_MICROPHONE;ENABLE_TEXTUREID_MAP;ENABLE_UNITYEVENTS;ENABLE_NEW_HIERARCHY ;ENABLE_AUDIO_FMOD;ENABLE_MONO;ENABLE_TERRAIN;ENABLE_SUBSTANCE;ENABLE_GENERICS;INCLUDE_WP8SUPPORT;ENABLE_WWW;ENABLE_IMAGEEFFECTS;UNITY_IPHONE_API;ENABLE_4_6_FEATURES;INCLUDE_WP_BLUE_SUPPORT;ENABLE_WEBCAM;INCLUDE_METROSUPPORT;ENABLE_NETWORK;ENABLE_PHYSICS;ENABLE_CACHING;ENABLE_CLOTH;ENABLE_2D_PHYSICS;ENABLE_GAMECENTER;UNITY_IOS;ENABLE_SHADOWS;ENABLE_AUDIO;ENABLE_NAVMESH_CARVING;ENABLE_SINGLE_INSTANCE_BUILD_SETTING;ENABLE_PROFILER;UNITY_EDITOR;UNITY_EDITOR_OSX;UNITY_PRO_LICENSE</DefineConstants>
+	<DefineConstants>DEBUG;TRACE;UNITY_4_6_0;UNITY_4_6;UNITY_ANDROID;ENABLE_MICROPHONE;ENABLE_TEXTUREID_MAP;ENABLE_UNITYEVENTS;ENABLE_NEW_HIERARCHY ;ENABLE_AUDIO_FMOD;ENABLE_MONO;ENABLE_TERRAIN;ENABLE_SUBSTANCE;ENABLE_GENERICS;INCLUDE_WP8SUPPORT;ENABLE_WWW;ENABLE_IMAGEEFFECTS;ENABLE_4_6_FEATURES;INCLUDE_WP_BLUE_SUPPORT;ENABLE_WEBCAM;INCLUDE_METROSUPPORT;RENDER_SOFTWARE_CURSOR;ENABLE_NETWORK;ENABLE_PHYSICS;ENABLE_CACHING;ENABLE_CLOTH;UNITY_ANDROID_API;ENABLE_2D_PHYSICS;ENABLE_SHADOWS;ENABLE_AUDIO;ENABLE_NAVMESH_CARVING;ENABLE_SINGLE_INSTANCE_BUILD_SETTING;ENABLE_PROFILER;UNITY_EDITOR;UNITY_EDITOR_OSX;UNITY_PRO_LICENSE</DefineConstants>
 	<ErrorReport>prompt</ErrorReport>
 	<WarningLevel>4</WarningLevel>
 	<NoWarn>0169</NoWarn>
@@ -84,6 +84,7 @@
      <Compile Include="Assets\Extensions\AndroidNative\PlayService\Manage\GooglePlayManager.cs" />
      <Compile Include="Assets\Extensions\AndroidNative\PlayService\Manage\GooglePlayQuests.cs" />
      <Compile Include="Assets\Extensions\AndroidNative\PlayService\Manage\GooglePlayRTM.cs" />
+     <Compile Include="Assets\Extensions\AndroidNative\PlayService\Manage\GooglePlusAPI.cs" />
      <Compile Include="Assets\Extensions\AndroidNative\PopUps\AndroidDialog.cs" />
      <Compile Include="Assets\Extensions\AndroidNative\PopUps\AndroidMessage.cs" />
      <Compile Include="Assets\Extensions\AndroidNative\PopUps\AndroidRateUsPopUp.cs" />
@@ -118,10 +119,8 @@
      <Compile Include="Assets\Extensions\FlashLikeEvents\Events\Data\BaseEvent.cs" />
      <Compile Include="Assets\Extensions\FlashLikeEvents\Events\Templates\CEvent.cs" />
      <Compile Include="Assets\Extensions\FlashLikeEvents\Events\interfaces\IDispatcher.cs" />
-     <Compile Include="Assets\Extensions\FlashLikeEvents\Example\Scripts\EventButtonExample.cs" />
      <Compile Include="Assets\Extensions\FlashLikeEvents\Example\Scripts\ExampleListner.cs" />
      <Compile Include="Assets\Extensions\FlashLikeEvents\Example\Scripts\FLButtonExample.cs" />
-     <Compile Include="Assets\Extensions\FlashLikeEvents\Example\Scripts\FLExampleListner.cs" />
      <Compile Include="Assets\Extensions\GoogleAnalytics\Core\GoogleAnalytics.cs" />
      <Compile Include="Assets\Extensions\GoogleAnalytics\Core\GoogleAnalyticsClient.cs" />
      <Compile Include="Assets\Extensions\GoogleAnalytics\Core\GoogleAnalyticsRequestCache.cs" />
@@ -139,6 +138,7 @@
      <Compile Include="Assets\Extensions\GoogleMobileAd\Scripts\Core\GoogleMobileAdSettings.cs" />
      <Compile Include="Assets\Extensions\GoogleMobileAd\Scripts\IOS\IOSADBanner.cs" />
      <Compile Include="Assets\Extensions\GoogleMobileAd\Scripts\IOS\IOSAdMobController.cs" />
+     <Compile Include="Assets\Extensions\GoogleMobileAd\Scripts\Templates\GADTestDevice.cs" />
      <Compile Include="Assets\Extensions\GoogleMobileAd\Scripts\WP8\WP8ADBanner.cs" />
      <Compile Include="Assets\Extensions\GoogleMobileAd\Scripts\WP8\WP8AdMobController.cs" />
      <Compile Include="Assets\Extensions\GooglePlayCommon\Ad\AndroidAdMobController.cs" />
@@ -197,6 +197,7 @@
      <Compile Include="Assets\Extensions\GooglePlayCommon\Models\GooglePlayResult.cs" />
      <Compile Include="Assets\Extensions\GooglePlayCommon\Models\Quests\GP_Event.cs" />
      <Compile Include="Assets\Extensions\GooglePlayCommon\Models\Quests\GP_Quest.cs" />
+     <Compile Include="Assets\Extensions\GooglePlayCommon\Models\Results\GP_GCM_RegistrationResult.cs" />
      <Compile Include="Assets\Extensions\GooglePlayCommon\Models\Results\GP_GamesResult.cs" />
      <Compile Include="Assets\Extensions\GooglePlayCommon\Models\Results\GP_QuestResult.cs" />
      <Compile Include="Assets\Extensions\GooglePlayCommon\PUtil\ANMiniJSON.cs" />
@@ -219,6 +220,8 @@
      <Compile Include="Assets\Extensions\IOSNative\Enum\IOSDialogResult.cs" />
      <Compile Include="Assets\Extensions\IOSNative\Enum\IOSGravity.cs" />
      <Compile Include="Assets\Extensions\IOSNative\Enum\IOSStoreResultCode.cs" />
+     <Compile Include="Assets\Extensions\IOSNative\Enum\IOSUIUserNotificationType.cs" />
+     <Compile Include="Assets\Extensions\IOSNative\Enum\InAppPurchaseState.cs" />
      <Compile Include="Assets\Extensions\IOSNative\Enum\iAdGravity.cs" />
      <Compile Include="Assets\Extensions\IOSNative\GameCenter\GameCenterManager.cs" />
      <Compile Include="Assets\Extensions\IOSNative\GameCenter\GameCenterMultiplayer.cs" />
@@ -243,8 +246,10 @@
      <Compile Include="Assets\Extensions\IOSNative\Notifications\IOSNotificationController.cs" />
      <Compile Include="Assets\Extensions\IOSNative\Notifications\IOSNotificationDeviceToken.cs" />
      <Compile Include="Assets\Extensions\IOSNative\Other\Camera\IOSCamera.cs" />
+     <Compile Include="Assets\Extensions\IOSNative\Other\Camera\IOSGallaeryLoadImageFormat.cs" />
      <Compile Include="Assets\Extensions\IOSNative\Other\Camera\IOSImagePickResult.cs" />
      <Compile Include="Assets\Extensions\IOSNative\Other\System\IOSSharedApplication.cs" />
+     <Compile Include="Assets\Extensions\IOSNative\Other\System\ISN_CheckUrlResult.cs" />
      <Compile Include="Assets\Extensions\IOSNative\Other\VIdeo\IOSVideoManager.cs" />
      <Compile Include="Assets\Extensions\IOSNative\PopUps\IOSDialog.cs" />
      <Compile Include="Assets\Extensions\IOSNative\PopUps\IOSMessage.cs" />
@@ -327,9 +332,12 @@
      <Compile Include="Assets\Extensions\UltimateMobile\Examples\Scripts\Ad\UM_AdExample.cs" />
      <Compile Include="Assets\Extensions\UltimateMobile\Examples\Scripts\Billing\UM_BillingExample.cs" />
      <Compile Include="Assets\Extensions\UltimateMobile\Examples\Scripts\GameService\UM_GameServiceExample.cs" />
+     <Compile Include="Assets\Extensions\UltimateMobile\Examples\Scripts\Other\UM_CameraAPIExample.cs" />
      <Compile Include="Assets\Extensions\UltimateMobile\Examples\Scripts\Other\UM_ExampleStatusBar.cs" />
      <Compile Include="Assets\Extensions\UltimateMobile\Examples\Scripts\Other\UM_NativeAPIExample.cs" />
+     <Compile Include="Assets\Extensions\UltimateMobile\Examples\Scripts\Other\UM_NotificationsExample.cs" />
      <Compile Include="Assets\Extensions\UltimateMobile\Examples\Scripts\Social\UM_SocialExample.cs" />
+     <Compile Include="Assets\Extensions\UltimateMobile\Examples\Scripts\UM_Preview.cs" />
      <Compile Include="Assets\Extensions\UltimateMobile\Examples\Scripts\WM_Preview.cs" />
      <Compile Include="Assets\Extensions\UltimateMobile\Scripts\Ad\UM_AdManager.cs" />
      <Compile Include="Assets\Extensions\UltimateMobile\Scripts\Core\UltimateMobileSettings.cs" />

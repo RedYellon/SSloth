@@ -9,13 +9,25 @@
 
 
 using UnityEngine;
+using System;
+using UnionAssets.FLE;
 using System.Collections;
+using System.Collections.Generic;
 
 public class GoogleMobileAd  {
 
 	public static GoogleMobileAdInterface controller;
 	private static bool _IsInited = false ;
 
+
+	
+	//Actions
+	public static Action OnInterstitialLoaded 			= delegate {};
+	public static Action OnInterstitialFailedLoading 	= delegate {};
+	public static Action OnInterstitialOpened 			= delegate {};
+	public static Action OnInterstitialClosed 			= delegate {};
+	public static Action OnInterstitialLeftApplication  	= delegate {};
+	public static Action<string> OnAdInAppRequest		= delegate {};
 
 
 	public static void Init() {
@@ -46,7 +58,25 @@ public class GoogleMobileAd  {
 
 		}
 
+		controller.OnInterstitialLoaded			 	= OnInterstitialLoadedListner;
+		controller.OnInterstitialFailedLoading 		= OnInterstitialFailedLoadingListner;
+		controller.OnInterstitialOpened 			= OnInterstitialOpenedListner;
+		controller.OnInterstitialClosed 			= OnInterstitialClosedListner;
+		controller.OnInterstitialLeftApplication 	= OnInterstitialLeftApplicationListner;
+		controller.OnAdInAppRequest 				= OnAdInAppRequestListner;
+
+
+
 		_IsInited = true;
+
+		if(GoogleMobileAdSettings.Instance.testDevices.Count > 0) {
+			List<string> ids = new List<string>();
+			foreach(GADTestDevice device in GoogleMobileAdSettings.Instance.testDevices) {
+				ids.Add(device.ID);
+			}
+			AddTestDevices(ids.ToArray());
+		}
+
 
 	}
 
@@ -247,6 +277,10 @@ public class GoogleMobileAd  {
 
 
 	//--------------------------------------
+	//  Actions
+	//--------------------------------------
+
+	//--------------------------------------
 	//  GET / SET
 	//--------------------------------------
 
@@ -267,6 +301,35 @@ public class GoogleMobileAd  {
 		get {
 			return controller.InterstisialUnitId;
 		}
+	}
+
+
+	//--------------------------------------
+	// Actions Impl
+	//--------------------------------------
+
+	private static void OnInterstitialLoadedListner () {
+		OnInterstitialLoaded();
+	}
+
+	private static void OnInterstitialFailedLoadingListner () {
+		OnInterstitialFailedLoading();
+	}
+
+	private static void OnInterstitialOpenedListner () {
+		OnInterstitialOpened();
+	}
+
+	private static void OnInterstitialClosedListner () {
+		OnInterstitialClosed();
+	}
+
+	private static void OnInterstitialLeftApplicationListner () {
+		OnInterstitialLeftApplication();
+	}
+
+	private static void OnAdInAppRequestListner (string productId) {
+		OnAdInAppRequest(productId);
 	}
 
 	//--------------------------------------

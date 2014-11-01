@@ -77,7 +77,13 @@ static NSMutableDictionary* _views;
     NSMutableString * data = [[NSMutableString alloc] init];
     [data appendString: code ];
     [data appendString:@"|"];
-    [data appendString:error.description];
+    
+    NSString *descr = @"no_descr";
+    if(error.description != nil) {
+        descr = error.description;
+    }
+    
+    [data appendString:descr];
     
     UnitySendMessage("IOSInAppPurchaseManager", "OnStoreKitInitFailed", [ISNDataConvertor NSStringToChar:data]);
   

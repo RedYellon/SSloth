@@ -22,14 +22,21 @@ public class iCloudUseExample : MonoBehaviour {
 	void Awake() {
 
 		//initialize icloud and listed for events
+		iCloudManager.instance.OnCloundInitAction += OnCloundInitAction;
+		iCloudManager.instance.OnCloundDataChangedAction += OnCloundDataChangedAction;
+		iCloudManager.instance.OnCloudDataReceivedAction += OnCloudDataReceivedAction;
+
 		iCloudManager.instance.init ();
 	
 
+		//using events example
+		/*
 		iCloudManager.instance.addEventListener (iCloudManager.CLOUD_INITIALIZED, OnInit);
 		iCloudManager.instance.addEventListener (iCloudManager.CLOUD_INITIALIZE_FAILED, OnInitFailed);
 		iCloudManager.instance.addEventListener (iCloudManager.CLOUD_DATA_CHANGED, OnDataChanged);
 
 		iCloudManager.instance.addEventListener (iCloudManager.CLOUD_DATA_RECEIVE, OnDataReceive);
+		*/
 	}
 
 	//--------------------------------------
@@ -83,27 +90,27 @@ public class iCloudUseExample : MonoBehaviour {
 	//  EVENTS
 	//--------------------------------------
 
-	private void OnInit() {
-		IOSNativePopUpManager.showMessage("iCloud", "Initialization Sucsess!");
+
+
+	private void OnCloundInitAction (ISN_Result result) {
+		if(result.IsSucceeded) {
+			IOSNativePopUpManager.showMessage("iCloud", "Initialization Sucsess!");
+		} else {
+			IOSNativePopUpManager.showMessage("iCloud", "Initialization Failed!");
+		}
 	}
 
-	private void OnInitFailed() {
-		IOSNativePopUpManager.showMessage("iCloud", "Initialization Failed!");
-	}
-
-	private void OnDataChanged() {
-		IOSNativePopUpManager.showMessage("iCloud", "Cloud Data Was Changed On Other Device");
-	}
-
-	private void OnDataReceive(CEvent e) {
-		iCloudData data = e.data as iCloudData;
+	private void OnCloudDataReceivedAction (iCloudData data) {
 		if(data.IsEmpty) {
 			IOSNativePopUpManager.showMessage(data.key, "data is empty");
 		} else {
 			IOSNativePopUpManager.showMessage(data.key, data.stringValue);
 		}
+	}	
+	
 
-
+	private void OnCloundDataChangedAction () {
+		IOSNativePopUpManager.showMessage("iCloud", "Cloud Data Was Changed On Other Device");
 	}
 	
 	//--------------------------------------
@@ -113,5 +120,13 @@ public class iCloudUseExample : MonoBehaviour {
 	//--------------------------------------
 	//  DESTROY
 	//--------------------------------------
+
+	void OnDestroy() {
+		if(iCloudManager.HasInstance) {
+			iCloudManager.instance.OnCloundInitAction -= OnCloundInitAction;
+			iCloudManager.instance.OnCloundDataChangedAction -= OnCloundDataChangedAction;
+			iCloudManager.instance.OnCloudDataReceivedAction -= OnCloudDataReceivedAction;
+		}
+	}
 
 }

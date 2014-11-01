@@ -13,6 +13,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AppleId: 830746781
   InAppProducts: []
+  SendFakeEventsInEditor: 1
   RegistredAchievementsIds:
   - sloth1
   - sloth2
@@ -27,6 +28,8 @@ MonoBehaviour:
   ShowOtherParams: 0
   ShowCameraAndGallryParams: 0
   UseGCRequestsCahing: 0
+  UsePPForAchievements: 0
   EnablePushNotificationsAPI: 0
   MaxImageLoadSize: 512
   JPegCompressionRate: .800000012
+  GalleryImageFormat: 1

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnionAssets.FLE;
 using System.Collections;
 
 public class UM_GameServiceManager : SA_Singleton<UM_GameServiceManager> {
@@ -23,6 +24,10 @@ public class UM_GameServiceManager : SA_Singleton<UM_GameServiceManager> {
 	//--------------------------------------
 	// INITIALIZE
 	//--------------------------------------
+
+	void Awake() {
+		DontDestroyOnLoad(gameObject);
+	}
 
 
 	private void Init() {

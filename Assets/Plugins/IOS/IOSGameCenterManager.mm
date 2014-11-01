@@ -221,8 +221,8 @@ static NSMutableArray *loadedPlayersIds;
         if(localPlayer.authenticated == NO) {
            
            
-             [localPlayer setAuthenticateHandler:^(UIViewController *viewcontroller, NSError *error) {
-            //[localPlayer authenticateWithCompletionHandler:^(NSError *error){ //OLD Code
+            // [localPlayer setAuthenticateHandler:^(UIViewController *viewcontroller, NSError *error) {
+            [localPlayer authenticateWithCompletionHandler:^(NSError *error){ //OLD Code
                 if (localPlayer.isAuthenticated){
                     NSLog(@"PLAYER AUTHENICATED");
                     
@@ -254,6 +254,9 @@ static NSMutableArray *loadedPlayersIds;
                 } else {
                    
                     NSLog(@"Error: %@", error);
+                    if(error != nil) {
+                        NSLog(@"Error descr: %@", error.description);
+                    }
                     NSLog(@"PLAYER NOT AUTHENICATED");
                     UnitySendMessage("GameCenterManager", "onAuthenticationFailed", [ISNDataConvertor NSStringToChar:@""]);
                 }
@@ -450,10 +453,11 @@ static NSMutableArray *loadedPlayersIds;
                 
                 NSString *encodedImage = @"";
                 if (photo == nil) {
-                    // NSLog(@"no photo");
+                     NSLog(@"no photo for user with ID: %@", uid);
                 } else {
                     NSData *imageData = UIImagePNGRepresentation(photo);
                     encodedImage = [imageData base64Encoding];
+                   //  NSLog(@"encodedImage for user: %@", encodedImage);
                 }
                 
             

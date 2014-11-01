@@ -1,4 +1,6 @@
 using UnityEngine;
+using System;
+using UnionAssets.FLE;
 using System.Collections;
 
 public class MobileNativeRateUs : EventDispatcherBase {
@@ -12,6 +14,10 @@ public class MobileNativeRateUs : EventDispatcherBase {
 
 	public string url;
 	public string appleId;
+
+	public Action<MNDialogResult> OnComplete = delegate {};
+
+
 
 
 	public MobileNativeRateUs(string title, string message) {
@@ -45,26 +51,27 @@ public class MobileNativeRateUs : EventDispatcherBase {
 		
 		#if UNITY_WP8 || UNITY_METRO
 		MNWP8RateUsPopUp rate = MNWP8RateUsPopUp.Create(title, message);
-		rate.addEventListener(BaseEvent.COMPLETE, OnComplete);
+		rate.addEventListener(BaseEvent.COMPLETE, OnCompleteListener);
 		#endif
 		
 		
 		#if UNITY_IPHONE
 		MNIOSRateUsPopUp rate = MNIOSRateUsPopUp.Create(title, message, yes, later, no);
 		rate.appleId = appleId;
-		rate.addEventListener(BaseEvent.COMPLETE, OnComplete);
+		rate.addEventListener(BaseEvent.COMPLETE, OnCompleteListener);
 		#endif
 		
 		#if UNITY_ANDROID
 		MNAndroidRateUsPopUp rate = MNAndroidRateUsPopUp.Create(title, message, url, yes, later, no);
-		rate.addEventListener(BaseEvent.COMPLETE, OnComplete);
+		rate.addEventListener(BaseEvent.COMPLETE, OnCompleteListener);
 		#endif
 
 	}
 	
 	
 	
-	private void OnComplete(CEvent e) {
+	private void OnCompleteListener(CEvent e) {
+		OnComplete((MNDialogResult)e.data);
 		dispatch(BaseEvent.COMPLETE, e.data);
 	}
 }

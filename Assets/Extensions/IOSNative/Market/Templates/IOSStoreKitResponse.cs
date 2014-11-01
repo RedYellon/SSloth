@@ -14,27 +14,10 @@ using System.Collections;
 public class IOSStoreKitResponse  {
 
 	public string productIdentifier;
+	public InAppPurchaseState state;
 	public string receipt;
 
 	public string error = string.Empty;
 
-
-
-
-	public bool isSuccess  {
-		get {
-			if(error.Length == 0) {
-				return true;
-			} else {
-				return false;
-			}
-		}
-	}
-	
-	public bool isFailure {
-		get {
-			return !isSuccess;
-		}
-	}
 
 }

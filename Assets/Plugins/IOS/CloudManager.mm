@@ -79,7 +79,7 @@ static CloudManager *_sharedInstance;
     
     NSMutableString * array = [[NSMutableString alloc] init];
     [array appendString:key];
-    [array appendString:@"| "];
+    [array appendString:@"|"];
     
 
     NSString* stringData;

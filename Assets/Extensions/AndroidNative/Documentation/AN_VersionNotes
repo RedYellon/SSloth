@@ -1,3 +1,42 @@
+4.8:
+Google Play API,
+Native Popups API,
+In-App Purchasing API:
+C# Actions added, now you can choose between using C# Actions or FL event system 
+
+Refactor:
+Flash Like event system now use own namespace: UnionAssets.FLE
+
+Fixes:
+Twitter profile background loaded bug fixed
+Max photo size limit fixed
+
+Updates:
+Google Play SDK updated to v 6111000
+
+Read More about update
+http://goo.gl/IrG3Jl
+
+4.7:
+
+New Plus API methods:
+GooglePlusAPI.instance.clearDefaultAccount();
+
+Ad Mob:
+API now supports C# Action 
+
+New PlayMaker Actions:
+AN_ISProductPurchased
+AN_ClearDefaultAcc
+
+AN_CancelAllLocalNotifications
+AN_CancelLocalNotification
+AN_ScheduleLocalNotification
+AN_ShowToastNotification
+
+Other:
+Post Proces Script improved
+
 4.6:
 New Features:
 Build Post Processing added

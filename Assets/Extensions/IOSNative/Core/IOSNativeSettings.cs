@@ -10,11 +10,12 @@ using UnityEditor;
 
 public class IOSNativeSettings : ScriptableObject {
 
-	public const string VERSION_NUMBER = "5.0";
+	public const string VERSION_NUMBER = "5.3";
 
 	public string AppleId = "XXXXXXXXX";
 
 	public List<string> InAppProducts = new List<string>();
+	public bool SendFakeEventsInEditor = true;
 	public List<string> RegistredAchievementsIds = new List<string>();
 	public List<string> DefaultStoreProductsView = new List<string>();
 
@@ -28,11 +29,13 @@ public class IOSNativeSettings : ScriptableObject {
 
 
 	public bool UseGCRequestsCahing = false;
+	public bool UsePPForAchievements = false;
 	public bool EnablePushNotificationsAPI = false;
 
 
 	public int  MaxImageLoadSize = 512;
 	public float JPegCompressionRate = 0.8f;
+	public IOSGallaeryLoadImageFormat GalleryImageFormat = IOSGallaeryLoadImageFormat.JPEG;
 
 
 

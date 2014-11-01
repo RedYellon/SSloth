@@ -1,4 +1,6 @@
 using UnityEngine;
+using System;
+using UnionAssets.FLE;
 using System.Collections;
 #if (UNITY_IPHONE && !UNITY_EDITOR) || SA_DEBUG_MODE
 using System.Runtime.InteropServices;
@@ -17,6 +19,12 @@ public class IOSNativeAppEvents : EventDispatcher {
 	public const string APPLICATION_DID_RECEIVE_MEMORY_WARNING 	= "applicationDidReceiveMemoryWarning";
 	public const string APPLICATION_WILL_RESIGN_ACTIVE 	        = "applicationWillResignActive";
 	public const string APPLICATION_WILL_TERMINATE 	            = "applicationWillTerminate";
+
+	public Action OnApplicationDidEnterBackground	 = delegate {};
+	public Action OnApplicationDidBecomeActive = delegate {};
+	public Action OnApplicationDidReceiveMemoryWarning = delegate {};
+	public Action OnApplicationWillResignActive = delegate {};
+	public Action OnApplicationWillTerminate = delegate {};
 
 
 
@@ -44,24 +52,29 @@ public class IOSNativeAppEvents : EventDispatcher {
 
 
 	private void applicationDidEnterBackground() {
+		OnApplicationDidEnterBackground();
 		dispatch(APPLICATION_DID_ENTER_BACKGROUND);
 	}
 	
 	private void applicationDidBecomeActive() {
+		OnApplicationDidBecomeActive();
 		dispatch(APPLICATION_DID_BECOME_ACTIVE);
 	}
 	
 	private void applicationDidReceiveMemoryWarning() {
+		OnApplicationDidReceiveMemoryWarning();
 		dispatch(APPLICATION_DID_RECEIVE_MEMORY_WARNING);
 	}
 	
 	
 	private void applicationWillResignActive() {
+		OnApplicationWillResignActive();
 		dispatch (APPLICATION_WILL_RESIGN_ACTIVE);
 	}
 	
 	
 	private void applicationWillTerminate() {
+		OnApplicationWillTerminate();
 		dispatch (APPLICATION_WILL_TERMINATE);
 	}
 

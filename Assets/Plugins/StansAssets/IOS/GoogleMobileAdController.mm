@@ -112,7 +112,7 @@ static NSMutableDictionary* _banners;
     NSArray *items = [uids componentsSeparatedByString:@","];
     
     for(NSString* s in items) {
-        [self AddTestDevices:s];
+        [self AddTestDevice:s];
     }
 
 }

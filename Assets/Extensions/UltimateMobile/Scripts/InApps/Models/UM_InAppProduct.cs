@@ -10,9 +10,9 @@ public class UM_InAppProduct  {
 	public string id = "new_product";
 
 
-	public string IOSId;
-	public string AndroidId;
-	public string WP8Id;
+	public string IOSId = string.Empty;
+	public string AndroidId  = string.Empty;
+	public string WP8Id  = string.Empty;
 
 
 

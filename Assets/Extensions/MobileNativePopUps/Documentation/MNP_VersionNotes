@@ -1,3 +1,20 @@
+2.8:
+
+Updates:
+Compatibility update
+C# Actions support added
+
+Refactor:
+Flash Like event system now use own namespace: UnionAssets.FLE
+
+
+Updates:
+C# Actions Support added
+
+Read more
+http://goo.gl/uS4OjX
+
+
 2.4:
 Compatibility update
 

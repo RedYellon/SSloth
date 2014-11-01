@@ -17,6 +17,7 @@
 
 @property float ImageCompressionRate;
 @property int MaxImageSize;
+@property int encodingType;
 
 + (id)   sharedInstance;
 - (void) saveToCameraRoll:(NSString*)media;

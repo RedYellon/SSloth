@@ -605,6 +605,15 @@ public class AndroidNative {
 	public static void loadGoogleAccountNames() {
 		CallActivityFunction("loadGoogleAccountNames");
 	}
+
+	public static void clearDefaultAccount() {
+		CallActivityFunction("clearDefaultAccount");
+
+	}
+	
+	public static void revokeAccessAndDisconnect() {
+		CallActivityFunction("revokeAccessAndDisconnect");
+	}
 	
 
 	public static void ShowToastNotification(string text, int duration) {

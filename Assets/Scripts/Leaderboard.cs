@@ -60,13 +60,14 @@ public class Leaderboard : MonoBehaviour
 			//lbName = "lb3";
 		
 		// Authenticate the local user
-		//UM_GameServiceManager.instance.Connect ();
+		UM_GameServiceManager.instance.Connect ();
 		//Social.localUser.Authenticate (ProcessAuthentication);
 		
-		if (Application.platform == RuntimePlatform.Android)
+		/*if (Application.platform == RuntimePlatform.Android)
 			GooglePlayConnection.instance.connect ();
 		else if (Application.platform == RuntimePlatform.IPhonePlayer)
-			GameCenterManager.init ();
+			GameCenterManager.init ();*/
+			
 			
 	}
 	
@@ -126,12 +127,12 @@ public class Leaderboard : MonoBehaviour
 		Social.ReportScore (score, lbName, success => {
 			Debug.Log(success ? "Reported score successfully" : "Failed to report score");
 		});*/
-		if (Application.platform == RuntimePlatform.Android)
+		/*if (Application.platform == RuntimePlatform.Android)
 			GooglePlayManager.instance.submitScore ("CgkInZaV_KAKEAIQAA", score);
 		else if (Application.platform == RuntimePlatform.IPhonePlayer)
-			GameCenterManager.reportScore (score, "lb3");
+			GameCenterManager.reportScore (score, "lb3");*/
 			
-		//UM_GameServiceManager.instance.SubmitScore ("1.4lb", score);
+		UM_GameServiceManager.instance.SubmitScore ("1.4lb", score);
 	}
 	
 	
@@ -157,7 +158,7 @@ public class Leaderboard : MonoBehaviour
 	//
 	public void GiveAchievement (int id)
 	{
-		//string aName = "";
+		string aName = "";
 		switch (id)
 		{
 			// 24 hour sloth
@@ -168,12 +169,12 @@ public class Leaderboard : MonoBehaviour
 					aName = "sloth1";
 				else if (Application.platform == RuntimePlatform.Android)
 					aName = "CgkInZaV_KAKEAIQAg";*/
-			if (Application.platform == RuntimePlatform.Android)
+			/*if (Application.platform == RuntimePlatform.Android)
 				GooglePlayManager.instance.incrementAchievementById ("CgkInZaV_KAKEAIQAg", 100);
 			else if (Application.platform == RuntimePlatform.IPhonePlayer)
-				GameCenterManager.submitAchievement (100f, "sloth1");
+				GameCenterManager.submitAchievement (100f, "sloth1");*/
 			//#endif
-			//aName = "24hoursloth";
+			aName = "24hoursloth";
 					
 			break;
 			// Trampoline sloth
@@ -184,12 +185,12 @@ public class Leaderboard : MonoBehaviour
 					aName = "sloth2";
 				else if (Application.platform == RuntimePlatform.Android)
 					aName = "CgkInZaV_KAKEAIQAw";*/
-			if (Application.platform == RuntimePlatform.Android)
+		/*	if (Application.platform == RuntimePlatform.Android)
 				GooglePlayManager.instance.incrementAchievementById ("CgkInZaV_KAKEAIQAw", 100);
 			else if (Application.platform == RuntimePlatform.IPhonePlayer)
-				GameCenterManager.submitAchievement (100f, "sloth2");
+				GameCenterManager.submitAchievement (100f, "sloth2");*/
 			//#endif
-			//aName = "trampolinesloth";
+			aName = "trampolinesloth";
 			
 			break;
 			// Star sloth
@@ -200,12 +201,12 @@ public class Leaderboard : MonoBehaviour
 					aName = "sloth3";
 				else if (Application.platform == RuntimePlatform.Android)
 					aName = "CgkInZaV_KAKEAIQBA";*/
-			if (Application.platform == RuntimePlatform.Android)
+			/*if (Application.platform == RuntimePlatform.Android)
 				GooglePlayManager.instance.incrementAchievementById ("CgkInZaV_KAKEAIQBA", 100);
 			else if (Application.platform == RuntimePlatform.IPhonePlayer)
-				GameCenterManager.submitAchievement (100f, "sloth3");
+				GameCenterManager.submitAchievement (100f, "sloth3");*/
 			//#endif
-			//aName = "starsloth";
+			aName = "starsloth";
 			
 			break;
 			// Persistent sloth
@@ -216,12 +217,12 @@ public class Leaderboard : MonoBehaviour
 					aName = "sloth4";
 				else if (Application.platform == RuntimePlatform.Android)
 					aName = "CgkInZaV_KAKEAIQBQ";*/
-			if (Application.platform == RuntimePlatform.Android)
+		/*	if (Application.platform == RuntimePlatform.Android)
 				GooglePlayManager.instance.incrementAchievementById ("CgkInZaV_KAKEAIQBQ", 100);
 			else if (Application.platform == RuntimePlatform.IPhonePlayer)
-				GameCenterManager.submitAchievement (100f, "sloth4");
+				GameCenterManager.submitAchievement (100f, "sloth4");*/
 			//#endif
-			//aName = "persistentsloth";
+			aName = "persistentsloth";
 			
 			break;
 			// Bicentennial sloth
@@ -232,18 +233,18 @@ public class Leaderboard : MonoBehaviour
 					aName = "sloth5";
 				else if (Application.platform == RuntimePlatform.Android)
 					aName = "CgkInZaV_KAKEAIQBg";*/
-			if (Application.platform == RuntimePlatform.Android)
+			/*if (Application.platform == RuntimePlatform.Android)
 				GooglePlayManager.instance.incrementAchievementById ("CgkInZaV_KAKEAIQBg", 100);
 			else if (Application.platform == RuntimePlatform.IPhonePlayer)
-				GameCenterManager.submitAchievement (100f, "sloth5");
+				GameCenterManager.submitAchievement (100f, "sloth5");*/
 			//#endif
-			//aName = "bisloth";
+			aName = "bisloth";
 			
 			break;
 		}
 		//ReportAchievementProgress (aName, 100.0);
-		//UM_GameServiceManager.instance.IncrementAchievement (aName, 100.0f);
-		//UM_GameServiceManager.instance.ReportAchievement (aName);
+		UM_GameServiceManager.instance.IncrementAchievement (aName, 100.0f);
+		UM_GameServiceManager.instance.ReportAchievement (aName);
 		dataCont.SetCheevoGot (id);
 	}
 	
@@ -256,6 +257,7 @@ public class Leaderboard : MonoBehaviour
 		for (int i = 0; i < _lbStrings.Length; i++) { _lbStrings [i] = "-"; }
 		
 		//
+		/*
 		if (Application.platform == RuntimePlatform.Android)
 		{
 			GPLeaderBoard lb = GooglePlayManager.instance.GetLeaderBoard ("CgkInZaV_KAKEAIQAA");
@@ -264,7 +266,7 @@ public class Leaderboard : MonoBehaviour
 			{
 				_lbStrings [i] = sc [i].score.ToString () + "\t (" + sc [i].playerId + ")";
 			}
-		}
+		}*/
 		/*
 		else if (Application.platform == RuntimePlatform.IPhonePlayer)
 		{

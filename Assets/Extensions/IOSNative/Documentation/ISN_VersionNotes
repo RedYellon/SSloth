@@ -1,3 +1,78 @@
+5.3:
+
+Updates:
+IOSSharedApplication C# Actions support added
+Native Pop ups C# Actions support added
+IOSNativeAppEvents C# Actions support added
+GameCenterMultiplayer C# Actions support added
+
+
+Refactor:
+Flash Like event system now use own namespace: UnionAssets.FLE
+
+Fixes:
+Transaction error localizedDescription fixed
+Editor setting exception fixed
+Example scenes minor fixes
+
+
+Read more about update
+http://goo.gl/RbzIKS
+
+
+
+5.2:
+Fixes:
+Sharing on iPad with IOS8 fixed
+InApp purchases restore event fixes
+
+
+
+5.1:
+
+IOSInAppPurchaseManager:
+In App Purchase States added:
+* Purchased,
+* Failed,
+* Deferred, - IOS8 (Ask to Buy)
+* Restored
+
+<a href=“http://goo.gl/A5kFSP”>Read more </a>
+
+IOSCamera:
+Ability to choose image compression added
+
+iCloudManager:
+C# Actions added
+
+iAd:
+C# Action added
+
+GameCenter:
+New editor setting;
+<a href=“http://goo.gl/3nq260”>Read more </a>
+
+PlayMaker:
+ISN_GetBoardTopScore: action added
+ISN_GetScore action fixed
+ISN_GetAchivmentProgress action fixed
+
+Game Center  Example scene Added
+Billing Example scene Added
+<a href=“http://goo.gl/o9mXnx”>Scene Guide </a>
+
+Fixes:
+Pre-loader Size for IOS8 fixed
+Local Notification fixed and updated for IOS8
+iCloudManager Singleton implementation fixed 
+
+Refractor:
+
+IOSInAppPurchaseManager.PRODUCT_BOUGHT and IOSInAppPurchaseManager.TRANSACTION_FAILED
+events remove and replaced by IOSInAppPurchaseManager.TRANSACTION_COMPLETE event
+or you can use OnTransactionComplete Action
+
+
 5.0:
 New Features:
 GameCenterManager.issueAchievementChallenge added
@@ -47,7 +122,7 @@ IOSInAppPurchaseManager actions added:
 Action OnTransactionComplete
 Action OnRestoreComplet
 Action OnStoreKitInitComplete 
-Action<IOSStoreKitVerificationResponse> OnVerificationComplete 
+Action IOSStoreKitVerificationResponse OnVerificationComplete 
 
 Click on iAd banner now will be not treated as Unity click / touch events
 

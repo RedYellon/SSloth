@@ -9,19 +9,28 @@
 
 
 using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 #if (UNITY_IPHONE && !UNITY_EDITOR) || SA_DEBUG_MODE
 using System.Runtime.InteropServices;
 #endif
 
-public class iCloudManager : EventDispatcher {
+public class iCloudManager : ISN_Singleton<iCloudManager> {
 
+
+	//Events
 	public const string CLOUD_INITIALIZED	        = "cloud_initialized";
 	public const string CLOUD_INITIALIZE_FAILED	    = "cloud_initialize_failed";
 
 	public const string CLOUD_DATA_CHANGED	        = "cloud_data_changed";
 	public const string CLOUD_DATA_RECEIVE       = "cloud_data_receive";
+
+	//Actions
+	public Action<ISN_Result> OnCloundInitAction = delegate {};
+	public Action OnCloundDataChangedAction = delegate {};
+	public Action<iCloudData> OnCloudDataReceivedAction = delegate {};
+
 
 	#if (UNITY_IPHONE && !UNITY_EDITOR) || SA_DEBUG_MODE
 	[DllImport ("__Internal")]
@@ -39,27 +48,14 @@ public class iCloudManager : EventDispatcher {
 	[DllImport ("__Internal")]
 	private static extern void _requestDataForKey(string key);
 	#endif
-
-	private static iCloudManager _instance;
+	
 
 	//--------------------------------------
 	// INITIALIZE
 	//--------------------------------------
 
-	public static iCloudManager instance {
-
-		get {
-			if (_instance == null) {
-				_instance = GameObject.FindObjectOfType(typeof(iCloudManager)) as iCloudManager;
-				if (_instance == null) {
-					_instance = new GameObject ("iCloudManager").AddComponent<iCloudManager> ();
-				}
-			}
-
-			return _instance;
-
-		}
-
+	void Awake() {
+		DontDestroyOnLoad(gameObject);
 	}
 
 
@@ -118,14 +114,19 @@ public class iCloudManager : EventDispatcher {
 	//--------------------------------------
 
 	private void OnCloudInit() {
+		ISN_Result res =  new ISN_Result(true);
+		OnCloundInitAction(res);
 		dispatch (CLOUD_INITIALIZED);
 	}
 
 	private void OnCloudInitFail() {
+		ISN_Result res =  new ISN_Result(false);
+		OnCloundInitAction(res);
 		dispatch (CLOUD_INITIALIZE_FAILED);
 	}
 
 	private void OnCloudDataChanged() {
+		OnCloundDataChangedAction();
 		dispatch (CLOUD_DATA_CHANGED);
 	}
 
@@ -136,6 +137,7 @@ public class iCloudManager : EventDispatcher {
 
 		iCloudData package = new iCloudData (data[0], data [1]);
 
+		OnCloudDataReceivedAction(package);
 		dispatch (CLOUD_DATA_RECEIVE, package);
 	}
 
@@ -145,6 +147,8 @@ public class iCloudManager : EventDispatcher {
 
 		iCloudData package = new iCloudData (data[0], "null");
 
+
+		OnCloudDataReceivedAction(package);
 		dispatch (CLOUD_DATA_RECEIVE, package);
 	}
 

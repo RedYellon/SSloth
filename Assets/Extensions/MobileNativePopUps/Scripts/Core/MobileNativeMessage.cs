@@ -1,7 +1,12 @@
 using UnityEngine;
+using System;
+using UnionAssets.FLE;
 using System.Collections;
 
 public class MobileNativeMessage : EventDispatcherBase {
+
+	public Action OnComplete = delegate {};
+	
 
 	public MobileNativeMessage(string title, string message) {
 		init(title, message, "Ok");
@@ -16,18 +21,18 @@ public class MobileNativeMessage : EventDispatcherBase {
 		
 		#if UNITY_WP8 || UNITY_METRO
 		MNWP8Message msg  = MNWP8Message.Create(title, message);
-		msg.addEventListener(BaseEvent.COMPLETE, OnComplete);
+		msg.addEventListener(BaseEvent.COMPLETE, OnCompleteListener);
 		#endif
 		
 		
 		#if UNITY_IPHONE
 		MNIOSMessage msg  = MNIOSMessage.Create(title, message, ok);
-		msg.addEventListener(BaseEvent.COMPLETE, OnComplete);
+		msg.addEventListener(BaseEvent.COMPLETE, OnCompleteListener);
 		#endif
 		
 		#if UNITY_ANDROID
 		MNAndroidMessage msg  = MNAndroidMessage.Create(title, message, ok);
-		msg.addEventListener(BaseEvent.COMPLETE, OnComplete);
+		msg.addEventListener(BaseEvent.COMPLETE, OnCompleteListener);
 		#endif
 		
 
@@ -35,7 +40,8 @@ public class MobileNativeMessage : EventDispatcherBase {
 	
 	
 	
-	private void OnComplete(CEvent e) {
+	private void OnCompleteListener(CEvent e) {
+		OnComplete();
 		dispatch(BaseEvent.COMPLETE, e.data);
 	}
 }

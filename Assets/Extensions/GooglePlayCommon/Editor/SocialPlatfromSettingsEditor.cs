@@ -32,6 +32,26 @@ public class SocialPlatfromSettingsEditor : Editor {
 	public override void OnInspectorGUI() {
 
 
+		
+		#if UNITY_WEBPLAYER
+		EditorGUILayout.HelpBox("Editing Mobile Social Settins not avaliable with web player platfrom. Please swith to any other platfrom under Build Seting menu", MessageType.Warning);
+		EditorGUILayout.BeginHorizontal();
+		EditorGUILayout.Space();
+		if(GUILayout.Button("Switch To Android",  GUILayout.Width(130))) {
+			EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTarget.Android);
+		}
+
+		if(GUILayout.Button("Switch To IOS",  GUILayout.Width(130))) {
+			EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTarget.iPhone);
+		}
+		EditorGUILayout.EndHorizontal();
+		
+		if(Application.isEditor) {
+			return;
+		}
+
+		#endif
+
 		GUI.changed = false;
 
 
@@ -136,7 +156,7 @@ public class SocialPlatfromSettingsEditor : Editor {
 					EditorGUILayout.BeginHorizontal();
 					EditorGUILayout.Space();
 					
-					if(GUILayout.Button("Remove AndroidManifest and Update to " + AndroidNativeSettings.VERSION_NUMBER,  GUILayout.Width(250))) {
+					if(GUILayout.Button("Remove AndroidManifest and Update to " + SocialPlatfromSettings.VERSION_NUMBER,  GUILayout.Width(250))) {
 						
 						string file = "AndroidManifest.xml";
 						FileStaticAPI.DeleteFile(PluginsInstalationUtil.ANDROID_DESTANATION_PATH + file);
@@ -203,7 +223,8 @@ public class SocialPlatfromSettingsEditor : Editor {
 					FileStaticAPI.DeleteFolder(PluginsInstalationUtil.ANDROID_DESTANATION_PATH + "facebook");
 					FileStaticAPI.DeleteFolder("Facebook");
 					FileStaticAPI.DeleteFolder("Extensions/GooglePlayCommon/Social/Facebook");
-					FileStaticAPI.DeleteFile("Extensions/AndroidNative/xExample/Scripts/Social/FacebookAndroidUseExample.cs");
+					FileStaticAPI.DeleteFile("Extensions/MobileSocialPlugin/Example/Scripts/MSPFacebookUseExample.cs");
+					FileStaticAPI.DeleteFile("Extensions/MobileSocialPlugin/Example/Scripts/MSP_FacebookAnalyticsExample.cs");
 					
 				}
 				

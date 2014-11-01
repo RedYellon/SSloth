@@ -11,6 +11,7 @@
 
 using UnityEngine;
 using System.Collections;
+using UnionAssets.FLE;
 using System.Collections.Generic;
 
 public class PlayServiceExample : AndroidNativeExampleBase {
@@ -90,7 +91,7 @@ public class PlayServiceExample : AndroidNativeExampleBase {
 		GooglePlayManager.instance.addEventListener (GooglePlayManager.PENDING_GAME_REQUESTS_DETECTED, OnPendingGiftsDetected);
 		GooglePlayManager.instance.addEventListener (GooglePlayManager.GAME_REQUESTS_ACCEPTED, OnGameRequestAccepted);
 
-		GooglePlayManager.instance.addEventListener (GooglePlayManager.AVALIABLE_DEVICE_ACCOUNT_LOADED, OnAccsLoaded);
+		GooglePlayManager.instance.addEventListener (GooglePlayManager.AVALIABLE_DEVICE_ACCOUNTS_LOADED, OnAccsLoaded);
 		GooglePlayManager.instance.addEventListener (GooglePlayManager.OAUTH_TOCKEN_LOADED, OnToeknLoaded);
 
 
@@ -119,7 +120,7 @@ public class PlayServiceExample : AndroidNativeExampleBase {
 			GooglePlayManager.instance.removeEventListener (GooglePlayManager.PENDING_GAME_REQUESTS_DETECTED, OnPendingGiftsDetected);
 			GooglePlayManager.instance.removeEventListener (GooglePlayManager.GAME_REQUESTS_ACCEPTED, OnGameRequestAccepted);
 			
-			GooglePlayManager.instance.removeEventListener (GooglePlayManager.AVALIABLE_DEVICE_ACCOUNT_LOADED, OnAccsLoaded);
+			GooglePlayManager.instance.removeEventListener (GooglePlayManager.AVALIABLE_DEVICE_ACCOUNTS_LOADED, OnAccsLoaded);
 			GooglePlayManager.instance.removeEventListener (GooglePlayManager.OAUTH_TOCKEN_LOADED, OnToeknLoaded);
 			
 			
@@ -153,6 +154,8 @@ public class PlayServiceExample : AndroidNativeExampleBase {
 	}
 
 	private void loadLeaderBoards() {
+
+		//listening for load event 
 		GooglePlayManager.instance.addEventListener (GooglePlayManager.LEADERBOARDS_LOEADED, OnLeaderBoardsLoaded);
 		GooglePlayManager.instance.loadLeaderBoards ();
 		SA_StatusBar.text = "Loading Leader Boards Data...";
@@ -222,12 +225,22 @@ public class PlayServiceExample : AndroidNativeExampleBase {
 
 
 	private void SendGiftRequest() {
+
+
+	
 		GooglePlayManager.instance.SendGiftRequest(GPGameRequestType.TYPE_GIFT, 1, pieIcon, "Here is some pie", PIE_GIFT_ID);
 	}
 
 
 	private void OpenInbox() {
 		GooglePlayManager.instance.ShowRequestsAccepDialog();
+	}
+
+
+
+	
+	public void clearDefaultAccount() {
+		GooglePlusAPI.instance.clearDefaultAccount();
 	}
 
 

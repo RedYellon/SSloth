@@ -11,7 +11,7 @@ using UnityEditor;
 
 public class GoogleAnalyticsSettings : ScriptableObject {
 
-	public static string VERSION_NUMBER = "1.9";
+	public static string VERSION_NUMBER = "2.1";
 
 
 
@@ -20,6 +20,16 @@ public class GoogleAnalyticsSettings : ScriptableObject {
 
 	[SerializeField]
 	public List<GAPlatfromBound> platfromBounds =  new List<GAPlatfromBound>();
+
+
+
+	public bool showAdditionalParams = false;
+	public bool showAdvancedParams = false;
+	
+	public bool showAccounts = true;
+	public bool showPlatfroms = false;
+	public bool showTestingMode = false;
+
 
 
 	public string AppName = "My App";
@@ -46,7 +56,7 @@ public class GoogleAnalyticsSettings : ScriptableObject {
 	public bool SubmitSystemInfoOnFirstLaunch = true;
 
 
-	public bool UsePlayerSettingsForAppInfo = false;
+	public bool UsePlayerSettingsForAppInfo = true;
 
 
 
@@ -106,6 +116,7 @@ public class GoogleAnalyticsSettings : ScriptableObject {
 	public void SetProfileIndexForPlatfrom(RuntimePlatform platfrom, int index, bool IsTesting) {
 		foreach(GAPlatfromBound pb in platfromBounds) {
 			if(pb.platfrom.Equals(platfrom)) {
+
 				if(IsTesting) {
 					pb.profileIndexTestMode = index;
 				} else {
@@ -118,8 +129,14 @@ public class GoogleAnalyticsSettings : ScriptableObject {
 
 		GAPlatfromBound bound =  new GAPlatfromBound();
 		bound.platfrom = platfrom;
-		bound.profileIndex = index;
-		bound.profileIndexTestMode = index;
+		bound.profileIndex = 0;
+		bound.profileIndexTestMode = 0;
+		if(IsTesting) {
+			bound.profileIndexTestMode = index;
+		} else {
+			bound.profileIndex = index;
+		}
+
 		platfromBounds.Add(bound);
 
 	}
@@ -150,6 +167,22 @@ public class GoogleAnalyticsSettings : ScriptableObject {
 		}
 
 		return names.ToArray();
+	}
+
+	public int GetProfileIndex(GAProfile p ) {
+		int index = 0;
+		string[] names = GetProfileNames();
+
+		foreach(string name in names) {
+			if(name.Equals(p.Name)) {
+				return index;
+			}
+
+			index++;
+		}
+
+		return 0;
+
 	}
 
 

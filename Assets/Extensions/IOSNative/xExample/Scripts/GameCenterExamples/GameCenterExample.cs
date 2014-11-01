@@ -9,6 +9,7 @@
 
 
 using UnityEngine;
+using UnionAssets.FLE;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -17,7 +18,7 @@ public class GameCenterExample : BaseIOSFeaturePreview {
 	private int hiScore = 200;
 
 	
-	private string leaderBoardId =  "your.ios.leaderbord1.id.here ";
+	private string leaderBoardId =  "your.ios.leaderbord1.id.here";
 	private string leaderBoardId2 = "your.leaderbord2.id.here";
 
 
@@ -43,7 +44,6 @@ public class GameCenterExample : BaseIOSFeaturePreview {
 			
 			
 			//Listen for the Game Center events
-			GameCenterManager.dispatcher.addEventListener (GameCenterManager.GAME_CENTER_ACHIEVEMENTS_LOADED, OnAchievementsLoaded);
 			GameCenterManager.dispatcher.addEventListener (GameCenterManager.GAME_CENTER_ACHIEVEMENT_PROGRESS, OnAchievementProgress);
 			GameCenterManager.dispatcher.addEventListener (GameCenterManager.GAME_CENTER_ACHIEVEMENTS_RESET, OnAchievementsReset);
 			
@@ -51,7 +51,12 @@ public class GameCenterExample : BaseIOSFeaturePreview {
 			GameCenterManager.dispatcher.addEventListener (GameCenterManager.GAME_CENTER_LEADER_BOARD_SCORE_LOADED, OnLeaderBoarScoreLoaded);
 
 
+
+			//actions use example
+			GameCenterManager.OnPlayerScoreLoaded += OnPlayerScoreLoaded;
 			GameCenterManager.OnAuthFinished += OnAuthFinished;
+
+			GameCenterManager.OnAchievementsLoaded += OnAchievementsLoaded;
 
 			
 			//Initializing Game Cneter class. This action will triger authentication flow
@@ -81,9 +86,8 @@ public class GameCenterExample : BaseIOSFeaturePreview {
 			//avatar loading will take a while after the user is connectd
 			//so we will draw it only after instantiation to avoid null pointer check
 			//if you whant to know exaxtly when the avatar is loaded, you can subscribe on 
-			//GameCenterManager.GAME_CENTER_USER_INFO_LOADED  			
-			//GameCenterManager.GAME_CENTER_USER_INFO_FAILED_TO_LOAD  
-			//events and checl for a spesific user ID
+			//GameCenterManager.OnUserInfoLoaded action  			
+			//and checl for a spesific user ID
 			if(GameCenterManager.player.avatar != null) {
 				GUI.DrawTexture(new Rect(10, 10, 75, 75), GameCenterManager.player.avatar);
 			}
@@ -117,7 +121,7 @@ public class GameCenterExample : BaseIOSFeaturePreview {
 		
 		StartX += XButtonStep;
 		if(GUI.Button(new Rect(StartX, StartY, buttonWidth, buttonHeight), "Get Score LB 1")) {
-			GameCenterManager.getScore(leaderBoardId);
+			GameCenterManager.loadCurrentPlayerScore(leaderBoardId);
 		}
 
 
@@ -136,13 +140,15 @@ public class GameCenterExample : BaseIOSFeaturePreview {
 		StartX += XButtonStep;
 		if(GUI.Button(new Rect(StartX, StartY, buttonWidth, buttonHeight), "Report Score LB2")) {
 			hiScore++;
+
+			GameCenterManager.OnScoreSubmited += OnScoreSubmited;
 			GameCenterManager.reportScore(hiScore, leaderBoardId2);
 		}
 
 
 		StartX += XButtonStep;
 		if(GUI.Button(new Rect(StartX, StartY, buttonWidth, buttonHeight), "Get Score LB 2")) {
-			GameCenterManager.getScore(leaderBoardId2);
+			GameCenterManager.loadCurrentPlayerScore(leaderBoardId2);
 		}
 
 
@@ -193,12 +199,16 @@ public class GameCenterExample : BaseIOSFeaturePreview {
 	//  EVENTS
 	//--------------------------------------
 
-	private void OnAchievementsLoaded() {
-		Debug.Log ("Achievemnts was loaded from IOS Game Center");
+	private void OnAchievementsLoaded(ISN_Result result) {
 
-		foreach(AchievementTemplate tpl in GameCenterManager.achievements) {
-			Debug.Log (tpl.id + ":  " + tpl.progress);
+		if(result.IsSucceeded) {
+			Debug.Log ("Achievemnts was loaded from IOS Game Center");
+			
+			foreach(AchievementTemplate tpl in GameCenterManager.achievements) {
+				Debug.Log (tpl.id + ":  " + tpl.progress);
+			}
 		}
+
 	}
 
 	private void OnAchievementsReset() {
@@ -228,6 +238,22 @@ public class GameCenterExample : BaseIOSFeaturePreview {
 
 	}
 
+	private void OnPlayerScoreLoaded (ISN_PlayerScoreLoadedResult result) {
+		if(result.IsSucceeded) {
+			GCScore score = result.loadedScore;
+			IOSNativePopUpManager.showMessage("Leader Board " + score.leaderboardId, "Score: " + score.score + "\n" + "Rank:" + score.rank);
+		}
+	}
+
+	private void OnScoreSubmited (ISN_Result result) {
+		GameCenterManager.OnScoreSubmited -= OnScoreSubmited;
+
+		if(result.IsSucceeded)  {
+			Debug.Log("Score Submited");
+		} else {
+			Debug.Log("Score Submit Failed");
+		}
+	}
 
 	void OnAuthFinished (ISN_Result res) {
 		if (res.IsSucceeded) {

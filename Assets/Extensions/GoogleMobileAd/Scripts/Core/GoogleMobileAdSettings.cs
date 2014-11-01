@@ -10,7 +10,7 @@ using UnityEditor;
 
 public class GoogleMobileAdSettings : ScriptableObject {
 
-	public const string VERSION_NUMBER = "3.6";
+	public const string VERSION_NUMBER = "3.8";
 
 
 	public string IOS_InterstisialsUnitId = "";
@@ -23,7 +23,16 @@ public class GoogleMobileAdSettings : ScriptableObject {
 	public string WP8_BannersUnitId = "";
 
 
+	public bool IsIOSSettinsOpened = true;
+	public bool IsAndroidSettinsOpened = true;
+	public bool IsWP8SettinsOpened = true;
 
+	public bool IsTestSettinsOpened = true;
+
+	
+	
+	[SerializeField]
+	public List<GADTestDevice> testDevices =  new List<GADTestDevice>();
 
 
 	private const string ISNSettingsAssetName = "GoogleMobileAdSettings";
@@ -60,6 +69,16 @@ public class GoogleMobileAdSettings : ScriptableObject {
 			}
 			return instance;
 		}
+	}
+
+
+
+	public void AddDevice(GADTestDevice p) {
+		testDevices.Add(p);
+	}
+	
+	public void RemoveDevice(GADTestDevice p) {
+		testDevices.Remove(p);
 	}
 
 

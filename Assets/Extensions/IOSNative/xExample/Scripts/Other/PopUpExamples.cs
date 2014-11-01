@@ -36,21 +36,24 @@ public class PopUpExamples : BaseIOSFeaturePreview {
 		StartY+= YLableStep;
 		if(GUI.Button(new Rect(StartX, StartY, buttonWidth, buttonHeight), "Rate PopUp with events")) {
 			IOSRateUsPopUp rate = IOSRateUsPopUp.Create("Like this game?", "Please rate to support future updates!");
-			rate.addEventListener(BaseEvent.COMPLETE, onRatePopUpClose);
+			rate.OnComplete += onRatePopUpClose;
+		
 		}
 		
 
 		StartX += XButtonStep;
 		if(GUI.Button(new Rect(StartX, StartY, buttonWidth, buttonHeight), "Dialog PopUp")) {
 			IOSDialog dialog = IOSDialog.Create("Dialog Titile", "Dialog message");
-			dialog.addEventListener(BaseEvent.COMPLETE, onDialogClose);
+			dialog.OnComplete += onDialogClose;
+
 		}
 
 
 		StartX += XButtonStep;
 		if(GUI.Button(new Rect(StartX, StartY, buttonWidth, buttonHeight), "Message PopUp")) {
 			IOSMessage msg = IOSMessage.Create("Message Titile", "Message message");
-			msg.addEventListener(BaseEvent.COMPLETE, onMessageClose);
+			msg.OnComplete += onMessageClose;
+
 		}
 
 
@@ -100,19 +103,27 @@ public class PopUpExamples : BaseIOSFeaturePreview {
 		IOSNativePopUpManager.dismissCurrentAlert ();
 	}
 	
-	private void onRatePopUpClose(CEvent e) {
-		(e.dispatcher as IOSRateUsPopUp).removeEventListener(BaseEvent.COMPLETE, onRatePopUpClose);
-		string result = e.data.ToString();
-		IOSNativePopUpManager.showMessage("Result", result + " button pressed");
+	private void onRatePopUpClose(IOSDialogResult result) {
+		switch(result) {
+		case IOSDialogResult.RATED:
+			Debug.Log ("Rate button pressed");
+			break;
+		case IOSDialogResult.REMIND:
+			Debug.Log ("Remind button pressed");
+			break;
+		case IOSDialogResult.DECLINED:
+			Debug.Log ("Decline button pressed");
+			break;
+			
+		}
+
+		IOSNativePopUpManager.showMessage("Result", result.ToString() + " button pressed");
 	}
 	
-	private void onDialogClose(CEvent e) {
-
-		//romoving listner
-		(e.dispatcher as IOSDialog).removeEventListener(BaseEvent.COMPLETE, onDialogClose);
+	private void onDialogClose(IOSDialogResult result) {
 
 		//parsing result
-		switch((IOSDialogResult)e.data) {
+		switch(result) {
 		case IOSDialogResult.YES:
 			Debug.Log ("Yes button pressed");
 			break;
@@ -122,12 +133,11 @@ public class PopUpExamples : BaseIOSFeaturePreview {
 
 		}
 
-		string result = e.data.ToString();
-		IOSNativePopUpManager.showMessage("Result", result + " button pressed");
+		IOSNativePopUpManager.showMessage("Result", result.ToString() + " button pressed");
 	}
 	
-	private void onMessageClose(CEvent e) {
-		(e.dispatcher as IOSMessage).removeEventListener(BaseEvent.COMPLETE,  onMessageClose);
+	private void onMessageClose() {
+		Debug.Log("Message was just closed");
 		IOSNativePopUpManager.showMessage("Result", "Message Closed");
 	}
 	

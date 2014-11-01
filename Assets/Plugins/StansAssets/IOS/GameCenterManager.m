@@ -84,20 +84,26 @@
 	// and reportAchievementWithCompletionHandler.  To avoid this, we fetch the current achievement list once,
 	// then cache it and keep it updated with any new achievements.
     
+    NSLog(@"submitAchievement %@", identifier);
+    
 	if(self.earnedAchievementCache == NULL) {
-		[GKAchievement loadAchievementsWithCompletionHandler: ^(NSArray *scores, NSError *error)
-		{
+        NSLog(@"loading Achievements cash....");
+		[GKAchievement loadAchievementsWithCompletionHandler: ^(NSArray *scores, NSError *error) {
 			if(error == NULL)  {
 				NSMutableDictionary* tempCache= [NSMutableDictionary dictionaryWithCapacity: [scores count]];
 				for (GKAchievement* score in tempCache) {
 					[tempCache setObject: score forKey: score.identifier];
 				}
                 
+               
+
+                
 				self.earnedAchievementCache= tempCache;
+                 NSLog(@"Achievements cash loaded, re submiting acguevment");
 				[self submitAchievement:identifier percentComplete:percentComplete notifayComplete:notifayComplete];
 			}
 			else{
-				//[self callDelegateOnMainThread: @selector(achievementSubmitted:error:) withArg: NULL error: error];
+                  NSLog(@"Achievements cash load errod: %@", error.description);
 			}
 
 		}];
@@ -126,6 +132,7 @@
 		}
         
 		if(achievement!= NULL) {
+             NSLog(@"Submit the Achievement");
 			//Submit the Achievement...
 			[achievement reportAchievementWithCompletionHandler: ^(NSError *error) {
                 if(error == NULL) {
@@ -137,7 +144,13 @@
                     
                     NSString *str = [[data copy] autorelease];
                     
+                    NSLog(@"Submitted");
+                    NSLog(@"identifier: %@", achievement.identifier);
+                    NSLog(@"percentComplete: %f", achievement.percentComplete);
+                    
                     UnitySendMessage("GameCenterManager", "onAchievementProgressChanged", [ISNDataConvertor NSStringToChar:str]);
+                } else {
+                    NSLog(@"Submit failed with error %@", error.description);
                 }
 			}];
 		}

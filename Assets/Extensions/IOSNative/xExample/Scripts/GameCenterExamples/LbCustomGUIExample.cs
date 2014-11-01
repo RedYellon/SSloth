@@ -31,8 +31,7 @@ public class LbCustomGUIExample : MonoBehaviour {
 
 
 
-		GameCenterManager.dispatcher.addEventListener (GameCenterManager.GAME_CENTER_LEADER_BOARD_SCORE_LIST_LOADED, OnScoreListLoaded);
-
+		GameCenterManager.OnScoresListLoaded += OnScoresListLoaded;
 
 		//Initializing Game Cneter class. This action will triger authentication flow
 		GameCenterManager.init();
@@ -109,20 +108,20 @@ public class LbCustomGUIExample : MonoBehaviour {
 
 	}
 
-
-
-
-	private void OnScoreListLoaded() {
-
-		Debug.Log("Scores loaded");
-
-		loadedLeaderBoard = GameCenterManager.GetLeaderBoard(leaderBoardId);
-
+	private void OnScoresListLoaded (ISN_Result res) {
+		if(res.IsSucceeded) {
+			Debug.Log("Scores loaded");
+			loadedLeaderBoard = GameCenterManager.GetLeaderBoard(leaderBoardId);
+		} else  {
+			Debug.Log("Failed to load scores");
+		}
 	}
 
 
 
-	void OnAuthFinished (ISN_Result res) {
+
+
+	private void OnAuthFinished (ISN_Result res) {
 		if (res.IsSucceeded) {
 			IOSNativePopUpManager.showMessage("Player Authed ", "ID: " + GameCenterManager.player.playerId + "\n" + "Name: " + GameCenterManager.player.displayName);
 		} else {

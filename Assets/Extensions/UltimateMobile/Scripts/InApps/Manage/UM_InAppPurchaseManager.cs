@@ -1,11 +1,20 @@
 ﻿using UnityEngine;
+using UnionAssets.FLE;
+using System;
 using System.Collections;
 
 public class UM_InAppPurchaseManager : SA_Singleton<UM_InAppPurchaseManager> {
 
-
+	//events
 	public const string ON_PURCHASE_FLOW_FINISHED   = "on_purchase_flow_finished";
 	public const string ON_BILLING_CONNECT_FINISHED   = "on_billing_connect_finished";
+
+
+
+	//actions
+	public static Action<UM_BillingConnectionResult> OnBillingConnectFinishedAction = delegate {};
+	public static Action<UM_PurchaseResult> OnPurchaseFlowFinishedAction = delegate {};
+
 	private bool _IsInited = false;
 
 	public const string PREFS_KEY = "UM_InAppPurchaseManager";
@@ -23,7 +32,7 @@ public class UM_InAppPurchaseManager : SA_Singleton<UM_InAppPurchaseManager> {
 			
 		case RuntimePlatform.Android:
 			//listening for purchase and consume events
-			AndroidInAppPurchaseManager.instance.addEventListener (AndroidInAppPurchaseManager.ON_PRODUCT_PURCHASED, Android_OnProductPurchased);
+			AndroidInAppPurchaseManager.ActionProductPurchased += Android_ActionProductPurchased;
 			AndroidInAppPurchaseManager.instance.addEventListener (AndroidInAppPurchaseManager.ON_PRODUCT_CONSUMED,  Android_OnProductConsumed);
 			
 			//initilaizing store
@@ -33,24 +42,15 @@ public class UM_InAppPurchaseManager : SA_Singleton<UM_InAppPurchaseManager> {
 			break;
 			
 		case RuntimePlatform.IPhonePlayer:
-			IOSInAppPurchaseManager.instance.addEventListener(IOSInAppPurchaseManager.PRODUCT_BOUGHT, IOS_OnProductPurchased);
-			IOSInAppPurchaseManager.instance.addEventListener(IOSInAppPurchaseManager.TRANSACTION_FAILED, IOS_OnTransactionFailed);
-
-			IOSInAppPurchaseManager.instance.addEventListener(IOSInAppPurchaseManager.STORE_KIT_INITIALIZED, IOS_OnStoreKitInited);
-			IOSInAppPurchaseManager.instance.addEventListener(IOSInAppPurchaseManager.STORE_KIT_INITI_FAILED, IOS_OnStoreKitInitFailed);
+			IOSInAppPurchaseManager.instance.OnStoreKitInitComplete += IOS_OnStoreKitInitComplete;
+			IOSInAppPurchaseManager.instance.OnTransactionComplete  += IOS_OnTransactionComplete;
 			break;
-			
-			
+
 		case RuntimePlatform.WP8Player:
 			WP8InAppPurchasesManager.instance.addEventListener(WP8InAppPurchasesManager.INITIALIZED, WP8_OnInitComplete);
 			WP8InAppPurchasesManager.instance.addEventListener(WP8InAppPurchasesManager.PRODUCT_PURCHASE_FINISHED, WP8_OnProductPurchased);
 			break;
-			
-			
 		}
-
-
-
 
 	}
 
@@ -122,6 +122,7 @@ public class UM_InAppPurchaseManager : SA_Singleton<UM_InAppPurchaseManager> {
 		return IsProductPurchased(UltimateMobileSettings.Instance.GetProductById(id));
 	}
 
+
 	public bool IsProductPurchased(UM_InAppProduct product) {
 		if(product == null) {
 			return false;
@@ -130,11 +131,21 @@ public class UM_InAppPurchaseManager : SA_Singleton<UM_InAppPurchaseManager> {
 		switch(Application.platform) {
 			
 		case RuntimePlatform.Android:
-			return AndroidInAppPurchaseManager.instance.inventory.IsProductPurchased(product.AndroidId);
+
+			if(AndroidInAppPurchaseManager.instance.IsInventoryLoaded) {
+				return AndroidInAppPurchaseManager.instance.inventory.IsProductPurchased(product.AndroidId);
+			} else {
+				return PlayerPrefs.HasKey(PREFS_KEY + product.id);
+			}
+			 
 		case RuntimePlatform.IPhonePlayer:
-			return PlayerPrefs.HasKey(PREFS_KEY + product.IOSId);
+			return PlayerPrefs.HasKey(PREFS_KEY + product.id);
 		case RuntimePlatform.WP8Player:
-			return product.WP8Template.isPurchased;
+			if(WP8InAppPurchasesManager.instance.IsInitialized) {
+				return product.WP8Template.isPurchased;
+			} else {
+				return PlayerPrefs.HasKey(PREFS_KEY + product.id);
+			}
 		}
 
 		return false;
@@ -170,10 +181,14 @@ public class UM_InAppPurchaseManager : SA_Singleton<UM_InAppPurchaseManager> {
 			WP8ProductTemplate tpl =  WP8InAppPurchasesManager.instance.GetProductById(product.WP8Id);
 			if(tpl != null) {
 				product.SetTemplate(tpl);
+				if(product.WP8Template.isPurchased && !product.IsConsumable) {
+					SaveNonConsumableItemPurchaseInfo(product);
+				}
 			}
 			
 		}
-		
+
+		OnBillingConnectFinishedAction(r);
 		dispatch(ON_BILLING_CONNECT_FINISHED, r);
 	}
 
@@ -183,118 +198,94 @@ public class UM_InAppPurchaseManager : SA_Singleton<UM_InAppPurchaseManager> {
 		UM_InAppProduct p = UltimateMobileSettings.Instance.GetProductByWp8Id(recponce.productId);
 		if(p != null) {
 			UM_PurchaseResult r =  new UM_PurchaseResult();
-			r.isSuccess = recponce.IsSuccses;
 			r.product = p;
-			dispatch(ON_PURCHASE_FLOW_FINISHED, r);
+			r.WP8_PurchaseInfo = recponce;
+
+			SendPurchaseEvent(r);
 		} else {
-			Debug.LogWarning("UM: Product tamplate not found");
-			dispatch(ON_PURCHASE_FLOW_FINISHED, new UM_PurchaseResult());
+			SendNoTemplateEvent();
 		}
 	}
 
 	//--------------------------------------
 	// IOS Listners
 	//--------------------------------------
+	
 
-
-	private void IOS_OnProductPurchased(CEvent e) {
-		IOSStoreKitResponse responce =  e.data as IOSStoreKitResponse;
+	private void IOS_OnTransactionComplete (IOSStoreKitResponse responce) {
 
 		UM_InAppProduct p = UltimateMobileSettings.Instance.GetProductByIOSId(responce.productIdentifier);
 		if(p != null) {
-			if(!p.IsConsumable) {
-				PlayerPrefs.SetInt(PREFS_KEY + responce.productIdentifier, 1);
-			}
-
-
 			UM_PurchaseResult r =  new UM_PurchaseResult();
-			r.isSuccess = true;
 			r.product = p;
-			dispatch(ON_PURCHASE_FLOW_FINISHED, r);
+			r.IOS_PurchaseInfo = responce;
+			SendPurchaseEvent(r);
 		} else {
-			Debug.LogWarning("UM: Product tamplate not found");
-			dispatch(ON_PURCHASE_FLOW_FINISHED, new UM_PurchaseResult());
+			SendNoTemplateEvent();
 		}
+
 
 	}
 
-	private void IOS_OnTransactionFailed(CEvent e) {
-		IOSStoreKitResponse responce =  e.data as IOSStoreKitResponse;
-		
-		UM_InAppProduct p = UltimateMobileSettings.Instance.GetProductByIOSId(responce.productIdentifier);
-		if(p != null) {
-			UM_PurchaseResult r =  new UM_PurchaseResult();
-			r.isSuccess = false;
-			r.product = p;
-			dispatch(ON_PURCHASE_FLOW_FINISHED, r);
-		} else {
-			Debug.LogWarning("UM: Product tamplate not found");
-			dispatch(ON_PURCHASE_FLOW_FINISHED, new UM_PurchaseResult());
-		}
-	}
+	private void IOS_OnStoreKitInitComplete (ISN_Result res) {
 
-	private void IOS_OnStoreKitInited() {
+		UM_BillingConnectionResult r =  new UM_BillingConnectionResult();
 		_IsInited = true;
 
+		r.isSuccess = res.IsSucceeded;
+		if(res.IsSucceeded) {
+			r.message = "Inited";
 
-		UM_BillingConnectionResult r =  new UM_BillingConnectionResult();
-		r.message = "Inited";
-		r.isSuccess = true;
-
-
-		foreach(UM_InAppProduct product in UltimateMobileSettings.Instance.InAppProducts) {
-
-			ProductTemplate tpl = IOSInAppPurchaseManager.instance.GetProductById(product.IOSId); 
-			if(tpl != null) {
-				product.SetTemplate(tpl);
+			foreach(UM_InAppProduct product in UltimateMobileSettings.Instance.InAppProducts) {
+				
+				ProductTemplate tpl = IOSInAppPurchaseManager.instance.GetProductById(product.IOSId); 
+				if(tpl != null) {
+					product.SetTemplate(tpl);
+				}
+				
 			}
-			
+
+			OnBillingConnectFinishedAction(r);
+			dispatch(ON_BILLING_CONNECT_FINISHED, r);
+		} else {
+
+			if(res.error != null) {
+				r.message = res.error.description;
+			}
+
+			OnBillingConnectFinishedAction(r);
+			dispatch(ON_BILLING_CONNECT_FINISHED, r);
 		}
-		
-		dispatch(ON_BILLING_CONNECT_FINISHED, r);
+
 	}
-
-	private void IOS_OnStoreKitInitFailed(CEvent e) {
-
-		ISN_Error er = e.data as ISN_Error;
-
-		UM_BillingConnectionResult r =  new UM_BillingConnectionResult();
-		r.message = er.description;
-		r.isSuccess = false;
-		
-		dispatch(ON_BILLING_CONNECT_FINISHED, r);
-	}
-
-
+	
 
 	//--------------------------------------
 	// Android Listners
 	//--------------------------------------
 
 
-	private void Android_OnProductPurchased(CEvent e) {
-		BillingResult result = e.data as BillingResult;
 
+
+	void Android_ActionProductPurchased (BillingResult result) {
 		UM_InAppProduct p = UltimateMobileSettings.Instance.GetProductByAndroidId(result.purchase.SKU);
+
 		if(p != null) {
 			if(p.IsConsumable) {
 				AndroidInAppPurchaseManager.instance.consume(result.purchase.SKU);
 			} else {
-				Debug.Log("non cons");
+				
 				UM_PurchaseResult r =  new UM_PurchaseResult();
 				r.isSuccess = result.isSuccess;
 				r.product = p;
-				dispatch(ON_PURCHASE_FLOW_FINISHED, r);
+				r.Google_PurchaseInfo = result.purchase;
+				
+				SendPurchaseEvent(r);
 			}
 		} else {
-			Debug.LogWarning("UM: Product tamplate not found");
-			dispatch(ON_PURCHASE_FLOW_FINISHED, new UM_PurchaseResult());
+			SendNoTemplateEvent();
 		}
-
-
-
-	}
-	
+	}	
 	
 	private void Android_OnProductConsumed(CEvent e) {
 		BillingResult result = e.data as BillingResult;
@@ -304,10 +295,10 @@ public class UM_InAppPurchaseManager : SA_Singleton<UM_InAppPurchaseManager> {
 			UM_PurchaseResult r =  new UM_PurchaseResult();
 			r.isSuccess = result.isSuccess;
 			r.product = p;
-			dispatch(ON_PURCHASE_FLOW_FINISHED, r);
+			r.Google_PurchaseInfo = result.purchase;
+			SendPurchaseEvent(r);
 		} else {
-			Debug.LogWarning("UM: Product tamplate not found");
-			dispatch(ON_PURCHASE_FLOW_FINISHED, new UM_PurchaseResult());
+			SendNoTemplateEvent();
 		}
 	}
 	
@@ -349,8 +340,12 @@ public class UM_InAppPurchaseManager : SA_Singleton<UM_InAppPurchaseManager> {
 				GoogleProductTemplate tpl = AndroidInAppPurchaseManager.instance.inventory.GetProductDetails(product.AndroidId);
 				if(tpl != null) {
 					product.SetTemplate(tpl);
-					if(product.IsConsumable && IsProductPurchased(product)) {
+					if(product.IsConsumable && AndroidInAppPurchaseManager.instance.inventory.IsProductPurchased(product.AndroidId)) {
 						AndroidInAppPurchaseManager.instance.consume(product.AndroidId);
+					}
+
+					if(!product.IsConsumable && AndroidInAppPurchaseManager.instance.inventory.IsProductPurchased(product.AndroidId)) {
+						SaveNonConsumableItemPurchaseInfo(product);
 					}
 				}
 
@@ -359,6 +354,58 @@ public class UM_InAppPurchaseManager : SA_Singleton<UM_InAppPurchaseManager> {
 
 		dispatch(ON_BILLING_CONNECT_FINISHED, r);
 		
+	}
+
+
+	//--------------------------------------
+	// Private Methods
+	//--------------------------------------
+
+	private void SendPurchaseEvent(UM_PurchaseResult result) {
+
+
+		switch(Application.platform) {
+			
+		case RuntimePlatform.Android:
+			break;
+		case RuntimePlatform.IPhonePlayer:
+
+			switch(result.IOS_PurchaseInfo.state) {
+			case InAppPurchaseState.Purchased:
+			case InAppPurchaseState.Restored:
+				result.isSuccess = true;
+				break;
+			case InAppPurchaseState.Deferred:
+			case InAppPurchaseState.Failed:
+				result.isSuccess = false;
+				break;
+			}
+			break;
+		case RuntimePlatform.WP8Player:
+			result.isSuccess = result.WP8_PurchaseInfo.IsSuccses;
+			break;
+		}
+
+
+		if(!result.product.IsConsumable && result.isSuccess) {
+			Debug.Log("UM: Purchase saved to PlayerPrefs");
+			SaveNonConsumableItemPurchaseInfo(result.product);
+		}
+
+		OnPurchaseFlowFinishedAction(result);
+		dispatch(ON_PURCHASE_FLOW_FINISHED, result);
+	}
+
+	private void SaveNonConsumableItemPurchaseInfo(UM_InAppProduct product) {
+		PlayerPrefs.SetInt(PREFS_KEY + product.id, 1);
+	}
+
+
+	private void SendNoTemplateEvent() {
+		Debug.LogWarning("UM: Product tamplate not found");
+		UM_PurchaseResult r =  new UM_PurchaseResult();
+		OnPurchaseFlowFinishedAction(r);
+		dispatch(ON_PURCHASE_FLOW_FINISHED, r);
 	}
 
 }

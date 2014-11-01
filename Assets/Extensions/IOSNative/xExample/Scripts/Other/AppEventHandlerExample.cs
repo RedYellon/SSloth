@@ -18,9 +18,11 @@ public class AppEventHandlerExample : MonoBehaviour {
 
 	void Awake() {
 
-
+		//Event use example
 		IOSNativeAppEvents.instance.addEventListener (IOSNativeAppEvents.APPLICATION_DID_BECOME_ACTIVE,                OnApplicationDidBecomeActive);
-		IOSNativeAppEvents.instance.addEventListener (IOSNativeAppEvents.APPLICATION_DID_RECEIVE_MEMORY_WARNING,       OnApplicationDidReceiveMemoryWarning);
+
+		//Action use example
+		IOSNativeAppEvents.instance.OnApplicationDidReceiveMemoryWarning += OnApplicationDidReceiveMemoryWarning;
 	}
 
 	//--------------------------------------

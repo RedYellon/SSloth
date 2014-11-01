@@ -11,6 +11,8 @@
 
 
 using UnityEngine;
+using System;
+using UnionAssets.FLE;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -18,6 +20,7 @@ public class IOSMessage : BaseIOSPopup {
 	
 	
 	public string ok;
+	public Action OnComplete = delegate {};
 	
 	//--------------------------------------
 	// INITIALIZE
@@ -59,6 +62,7 @@ public class IOSMessage : BaseIOSPopup {
 	public void onPopUpCallBack(string buttonIndex) {
 		
 		dispatch(BaseEvent.COMPLETE);
+		OnComplete();
 		Destroy(gameObject);
 		
 		

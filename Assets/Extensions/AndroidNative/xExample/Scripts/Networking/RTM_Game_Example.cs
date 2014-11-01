@@ -1,5 +1,6 @@
 //#define SA_DEBUG_MODE
 using UnityEngine;
+using UnionAssets.FLE;
 using System.Collections;
 
 public class RTM_Game_Example : AndroidNativeExampleBase {

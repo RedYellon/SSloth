@@ -11,6 +11,7 @@
 
 using System;
 using UnityEngine;
+using UnionAssets.FLE;
 using System.Collections;
 #if (UNITY_IPHONE && !UNITY_EDITOR) || SA_DEBUG_MODE
 using System.Runtime.InteropServices;

@@ -1,7 +1,11 @@
 using UnityEngine;
+using System;
+using UnionAssets.FLE;
 using System.Collections;
 
 public class MobileNativeDialog : EventDispatcherBase {
+
+	public Action<MNDialogResult> OnComplete = delegate {};
 
 	public MobileNativeDialog(string title, string message) {
 		init(title, message, "Yes", "No");
@@ -16,18 +20,18 @@ public class MobileNativeDialog : EventDispatcherBase {
 
 		#if UNITY_WP8 || UNITY_METRO
 		MNWP8Dialog dialog  = MNWP8Dialog.Create(title, message);
-		dialog.addEventListener(BaseEvent.COMPLETE, OnComplete);
+		dialog.addEventListener(BaseEvent.COMPLETE, OnCompleteListener);
 		#endif
 
 
 		#if UNITY_IPHONE
 		MNIOSDialog dialog  = MNIOSDialog.Create(title, message, yes, no);
-		dialog.addEventListener(BaseEvent.COMPLETE, OnComplete);
+		dialog.addEventListener(BaseEvent.COMPLETE, OnCompleteListener);
 		#endif
 
 		#if UNITY_ANDROID
 		MNAndroidDialog dialog  = MNAndroidDialog.Create(title, message, yes, no);
-		dialog.addEventListener(BaseEvent.COMPLETE, OnComplete);
+		dialog.addEventListener(BaseEvent.COMPLETE, OnCompleteListener);
 		#endif
 
 
@@ -35,7 +39,8 @@ public class MobileNativeDialog : EventDispatcherBase {
 
 
 
-	private void OnComplete(CEvent e) {
+	private void OnCompleteListener(CEvent e) {
+		OnComplete((MNDialogResult)e.data);
 		dispatch(BaseEvent.COMPLETE, e.data);
 	}
 }

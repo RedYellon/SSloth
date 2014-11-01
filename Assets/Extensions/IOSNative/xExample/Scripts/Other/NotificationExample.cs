@@ -9,6 +9,7 @@
 
 
 using UnityEngine;
+using UnionAssets.FLE;
 using System.Collections;
 
 public class NotificationExample : BaseIOSFeaturePreview {
@@ -20,6 +21,10 @@ public class NotificationExample : BaseIOSFeaturePreview {
 	// INITIALIZE
 	//--------------------------------------
 
+
+	void Awake() {
+		IOSNotificationController.instance.RequestNotificationPermitions();
+	}
 
 	//--------------------------------------
 	//  PUBLIC METHODS
@@ -34,11 +39,13 @@ public class NotificationExample : BaseIOSFeaturePreview {
 		
 		StartY+= YLableStep;
 		if(GUI.Button(new Rect(StartX, StartY, buttonWidth, buttonHeight), "Schedule Notification Silet")) {
+			IOSNotificationController.instance.OnNotificationScheduleResult += OnNotificationScheduleResult;
 			lastNotificationId = IOSNotificationController.instance.ScheduleNotification (5, "Your Notification Text No Sound", false);
 		}
 
 		StartX += XButtonStep;
 		if(GUI.Button(new Rect(StartX, StartY, buttonWidth, buttonHeight), "Schedule Notification")) {
+			IOSNotificationController.instance.OnNotificationScheduleResult += OnNotificationScheduleResult;
 			lastNotificationId = IOSNotificationController.instance.ScheduleNotification (5, "Your Notification Text", true);
 		}
 
@@ -61,6 +68,7 @@ public class NotificationExample : BaseIOSFeaturePreview {
 
 
 			#if UNITY_IPHONE
+
 			IOSNotificationController.instance.RegisterForRemoteNotifications (RemoteNotificationType.Alert |  RemoteNotificationType.Badge |  RemoteNotificationType.Sound);
 			IOSNotificationController.instance.addEventListener (IOSNotificationController.DEVICE_TOKEN_RECEIVED, OnTokenReived);
 			#endif
@@ -93,6 +101,37 @@ public class NotificationExample : BaseIOSFeaturePreview {
 
 		IOSNotificationController.instance.removeEventListener (IOSNotificationController.DEVICE_TOKEN_RECEIVED, OnTokenReived);
 	}
+
+	private void OnNotificationScheduleResult (ISN_Result res) {
+		IOSNotificationController.instance.OnNotificationScheduleResult -= OnNotificationScheduleResult;
+
+
+
+		string msg = string.Empty;
+
+		if(res.IsSucceeded) {
+			msg += "Notification was successfully scheduled \n allowed notifications types: \n";
+		
+
+			if((IOSNotificationController.AllowedNotificationsType & IOSUIUserNotificationType.Alert) != 0) {
+				msg += "Alert ";
+			}
+
+			if((IOSNotificationController.AllowedNotificationsType & IOSUIUserNotificationType.Sound) != 0) {
+				msg += "Sound ";
+			}
+
+			if((IOSNotificationController.AllowedNotificationsType & IOSUIUserNotificationType.Badge) != 0) {
+				msg += "Badge ";
+			}
+
+		} else {
+			msg += "Notification scheduling failed";
+		}
+
+
+		IOSMessage.Create("On Notification Schedule Result", msg);
+	}
 	
 	//--------------------------------------
 	//  PRIVATE METHODS
@@ -101,5 +140,6 @@ public class NotificationExample : BaseIOSFeaturePreview {
 	//--------------------------------------
 	//  DESTROY
 	//--------------------------------------
+
 
 }

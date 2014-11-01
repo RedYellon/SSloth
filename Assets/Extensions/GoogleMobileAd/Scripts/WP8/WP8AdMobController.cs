@@ -1,5 +1,6 @@
 ﻿#define SA_DEBUG_MODE
 using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -15,6 +16,15 @@ public class WP8AdMobController : SA_Singleton<WP8AdMobController>, GoogleMobile
 	private Dictionary<int, WP8ADBanner> _banners; 
 	private string _BannersUunitId;
 	private string _InterstisialUnitId;
+
+
+	//Actions
+	private Action _OnInterstitialLoaded 			= delegate {};
+	private Action _OnInterstitialFailedLoading 	= delegate {};
+	private Action _OnInterstitialOpened 			= delegate {};
+	private Action _OnInterstitialClosed 			= delegate {};
+	private Action _OnInterstitialLeftApplication  	= delegate {};
+	private Action<string> _OnAdInAppRequest		= delegate {};
 
 		
 	//--------------------------------------
@@ -318,6 +328,75 @@ public class WP8AdMobController : SA_Singleton<WP8AdMobController>, GoogleMobile
 		}
 	}
 
+
+	//--------------------------------------
+	//  Actions 
+	//--------------------------------------
+	
+	public Action OnInterstitialLoaded {
+		get {
+			return _OnInterstitialLoaded;
+		}
+		
+		set {
+			_OnInterstitialLoaded = value;
+		}
+	}
+	
+	public Action OnInterstitialFailedLoading {
+		get {
+			return _OnInterstitialFailedLoading;
+		}
+		
+		set {
+			_OnInterstitialFailedLoading = value;
+		}
+	}
+	
+	
+	public Action OnInterstitialOpened {
+		get {
+			return _OnInterstitialOpened;
+		}
+		
+		set {
+			_OnInterstitialOpened = value;
+		}
+	}
+	
+	public Action OnInterstitialClosed {
+		get {
+			return _OnInterstitialClosed;
+		}
+		
+		set {
+			_OnInterstitialClosed = value;
+		}
+	}
+	
+	
+	public Action OnInterstitialLeftApplication {
+		get {
+			return _OnInterstitialLeftApplication;
+		}
+		
+		set {
+			_OnInterstitialLeftApplication = value;
+		}
+	}
+	
+	
+	public Action<string> OnAdInAppRequest {
+		get {
+			return _OnAdInAppRequest;
+		}
+		
+		set {
+			_OnAdInAppRequest = value;
+		}
+	}
+
+
 	//--------------------------------------
 	//  EVENTS BANNER AD
 	//--------------------------------------
@@ -377,22 +456,27 @@ public class WP8AdMobController : SA_Singleton<WP8AdMobController>, GoogleMobile
 	
 	
 	private void OnInterstitialAdLoaded(string data)  {
+		_OnInterstitialLoaded();
 		dispatch(GoogleMobileAdEvents.ON_INTERSTITIAL_AD_LOADED);
 	}
 	
 	private void OnInterstitialAdFailedToLoad(string data) {
+		_OnInterstitialFailedLoading();
 		dispatch(GoogleMobileAdEvents.ON_INTERSTITIAL_AD_FAILED_LOADING);
 	}
 	
 	private void OnInterstitialAdOpened(string data) {
+		_OnInterstitialOpened();
 		dispatch(GoogleMobileAdEvents.ON_INTERSTITIAL_AD_OPENED);
 	}
 	
 	private void OnInterstitialAdClosed(string data) {
+		_OnInterstitialClosed();
 		dispatch(GoogleMobileAdEvents.ON_INTERSTITIAL_AD_CLOSED);
 	}
 	
 	private void OnInterstitialAdLeftApplication(string data) {
+		_OnInterstitialLeftApplication();
 		dispatch(GoogleMobileAdEvents.ON_INTERSTITIAL_AD_LEFT_APPLICATION);
 	}
 	
@@ -401,6 +485,7 @@ public class WP8AdMobController : SA_Singleton<WP8AdMobController>, GoogleMobile
 	//--------------------------------------
 	
 	private void OnInAppPurchaseRequested(string productId) {
+		_OnAdInAppRequest(productId);
 		dispatch(GoogleMobileAdEvents.ON_AD_IN_APP_REQUEST, productId);
 	}
 

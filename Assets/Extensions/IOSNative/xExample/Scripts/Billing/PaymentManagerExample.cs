@@ -10,6 +10,7 @@
 
 using UnityEngine;
 using System.Collections;
+using UnionAssets.FLE;
 using System.Collections.Generic;
 
 public class PaymentManagerExample {
@@ -36,12 +37,16 @@ public class PaymentManagerExample {
 			IOSInAppPurchaseManager.instance.addProductId(SMALL_PACK);
 			IOSInAppPurchaseManager.instance.addProductId(NC_PACK);
 			
-			IOSInAppPurchaseManager.instance.addEventListener(IOSInAppPurchaseManager.PRODUCT_BOUGHT, onProductBought);
-			IOSInAppPurchaseManager.instance.addEventListener(IOSInAppPurchaseManager.TRANSACTION_FAILED, onTransactionFailed);
+
+
+			//Event Use Examples
 			IOSInAppPurchaseManager.instance.addEventListener(IOSInAppPurchaseManager.RESTORE_TRANSACTION_FAILED, onRestoreTransactionFailed);
 			IOSInAppPurchaseManager.instance.addEventListener(IOSInAppPurchaseManager.VERIFICATION_RESPONSE, onVerificationResponce);
 			IOSInAppPurchaseManager.instance.addEventListener(IOSInAppPurchaseManager.STORE_KIT_INITIALIZED, OnStoreKitInited);
-			
+
+
+			//Action Use Examples
+			IOSInAppPurchaseManager.instance.OnTransactionComplete += OnTransactionComplete;
 
 
 			IsInited = true;
@@ -69,35 +74,50 @@ public class PaymentManagerExample {
 	//--------------------------------------
 	//  EVENTS
 	//--------------------------------------
-	
-	private static void onProductBought(CEvent e) {
-		
-		IOSStoreKitResponse responce =  e.data as IOSStoreKitResponse;
-		Debug.Log("STORE KIT GOT BUY: " + responce.productIdentifier);
-		Debug.Log("RECIPT: " + responce.receipt);
 
-		switch(responce.productIdentifier) {
+
+	private static void UnlockProducts(string productIdentifier) {
+		switch(productIdentifier) {
 		case SMALL_PACK:
 			//code for adding small game money amount here
 			break;
 		case NC_PACK:
 			//code for unlocking cool item here
 			break;
-
+			
 		}
-
-		
-		IOSNativePopUpManager.showMessage("Success", "product " + responce.productIdentifier + " is purchased");
 	}
 
+	private static void OnTransactionComplete (IOSStoreKitResponse responce) {
+
+		Debug.Log("OnTransactionComplete: " + responce.productIdentifier);
+		Debug.Log("OnTransactionComplete: state: " + responce.state);
+
+		switch(responce.state) {
+		case InAppPurchaseState.Purchased:
+		case InAppPurchaseState.Restored:
+			//Our product been succsesly purchased or restored
+			//So we need to provide content to our user depends on productIdentifier
+			UnlockProducts(responce.productIdentifier);
+			break;
+		case InAppPurchaseState.Deferred:
+			//iOS 8 introduces Ask to Buy, which lets parents approve any purchases initiated by children
+			//You should update your UI to reflect this deferred state, and expect another Transaction Complete  to be called again with a new transaction state 
+			//reflecting the parent’s decision or after the transaction times out. Avoid blocking your UI or gameplay while waiting for the transaction to be updated.
+			break;
+		case InAppPurchaseState.Failed:
+			//Our purchase flow is failed.
+			//We can unlock intrefase and repor user that the purchase is failed. 
+			break;
+		}
+
+		IOSNativePopUpManager.showMessage("Store Kit Response", "product " + responce.productIdentifier + " state: " + responce.state.ToString());
+	}
+ 
 	private static void onRestoreTransactionFailed() {
 		IOSNativePopUpManager.showMessage("Fail", "Restore Failed");
 	}
-
-	private static void onTransactionFailed(CEvent e) {
-		IOSStoreKitResponse responce =  e.data as IOSStoreKitResponse;
-		IOSNativePopUpManager.showMessage("Fail", responce.error);
-	}
+	
 
 	private static void onVerificationResponce(CEvent e) {
 		IOSStoreKitVerificationResponse responce =  e.data as IOSStoreKitVerificationResponse;

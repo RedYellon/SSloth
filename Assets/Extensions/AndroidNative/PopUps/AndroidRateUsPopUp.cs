@@ -7,6 +7,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 using UnityEngine;
+using System;
+using UnionAssets.FLE;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -18,6 +20,8 @@ public class AndroidRateUsPopUp : BaseAndroidPopup {
 	public string later;
 	public string no;
 	public string url;
+
+	public Action<AndroidDialogResult> OnComplete = delegate {} ;
 
 	
 	//--------------------------------------
@@ -66,12 +70,15 @@ public class AndroidRateUsPopUp : BaseAndroidPopup {
 		int index = System.Convert.ToInt16(buttonIndex);
 		switch(index) {
 			case 0: 
+				OnComplete(AndroidDialogResult.RATED);
 				dispatch(BaseEvent.COMPLETE, AndroidDialogResult.RATED);
 				break;
 			case 1:
+				OnComplete(AndroidDialogResult.REMIND);
 				dispatch(BaseEvent.COMPLETE, AndroidDialogResult.REMIND);
 				break;
 			case 2:
+				OnComplete(AndroidDialogResult.DECLINED);
 				dispatch(BaseEvent.COMPLETE, AndroidDialogResult.DECLINED);
 				break;
 		}

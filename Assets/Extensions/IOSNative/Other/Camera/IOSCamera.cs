@@ -43,7 +43,7 @@ public class IOSCamera : ISN_Singleton<IOSCamera> {
 	private static extern void _ISN_GetImageFromAlbum();
 
 	[DllImport ("__Internal")]
-	private static extern void _ISN_InitCamerAPI(float compressionRate, int maxSize);
+	private static extern void _ISN_InitCamerAPI(float compressionRate, int maxSize, int encodingType);
 
 
 	#endif
@@ -53,7 +53,7 @@ public class IOSCamera : ISN_Singleton<IOSCamera> {
 		DontDestroyOnLoad(gameObject);
 
 		#if (UNITY_IPHONE && !UNITY_EDITOR) || SA_DEBUG_MODE
-		_ISN_InitCamerAPI(IOSNativeSettings.Instance.JPegCompressionRate, IOSNativeSettings.Instance.MaxImageLoadSize);
+		_ISN_InitCamerAPI(IOSNativeSettings.Instance.JPegCompressionRate, IOSNativeSettings.Instance.MaxImageLoadSize, (int) IOSNativeSettings.Instance.GalleryImageFormat);
 		#endif
 	}
 
@@ -91,8 +91,12 @@ public class IOSCamera : ISN_Singleton<IOSCamera> {
 
 	private void OnImagePickedEvent(string data) {
 
+
+
 		IOSImagePickResult result =  new IOSImagePickResult(data);
 
+
+	
 		dispatch(IMAGE_PICKED, result);
 		if(OnImagePicked != null) {
 			OnImagePicked(result);

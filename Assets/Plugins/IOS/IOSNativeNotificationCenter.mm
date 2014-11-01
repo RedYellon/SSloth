@@ -22,7 +22,61 @@ static IOSNativeNotificationCenter *sharedHelper = nil;
     return sharedHelper;
 }
 
+- (void) RegisterForNotifications {
+    
+    NSArray *vComp = [[UIDevice currentDevice].systemVersion componentsSeparatedByString:@"."];
+    if ([[vComp objectAtIndex:0] intValue] >= 8) {
+        [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert|UIUserNotificationTypeBadge|UIUserNotificationTypeSound categories:nil]];
+
+    }
+}
+
+
 -(void) scheduleNotification:(int)time message:(NSString *)messgae sound:(bool *)sound alarmID:(NSString *)alarmID badges:(int)badges {
+    
+    
+    
+    
+    NSArray *vComp = [[UIDevice currentDevice].systemVersion componentsSeparatedByString:@"."];
+    if ([[vComp objectAtIndex:0] intValue] >= 8) {
+        UIUserNotificationSettings* NotificationSettings = [[UIApplication sharedApplication] currentUserNotificationSettings];
+        
+        NSLog(@"IOS 8 detected");
+ 
+        if((NotificationSettings.types & UIUserNotificationTypeAlert) == 0) {
+            NSLog(@"ISN: user disabled local notification for this app, sending fail event");
+            
+            NSMutableString * data = [[NSMutableString alloc] init];
+            [data appendString: @"0" ];
+            [data appendString:@"|"];
+            [data appendString:  [NSString stringWithFormat:@"%u",[[UIApplication sharedApplication] currentUserNotificationSettings].types]];
+            
+            UnitySendMessage("IOSNotificationController", "OnNotificationScheduleResultAction", [ISNDataConvertor NSStringToChar:data]);
+            
+            [self RegisterForNotifications];
+            return;
+        }
+        
+        if((NotificationSettings.types & UIUserNotificationTypeBadge) == 0) {
+           
+            if(badges > 0) {
+                 NSLog(@"ISN: no bages allowed for this user. notification bage disabled ");
+                 badges = 0;
+            }
+           
+            
+        }
+        NSLog(@"ISN: sss %u", NotificationSettings.types & UIUserNotificationTypeSound);
+        
+        if((NotificationSettings.types & UIUserNotificationTypeSound) == 0) {
+            if(sound) {
+                NSLog(@"ISN: no sound allowed for this user. notification sound disabled ");
+                sound = false;
+            }
+
+        }
+    }
+   
     
     UILocalNotification* localNotification = [[UILocalNotification alloc] init];
     localNotification.fireDate = [NSDate dateWithTimeIntervalSinceNow:time];
@@ -30,7 +84,6 @@ static IOSNativeNotificationCenter *sharedHelper = nil;
     localNotification.timeZone = [NSTimeZone defaultTimeZone];
     if (badges > 0)
         localNotification.applicationIconBadgeNumber = badges;
-    
     
     if(sound) {
         localNotification.soundName = UILocalNotificationDefaultSoundName;
@@ -43,9 +96,24 @@ static IOSNativeNotificationCenter *sharedHelper = nil;
     // Set some extra info to your alarm
     localNotification.userInfo = userInfo;
     
-    NSLog(@"scheduleNotification AlarmKey: %@", alarmID);
+    NSLog(@"ISN: scheduleNotification AlarmKey: %@", alarmID);
     
     [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
+    
+    
+     NSMutableString * data = [[NSMutableString alloc] init];
+    [data appendString: @"1" ];
+    [data appendString:@"|"];
+    
+     if ([[vComp objectAtIndex:0] intValue] >= 8) {
+         [data appendString:  [NSString stringWithFormat:@"%u",[[UIApplication sharedApplication] currentUserNotificationSettings].types]];
+     } else {
+         [data appendString:@"7"];
+     }
+    
+    
+     UnitySendMessage("IOSNotificationController", "OnNotificationScheduleResultAction", [ISNDataConvertor NSStringToChar:data]);
+
     
 }
 
@@ -97,6 +165,10 @@ extern "C" {
     void _ISN_CancelNotificationById(char* nId) {
         NSString* alarmID = [ISNDataConvertor charToNSString:nId];
         [[IOSNativeNotificationCenter sharedInstance] cleanUpLocalNotificationWithAlarmID:alarmID];
+    }
+    
+    void  _ISN_RequestNotificationPermitions ()  {
+        [[IOSNativeNotificationCenter sharedInstance] RegisterForNotifications];
     }
     
     

@@ -6,6 +6,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 using UnityEngine;
+using UnionAssets.FLE;
 using System.Collections;
 
 public class MNUseExample : MNFeaturePreview {
@@ -29,7 +30,7 @@ public class MNUseExample : MNFeaturePreview {
 			MobileNativeRateUs ratePopUp =  new MobileNativeRateUs("Like this game?", "Please rate to support future updates!");
 			ratePopUp.SetAppleId(appleId);
 			ratePopUp.SetAndroidAppUrl(apdroidAppUrl);
-			ratePopUp.addEventListener(BaseEvent.COMPLETE, OnRatePopUpClose);
+			ratePopUp.OnComplete += OnRatePopUpClose;
 
 			ratePopUp.Start();
 
@@ -40,14 +41,15 @@ public class MNUseExample : MNFeaturePreview {
 		StartX += XButtonStep;
 		if(GUI.Button(new Rect(StartX, StartY, buttonWidth, buttonHeight), "Dialog PopUp")) {
 			MobileNativeDialog dialog = new MobileNativeDialog("Dialog Titile", "Dialog message");
-			dialog.addEventListener(BaseEvent.COMPLETE, OnDialogClose);
+			dialog.OnComplete += OnDialogClose;
+
 		}
 		
 		
 		StartX += XButtonStep;
 		if(GUI.Button(new Rect(StartX, StartY, buttonWidth, buttonHeight), "Message PopUp")) {
 			MobileNativeMessage msg = new MobileNativeMessage("Message Titile", "Message message");
-			msg.addEventListener(BaseEvent.COMPLETE, OnMessageClose);
+			msg.OnComplete += OnMessageClose;
 		}
 
 		StartY += YButtonStep;
@@ -80,12 +82,10 @@ public class MNUseExample : MNFeaturePreview {
 	
 
 	
-	private void OnRatePopUpClose(CEvent e) {
-		//removing listner
-		e.dispatcher.removeEventListener(BaseEvent.COMPLETE, OnRatePopUpClose);
+	private void OnRatePopUpClose(MNDialogResult result) {
 
 		//parsing result
-		switch((MNDialogResult)e.data) {
+		switch(result) {
 		case MNDialogResult.RATED:
 			Debug.Log ("Rate Option pickied");
 			break;
@@ -97,18 +97,15 @@ public class MNUseExample : MNFeaturePreview {
 			break;
 		}
 
-		string result = e.data.ToString();
-		new MobileNativeMessage("Result", result + " button pressed");
+		new MobileNativeMessage("Result", result.ToString() + " button pressed");
 
 	}
 	
-	private void OnDialogClose(CEvent e) {
+	private void OnDialogClose(MNDialogResult result) {
 		
-		//removing listner
-		e.dispatcher.removeEventListener(BaseEvent.COMPLETE, OnDialogClose);
-		
+
 		//parsing result
-		switch((MNDialogResult)e.data) {
+		switch(result) {
 		case MNDialogResult.YES:
 			Debug.Log ("Yes button pressed");
 			break;
@@ -117,14 +114,12 @@ public class MNUseExample : MNFeaturePreview {
 			break;
 			
 		}
-		
-		string result = e.data.ToString();
-		new MobileNativeMessage("Result", result + " button pressed");
+
+		new MobileNativeMessage("Result", result.ToString() + " button pressed");
 	}
 	
-	private void OnMessageClose(CEvent e) {
-		//removing listner
-		e.dispatcher.removeEventListener(BaseEvent.COMPLETE,  OnMessageClose);
+	private void OnMessageClose() {
+
 		new MobileNativeMessage("Result", "Message Closed");
 	}
 

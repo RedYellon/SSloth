@@ -11,9 +11,8 @@
 using UnityEngine;
 using System.Collections;
 
-public class GameCenterDataSendType  {
+public enum  GameCenterDataSendType  {
 
-	public const int RELIABLE   = 0;
-	public const int UNRELIABLE = 1;
-
+	 RELIABLE   = 0,
+	 UNRELIABLE = 1
 }

@@ -109,8 +109,14 @@ static ISNCamera *_sharedInstance;
         
         //NSData *imageData =  UIImagePNGRepresentation(photo);
         
+        NSData *imageData = nil;
         NSLog(@"ImageCompressionRate: %f", [self ImageCompressionRate]);
-        NSData *imageData = UIImageJPEGRepresentation(photo, [self ImageCompressionRate]);
+        if([self encodingType] == 0) {
+            imageData = UIImagePNGRepresentation(photo);
+        } else {
+            imageData = UIImageJPEGRepresentation(photo, [self ImageCompressionRate]);
+        }
+        
         encodedImage = [imageData base64Encoding];
     }
     
@@ -165,9 +171,10 @@ extern "C" {
         [[ISNCamera sharedInstance] GetImageFromAlbum];
     }
     
-    void _ISN_InitCamerAPI(float compressionRate, int maxSize) {
+    void _ISN_InitCamerAPI(float compressionRate, int maxSize, int encodingType) {
         [[ISNCamera sharedInstance] setImageCompressionRate:compressionRate];
         [[ISNCamera sharedInstance] setMaxImageSize:maxSize];
+        [[ISNCamera sharedInstance] setEncodingType:encodingType];
     }
 
 }

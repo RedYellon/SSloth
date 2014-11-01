@@ -55,6 +55,10 @@ static BOOL IsShowIntersticialsOnLoad = false;
     }
 }
 
+-(void) ShowVieoAd {
+    
+}
+
 -(void) CreateBannerAd:(int)gravity bannerId:(int)bannerId {
     
     iAdBannerObject* banner;
@@ -136,7 +140,7 @@ static BOOL IsShowIntersticialsOnLoad = false;
     UnitySendMessage("iAdBannerController", "interstitialAdDidLoad", "");
     
 }
-
+//- (void)interstitialAdActionDidFinish
 - (void)interstitialAdActionDidFinish:(ADInterstitialAd *)interstitialAd {
     NSLog(@"interstitialAdActionDidFinish");
     

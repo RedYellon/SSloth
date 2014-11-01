@@ -10,6 +10,7 @@
 
 using UnityEngine;
 using System;
+using UnionAssets.FLE;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -22,8 +23,7 @@ public class IOSInAppPurchaseManager : EventDispatcher {
 
 
 	//Events
-	public const string PRODUCT_BOUGHT 		= "product_bought";
-	public const string TRANSACTION_FAILED 	= "transaction_failed";
+	public const string TRANSACTION_COMPLETE 	= "transaction_complete";
 	public const string RESTORE_TRANSACTION_FAILED 	= "restore_transaction_failed";
 	public const string RESTORE_TRANSACTION_COMPLETE 	= "restore_transaction_complete";
 	
@@ -77,8 +77,12 @@ public class IOSInAppPurchaseManager : EventDispatcher {
 	
 	public void loadStore() {
 
+		if(_IsStoreLoaded) {
+			Invoke("FireSuccsesInitEvent", 1f);
+			return;
+		}
 
-		if(_IsWaitingLoadResult || _IsStoreLoaded) {
+		if(_IsWaitingLoadResult) {
 			return;
 		}
 
@@ -97,9 +101,15 @@ public class IOSInAppPurchaseManager : EventDispatcher {
 			
 			ids += _productsIds[i];
 		}
-		
-		IOSNativeMarketBridge.loadStore(ids);
 
+
+		#if !UNITY_EDITOR
+		IOSNativeMarketBridge.loadStore(ids);
+		#else
+		if(IOSNativeSettings.Instance.SendFakeEventsInEditor) {
+			Invoke("FireSuccsesInitEvent", 1f);
+		}
+		#endif
 		
 	}
 
@@ -122,6 +132,10 @@ public class IOSInAppPurchaseManager : EventDispatcher {
 
 		IOSNativeMarketBridge.buyProduct(productId);
 
+		#else
+		if(IOSNativeSettings.Instance.SendFakeEventsInEditor) {
+			FireProductBoughtEvent(productId, "", false);
+		}
 		#endif
 	}
 	
@@ -152,7 +166,16 @@ public class IOSInAppPurchaseManager : EventDispatcher {
 			return;
 		}
 
+		#if !UNITY_EDITOR
 		IOSNativeMarketBridge.restorePurchases();
+		#else
+		if(IOSNativeSettings.Instance.SendFakeEventsInEditor) {
+			foreach(string productId in _productsIds) {
+				FireProductBoughtEvent(productId, "", true);
+			}
+			FireRestoreCompleteEvent();
+		}
+		#endif
 	}
 
 	public void verifyLastPurchase(string url) {
@@ -236,7 +259,7 @@ public class IOSInAppPurchaseManager : EventDispatcher {
 
 	}
 	
-	public void onStoreDataReceived(string data) {
+	private void onStoreDataReceived(string data) {
 		if(data.Equals(string.Empty)) {
 			Debug.Log("InAppPurchaseManager, no products avaiable: " + _products.Count.ToString());
 			ISN_Result res = new ISN_Result(true);
@@ -262,28 +285,35 @@ public class IOSInAppPurchaseManager : EventDispatcher {
 		}
 		
 		Debug.Log("InAppPurchaseManager, tottal products loaded: " + _products.Count.ToString());
-		_IsStoreLoaded = true;
-		_IsWaitingLoadResult = false;
-		ISN_Result r = new ISN_Result(true);
-		dispatch (STORE_KIT_INITIALIZED);
-		OnStoreKitInitComplete(r);
+		FireSuccsesInitEvent();
 	}
 	
-	public void onProductBought(string array) {
+	private void onProductBought(string array) {
 
 		string[] data;
 		data = array.Split("|" [0]);
-		IOSStoreKitResponse response = new IOSStoreKitResponse ();
-		response.productIdentifier = data [0];
-		response.receipt = data [1];
 
-		lastPurchasedProdcut = response.productIdentifier;
-		dispatch(PRODUCT_BOUGHT, response);
-		OnTransactionComplete (response);
+		bool IsRestored = false;
+		if(data [1].Equals("0")) {
+			IsRestored = true;
+		}
+
+		FireProductBoughtEvent(data [0], data [2], IsRestored);
+
 
 	}
+
+	private void onProductStateDeferred(string productIdentifier) {
+		IOSStoreKitResponse response = new IOSStoreKitResponse ();
+		response.productIdentifier = productIdentifier;
+		response.state = InAppPurchaseState.Deferred;
+		
+		dispatch(TRANSACTION_COMPLETE, response);
+		OnTransactionComplete (response);
+	}
+
 	
-	public void onTransactionFailed(string array) {
+	private void onTransactionFailed(string array) {
 
 		string[] data;
 		data = array.Split("|" [0]);
@@ -292,7 +322,7 @@ public class IOSInAppPurchaseManager : EventDispatcher {
 	}
 	
 	
-	public void onVerificationResult(string array) {
+	private void onVerificationResult(string array) {
 
 		string[] data;
 		data = array.Split("|" [0]);
@@ -314,8 +344,7 @@ public class IOSInAppPurchaseManager : EventDispatcher {
 	}
 
 	public void onRestoreTransactionComplete(string array) {
-		dispatch(RESTORE_TRANSACTION_COMPLETE);
-		OnRestoreComplete (new ISN_Result (true));
+		FireRestoreCompleteEvent();
 	}
 
 
@@ -345,13 +374,44 @@ public class IOSInAppPurchaseManager : EventDispatcher {
 	//  PRIVATE METHODS
 	//--------------------------------------
 
+	private void FireSuccsesInitEvent() {
+		_IsStoreLoaded = true;
+		_IsWaitingLoadResult = false;
+		ISN_Result r = new ISN_Result(true);
+		dispatch (STORE_KIT_INITIALIZED);
+		OnStoreKitInitComplete(r);
+	}
+
+
+	private void FireRestoreCompleteEvent() {
+		dispatch(RESTORE_TRANSACTION_COMPLETE);
+		OnRestoreComplete (new ISN_Result (true));
+	}
+
+	private void FireProductBoughtEvent(string productIdentifier, string receipt, bool IsRestored) {
+		IOSStoreKitResponse response = new IOSStoreKitResponse ();
+		response.productIdentifier = productIdentifier;
+		response.receipt = receipt;
+		if(IsRestored) {
+			response.state = InAppPurchaseState.Restored;
+		} else {
+			response.state = InAppPurchaseState.Purchased;
+		}
+		
+		lastPurchasedProdcut = response.productIdentifier;
+		dispatch(TRANSACTION_COMPLETE, response);
+		OnTransactionComplete (response);
+	}
+
+
 	private void SendTransactionFailEvent(string productIdentifier, string error) {
 		IOSStoreKitResponse response = new IOSStoreKitResponse ();
 		response.productIdentifier = productIdentifier;
 		response.error =  error;
+		response.state = InAppPurchaseState.Failed;
 		
 		
-		dispatch(TRANSACTION_FAILED, response);
+		dispatch(TRANSACTION_COMPLETE, response);
 		OnTransactionComplete (response);
 	}
 	

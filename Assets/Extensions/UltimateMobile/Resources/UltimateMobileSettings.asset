@@ -16,10 +16,15 @@ MonoBehaviour:
   IsInAppSettingsOpen: 0
   IsInAppSettingsPlatfromsOpen: 1
   IsInAppSettingsProductsOpen: 1
-  IsCameraAndGallerySettingsOpen: 1
+  IsCameraAndGallerySettingsOpen: 0
+  IsCameraAndGalleryAndroidSettingsOpen: 0
+  IsCameraAndGalleryIOSSettingsOpen: 0
+  IsLPSettingsOpen: 0
+  IsLP_Android_SettingsOpen: 0
+  IsLP_IOS_SettingsOpen: 0
   Leaderboards:
   - id: 1.4lb
-    IsOpen: 0
+    IsOpen: 1
     IOSId: lb3
     AndroidId: CgkInZaV_KAKEAIQAA
   Achievements:
@@ -52,8 +57,8 @@ MonoBehaviour:
   AdIOSSettings: 0
   AdAndroidSettings: 0
   AdWp8Settings: 0
-  IsGameServiceOpen: 0
-  IsLeaderBoardsOpen: 0
-  IsAchievmentsOpen: 0
+  IsGameServiceOpen: 1
+  IsLeaderBoardsOpen: 1
+  IsAchievmentsOpen: 1
   IsMoreActionsOpen: 1
   InAppProducts: []

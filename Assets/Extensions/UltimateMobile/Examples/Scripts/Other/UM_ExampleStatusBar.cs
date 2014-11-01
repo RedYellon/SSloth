@@ -17,6 +17,8 @@ public class UM_ExampleStatusBar : SA_Singleton<UM_ExampleStatusBar> {
 		style.alignment = TextAnchor.MiddleRight;
 		style.normal.textColor = Color.white;
 
+		DontDestroyOnLoad(gameObject);
+
 	}
 
 	void OnGUI() {

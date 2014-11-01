@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnionAssets.FLE;
 using System.Collections;
 
 public class GCFridnsLoadExample : MonoBehaviour {
@@ -19,8 +20,6 @@ public class GCFridnsLoadExample : MonoBehaviour {
 		GameCenterManager.dispatcher.addEventListener (GameCenterManager.GAME_CENTER_PLAYER_AUTHENTICATED, OnAuth);
 
 		
-		GameCenterManager.dispatcher.addEventListener(GameCenterManager.GAME_CENTER_FRIEND_LIST_LOADED, OnFriendListLoaded);
-		
 		//Initializing Game Cneter class. This action will triger authentication flow
 		GameCenterManager.init();
 	}
@@ -33,6 +32,7 @@ public class GCFridnsLoadExample : MonoBehaviour {
 		GUI.Label(new Rect(10, 20, 400, 40), "Friend List Load Example", headerStyle);
 		
 		if(GUI.Button(new Rect(300, 10, 150, 50), "Load Friends")) {
+			GameCenterManager.OnFriendsListLoaded += OnFriendsListLoaded;
 			GameCenterManager.RetrieveFriends();
 		}
 
@@ -85,9 +85,6 @@ public class GCFridnsLoadExample : MonoBehaviour {
 
 	}
 
-	private void OnFriendListLoaded() {
-		renderFriendsList = true;
-	}
 	
 	private void OnAuth(CEvent e) {
 
@@ -102,4 +99,11 @@ public class GCFridnsLoadExample : MonoBehaviour {
 
 	}
 
+	private void OnFriendsListLoaded (ISN_Result result) {
+		GameCenterManager.OnFriendsListLoaded -= OnFriendsListLoaded;
+		if(result.IsSucceeded) {
+			renderFriendsList = true;
+		}
+				
+	}
 }

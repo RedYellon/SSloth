@@ -23,14 +23,20 @@ public class IOSNotificationController : ISN_Singleton<IOSNotificationController
 
 	private static IOSNotificationController _instance;
 
+	private static int _AllowedNotificationsType = -1;
+
+
 
 	//Events
 	public const string DEVICE_TOKEN_RECEIVED = "device_token_received";
 	public const string REMOTE_NOTIFICATION_RECEIVED = "remote_notification_received";
+	public const string NOTIFICATION_SCHEDULE_RESULT = "notification_schedule_result";
 
 	//Actions
 	public Action<IOSNotificationDeviceToken> OnDeviceTokenReceived = delegate {};
+	public Action<ISN_Result>  OnNotificationScheduleResult = delegate {};
 	#if (UNITY_IPHONE && !UNITY_EDITOR && PUSH_ENABLED) || SA_DEBUG_MODE
+	[NonSerialized]
 	public Action<RemoteNotification> OnRemoteNotificationReceived = delegate {};
 	#endif
 
@@ -47,6 +53,10 @@ public class IOSNotificationController : ISN_Singleton<IOSNotificationController
 	
 	[DllImport ("__Internal")]
 	private static extern void _ISN_CancelNotifications();
+
+
+	[DllImport ("__Internal")]
+	private static extern void _ISN_RequestNotificationPermitions();
 
 	[DllImport ("__Internal")]
 	private static extern void _ISN_CancelNotificationById(string nId);
@@ -85,7 +95,7 @@ public class IOSNotificationController : ISN_Singleton<IOSNotificationController
 
 
 
-
+	#if UNITY_IPHONE
 	public void RegisterForRemoteNotifications(RemoteNotificationType notificationTypes) {
 		#if (UNITY_IPHONE && !UNITY_EDITOR && PUSH_ENABLED) || SA_DEBUG_MODE
 		
@@ -94,10 +104,18 @@ public class IOSNotificationController : ISN_Singleton<IOSNotificationController
 
 		#endif
 	}
+	#endif
 
 	//--------------------------------------
 	//  PUBLIC METHODS
 	//--------------------------------------
+
+	public void RequestNotificationPermitions() {
+		#if (UNITY_IPHONE && !UNITY_EDITOR) || SA_DEBUG_MODE
+			_ISN_RequestNotificationPermitions ();
+		#endif
+
+	}
 	
 	public void ShowNotificationBanner (string title, string messgae) {
 		#if (UNITY_IPHONE && !UNITY_EDITOR) || SA_DEBUG_MODE
@@ -167,6 +185,12 @@ public class IOSNotificationController : ISN_Singleton<IOSNotificationController
 		}
 		
 	}
+
+	public static int AllowedNotificationsType {
+		get {
+			return _AllowedNotificationsType;
+		}
+	}
 	
 	//--------------------------------------
 	//  EVENTS
@@ -175,6 +199,29 @@ public class IOSNotificationController : ISN_Singleton<IOSNotificationController
 	public void OnDeviceTockeReceivedAction (IOSNotificationDeviceToken token) {
 		dispatch (DEVICE_TOKEN_RECEIVED, token);
 		OnDeviceTokenReceived(token);
+	}
+
+	private void OnNotificationScheduleResultAction (string array) {
+
+		string[] data;
+		data = array.Split("|" [0]);
+
+
+		ISN_Result result = null;
+
+		if(data[0].Equals("0")) {
+			result =  new ISN_Result(false);
+		} else {
+			result =  new ISN_Result(true);
+		}
+
+
+		_AllowedNotificationsType = System.Convert.ToInt32(data[1]);
+
+		OnNotificationScheduleResult(result);
+		dispatch(NOTIFICATION_SCHEDULE_RESULT, result);
+
+	
 	}
 	
 	//--------------------------------------

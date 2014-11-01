@@ -12,7 +12,12 @@ public class UM_NotificationController : SA_Singleton<UM_NotificationController>
 	public const string  PUSH_ID_LOADED = "push_id_loaded";
 
 
-	public void RequestDevicePushNotificationId() {
+	void Awake() {
+		DontDestroyOnLoad(gameObject);
+	}
+
+
+	public void RetriveDevicePushId() {
 		switch(Application.platform) {
 		case RuntimePlatform.Android:
 			GoogleCloudMessageService.instance.addEventListener(GoogleCloudMessageService.CLOUD_MESSAGE_SERVICE_REGISTRATION_FAILED, OnRegFailed);
@@ -21,8 +26,10 @@ public class UM_NotificationController : SA_Singleton<UM_NotificationController>
 
 			break;
 		case RuntimePlatform.IPhonePlayer:
+			#if UNITY_IPHONE
 			IOSNotificationController.instance.RegisterForRemoteNotifications(RemoteNotificationType.Alert | RemoteNotificationType.Badge | RemoteNotificationType.Sound);
 			IOSNotificationController.instance.OnDeviceTokenReceived += IOSPushTockenReceived;
+			#endif
 			break;
 		}
 

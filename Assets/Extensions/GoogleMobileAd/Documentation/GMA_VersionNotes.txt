@@ -1,7 +1,22 @@
+3.7:
+IOS Banner size fixed
+Post Process script improved
+Test Device Editor Menu Added
+Addiont Mutliple Test device on IOS Fixed
+
+
 3.6:
 Fixes For IOS8
 Google Ad SDK updated
+3.8:
+Refactor:
+Flash Like event system now use own namespace: UnionAssets.FLE
 
+Updates:
+As sdk updated to 6.12.0
+
+Read more about update:
+http://goo.gl/nEjz7b
 
 3.5:
 

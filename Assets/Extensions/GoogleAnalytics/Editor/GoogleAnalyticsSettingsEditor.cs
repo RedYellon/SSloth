@@ -8,12 +8,6 @@ using System.Reflection;
 [CustomEditor(typeof(GoogleAnalyticsSettings))]
 public class GoogleAnalyticsSettingsEditor : Editor {
 
-	private bool showAdditionalParams = false;
-	private bool showAdvancedParams = false;
-
-	private bool showAccounts = true;
-	private bool showPlatfroms = false;
-	private bool showTestingMode = false;
 
 
 	GUIContent acountNameLabel = new GUIContent("Account Name [?]:", "Name of Google Analytics Account");
@@ -111,8 +105,8 @@ public class GoogleAnalyticsSettingsEditor : Editor {
 		}
 
 
-		showAccounts = EditorGUILayout.Foldout(showAccounts, "Google Analytics Account");
-		if(showAccounts) {
+		GoogleAnalyticsSettings.Instance.showAccounts = EditorGUILayout.Foldout(GoogleAnalyticsSettings.Instance.showAccounts, "Google Analytics Account");
+		if(GoogleAnalyticsSettings.Instance.showAccounts) {
 
 
 			foreach(GAProfile profile in GoogleAnalyticsSettings.Instance.accounts) {
@@ -137,18 +131,46 @@ public class GoogleAnalyticsSettingsEditor : Editor {
 					EditorGUILayout.EndHorizontal();
 
 
+
 					EditorGUILayout.BeginHorizontal();
-					
 					EditorGUILayout.Space();
+
+					if(GUILayout.Button("Set For All Platfroms",  GUILayout.Width(150))) {
+						int options = EditorUtility.DisplayDialogComplex(
+							"Setting Account",
+							"Setting " + profile.Name + " for all platfroms",
+							"Set As Testing",
+							"Cancel",
+							"Set As Production"
+							);
+						
+						switch(options) {
+						case 0:
+
+							foreach(RuntimePlatform platfrom in (RuntimePlatform[]) System.Enum.GetValues(typeof(RuntimePlatform)) ) {
+								GoogleAnalyticsSettings.Instance.SetProfileIndexForPlatfrom(platfrom, GoogleAnalyticsSettings.Instance.GetProfileIndex(profile), true);
+							}
+
+							break;
+						case 2:
+							foreach(RuntimePlatform platfrom in (RuntimePlatform[]) System.Enum.GetValues(typeof(RuntimePlatform)) ) {
+								GoogleAnalyticsSettings.Instance.SetProfileIndexForPlatfrom(platfrom, GoogleAnalyticsSettings.Instance.GetProfileIndex(profile), false);
+							}
+							break;
+
+
+						}
+
+						DirtyEditor();
+					}
+
+
 					if(GUILayout.Button("Remove",  GUILayout.Width(80))) {
 						GoogleAnalyticsSettings.Instance.RemoveProfile(profile);
 						return;
 					}
-
-					
 					EditorGUILayout.EndHorizontal();
 					EditorGUILayout.Space();
-
 					
 				}
 
@@ -169,8 +191,8 @@ public class GoogleAnalyticsSettingsEditor : Editor {
 
 		}
 		
-		showPlatfroms = EditorGUILayout.Foldout(showPlatfroms, "Platfroms Settings");
-		if(showPlatfroms) {
+		GoogleAnalyticsSettings.Instance.showPlatfroms = EditorGUILayout.Foldout(GoogleAnalyticsSettings.Instance.showPlatfroms, "Platfroms Settings");
+		if(GoogleAnalyticsSettings.Instance.showPlatfroms) {
 
 			if (settings.accounts.Count == 0) {
 				EditorGUILayout.HelpBox("Setup at least one Google Analytics Profile", MessageType.Error);
@@ -236,8 +258,8 @@ public class GoogleAnalyticsSettingsEditor : Editor {
 		}
 
 
-		showTestingMode = EditorGUILayout.Foldout(showTestingMode, "Testing Mode");
-		if(showTestingMode) {
+		GoogleAnalyticsSettings.Instance.showTestingMode = EditorGUILayout.Foldout(GoogleAnalyticsSettings.Instance.showTestingMode, "Testing Mode");
+		if(GoogleAnalyticsSettings.Instance.showTestingMode) {
 			if (settings.accounts.Count == 0) {
 				EditorGUILayout.HelpBox("Setup at least one Google Analytics Profile", MessageType.Error);
 			} else {
@@ -292,8 +314,8 @@ public class GoogleAnalyticsSettingsEditor : Editor {
 
 	private void AdvancedTracking() {
 		EditorGUILayout.HelpBox("(Optional) Edit the advanced tracking parameters", MessageType.None);
-		showAdvancedParams = EditorGUILayout.Foldout(showAdvancedParams, "Advanced Tracking Parameters");
-		if(showAdvancedParams) {
+		GoogleAnalyticsSettings.Instance.showAdvancedParams = EditorGUILayout.Foldout(GoogleAnalyticsSettings.Instance.showAdvancedParams, "Advanced Tracking Parameters");
+		if(GoogleAnalyticsSettings.Instance.showAdvancedParams) {
 			settings.UseHTTPS = EditorGUILayout.Toggle(UseHttpsLabel, settings.UseHTTPS);
 			settings.StringEscaping = EditorGUILayout.Toggle(StringEscape, settings.StringEscaping);
 			settings.EditorAnalytics = EditorGUILayout.Toggle(EditorAnalytics, settings.EditorAnalytics);
@@ -303,8 +325,8 @@ public class GoogleAnalyticsSettingsEditor : Editor {
 
 	private void AutoTracking() {
 		EditorGUILayout.HelpBox("(Optional) Edit the automatic tracking parameters", MessageType.None);
-		showAdditionalParams = EditorGUILayout.Foldout(showAdditionalParams, "Automatic Tracking Parameters");
-		if (showAdditionalParams) {
+		GoogleAnalyticsSettings.Instance.showAdditionalParams = EditorGUILayout.Foldout(GoogleAnalyticsSettings.Instance.showAdditionalParams, "Automatic Tracking Parameters");
+		if (GoogleAnalyticsSettings.Instance.showAdditionalParams) {
 
 
 			settings.AutoExceptionTracking = EditorGUILayout.Toggle(exTrackingLabel, settings.AutoExceptionTracking);

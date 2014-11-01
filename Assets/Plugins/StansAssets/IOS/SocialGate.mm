@@ -24,7 +24,7 @@ static SocialGate *_sharedInstance;
 }
 
 -(void) mediaShare:(NSString *)text  media:(NSString *)media {
-    NSLog(@"mediaShare");
+    NSLog(@"ISN: mediaShare");
     UIActivityViewController *controller;
                                             
                                             
@@ -32,25 +32,49 @@ static SocialGate *_sharedInstance;
         NSData *imageData = [[NSData alloc] initWithBase64Encoding:media];
         UIImage *image = [[UIImage alloc] initWithData:imageData];
         
+        //[UIPopoverPresentationController alloc] ini
+        
+         NSLog(@"ISN: image added");
         if(text.length != 0) {
+              NSLog(@"ISN: text added");
             controller = [[UIActivityViewController alloc] initWithActivityItems:@[text, image] applicationActivities:nil];
         } else {
+             NSLog(@"ISN: no text");
             controller = [[UIActivityViewController alloc] initWithActivityItems:@[image] applicationActivities:nil];
         }
         
     } else {
+        NSLog(@"ISN: no media");
         controller = [[UIActivityViewController alloc] initWithActivityItems:@[text] applicationActivities:nil];
     }
     
     
+    
+   
+    
+    
+    
+   
+    
+   
+    
     UIViewController *vc =  UnityGetGLViewController();
+    
+    
+    NSArray *vComp = [[UIDevice currentDevice].systemVersion componentsSeparatedByString:@"."];
+    if ([[vComp objectAtIndex:0] intValue] >= 8) {
+          NSLog(@"ISN: IOS8 detected");
+        UIPopoverPresentationController *presentationController = [controller popoverPresentationController];
+        presentationController.sourceView = vc.view;
+    }
+    
     [vc presentViewController:controller animated:YES completion:nil];
     
 }
 
 
 -(void) twitterPostWithMedia:(NSString *)status media:(NSString *)media {
-    NSLog(@"twitterPostWithMedia");
+    NSLog(@"ISN: twitterPostWithMedia");
     
     NSData *imageData = [[NSData alloc] initWithBase64Encoding:media];
     UIImage *image = [[UIImage alloc] initWithData:imageData];
@@ -78,12 +102,12 @@ static SocialGate *_sharedInstance;
                 }
                 
                 
-                NSLog(@"Tweet message was cancelled");
+                NSLog(@"ISN: Tweet message was cancelled");
                 UnitySendMessage("IOSSocialManager", "OnTwitterPostFailed", [ISNDataConvertor NSStringToChar:@""]);
                 break;
                 //  This means the user hit 'Send'
             case SLComposeViewControllerResultDone:
-                NSLog(@"Done pressed successfully");
+                NSLog(@"ISN: Done pressed successfully");
                 
                 vComp = [[UIDevice currentDevice].systemVersion componentsSeparatedByString:@"."];
                 if ([[vComp objectAtIndex:0] intValue] < 7) {
@@ -102,7 +126,7 @@ static SocialGate *_sharedInstance;
 
 
 - (void) twitterPost:(NSString *)status {
-    NSLog(@"twitterPost");
+    NSLog(@"ISN: twitterPost");
     
    
     SLComposeViewController *twSheet = [SLComposeViewController  composeViewControllerForServiceType:SLServiceTypeTwitter];
@@ -125,7 +149,7 @@ static SocialGate *_sharedInstance;
                     [twSheet dismissViewControllerAnimated:YES completion:nil];
                 }
                 
-                NSLog(@"Tweet message was cancelled");
+                NSLog(@"ISN: Tweet message was cancelled");
                 UnitySendMessage("IOSSocialManager", "OnTwitterPostFailed", [ISNDataConvertor NSStringToChar:@""]);
                 break;
                 //  This means the user hit 'Send'
@@ -137,7 +161,7 @@ static SocialGate *_sharedInstance;
                     [twSheet dismissViewControllerAnimated:YES completion:nil];
                 }
                 
-                NSLog(@"Done pressed successfully");
+                NSLog(@"ISN: Done pressed successfully");
                 UnitySendMessage("IOSSocialManager", "OnTwitterPostSuccess", [ISNDataConvertor NSStringToChar:@""]);
                 break;
         }
@@ -147,13 +171,13 @@ static SocialGate *_sharedInstance;
 
 - (void) fbPost:(NSString *)status {
     
-    NSLog(@"fbPost");
+    NSLog(@"ISN: fbPost");
     
     SLComposeViewController *fbSheet = [SLComposeViewController  composeViewControllerForServiceType:SLServiceTypeFacebook];
     
     
     if(fbSheet == NULL) {
-        NSLog(@"SLServiceTypeFacebook not avaliable ");
+        NSLog(@"ISN: SLServiceTypeFacebook not avaliable ");
         UnitySendMessage("IOSSocialManager", "OnFacebookPostFailed", [ISNDataConvertor NSStringToChar:@""]);
         return;
     }
@@ -164,7 +188,7 @@ static SocialGate *_sharedInstance;
     
     [vc presentViewController:fbSheet animated:YES completion:nil];
     
-    NSLog(@"SLServiceTypeFacebook showed ");
+    NSLog(@"ISN: SLServiceTypeFacebook showed ");
 
     
     fbSheet.completionHandler = ^(SLComposeViewControllerResult result) {
@@ -180,7 +204,7 @@ static SocialGate *_sharedInstance;
                     [fbSheet dismissViewControllerAnimated:YES completion:nil];
                 }
                 
-                NSLog(@"Facebook message was cancelled");
+                NSLog(@"ISN: Facebook message was cancelled");
                 UnitySendMessage("IOSSocialManager", "OnFacebookPostFailed", [ISNDataConvertor NSStringToChar:@""]);
                 break;
                 //  This means the user hit 'Send'
@@ -191,7 +215,7 @@ static SocialGate *_sharedInstance;
                     [fbSheet dismissViewControllerAnimated:YES completion:nil];
                 }
                 
-                NSLog(@"Facebook pressed successfully");
+                NSLog(@"ISN: Facebook pressed successfully");
                 UnitySendMessage("IOSSocialManager", "OnFacebookPostSuccess", [ISNDataConvertor NSStringToChar:@""]);
                 break;
         }
@@ -222,7 +246,7 @@ static SocialGate *_sharedInstance;
 
 -(void) fbPostWithMedia:(NSString *)status media:(NSString *)media {
     
-    NSLog(@"fbPostWithMedia");
+    NSLog(@"ISN: fbPostWithMedia");
     
     NSData *imageData = [[NSData alloc] initWithBase64Encoding:media];
     UIImage *image = [[UIImage alloc] initWithData:imageData];
@@ -230,7 +254,7 @@ static SocialGate *_sharedInstance;
     
     SLComposeViewController *fbSheet = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeFacebook];
     if(fbSheet == NULL) {
-        NSLog(@"SLServiceTypeFacebook not avaliable ");
+        NSLog(@"ISN: SLServiceTypeFacebook not avaliable ");
         UnitySendMessage("IOSSocialManager", "OnFacebookPostFailed", [ISNDataConvertor NSStringToChar:@""]);
         return;
     }
@@ -255,7 +279,7 @@ static SocialGate *_sharedInstance;
                 }
                 
                 
-                NSLog(@"Tweet message was cancelled");
+                NSLog(@"ISN: Tweet message was cancelled");
                 UnitySendMessage("IOSSocialManager", "OnFacebookPostFailed", [ISNDataConvertor NSStringToChar:@""]);
                 break;
                 //  This means the user hit 'Send'
@@ -267,7 +291,7 @@ static SocialGate *_sharedInstance;
                 }
                 
                 
-                NSLog(@"Done pressed successfully");
+                NSLog(@"ISN: Done pressed successfully");
                 UnitySendMessage("IOSSocialManager", "OnFacebookPostSuccess", [ISNDataConvertor NSStringToChar:@""]);
                 break;
         }
@@ -278,7 +302,7 @@ static SocialGate *_sharedInstance;
 
 - (void) sendEmail:(NSString *)subject body:(NSString *)body recipients: (NSString*) recipients media:(NSString *)media {
     
-    NSLog(@"sendEmail");
+    NSLog(@"ISN: sendEmail");
 
    
     //Create a string with HTML formatting for the email body
@@ -332,19 +356,19 @@ static SocialGate *_sharedInstance;
     {
         case MFMailComposeResultCancelled:
             UnitySendMessage("IOSSocialManager", "OnMailFailed", [ISNDataConvertor NSStringToChar:@""]);
-            NSLog(@"Mail cancelled");
+            NSLog(@"ISN: Mail cancelled");
             break;
         case MFMailComposeResultSaved:
              UnitySendMessage("IOSSocialManager", "OnMailFailed", [ISNDataConvertor NSStringToChar:@""]);
-            NSLog(@"Mail saved");
+            NSLog(@"ISN: Mail saved");
             break;
         case MFMailComposeResultSent:
             UnitySendMessage("IOSSocialManager", "OnMailSuccess", [ISNDataConvertor NSStringToChar:@""]);
-            NSLog(@"Mail sent");
+            NSLog(@"ISN: Mail sent");
             break;
         case MFMailComposeResultFailed:
             UnitySendMessage("IOSSocialManager", "OnMailFailed", [ISNDataConvertor NSStringToChar:@""]);
-            NSLog(@"Mail sent failure: %@", [error localizedDescription]);
+            NSLog(@"ISN: Mail sent failure: %@", [error localizedDescription]);
             break;
         default:
             UnitySendMessage("IOSSocialManager", "OnMailFailed", [ISNDataConvertor NSStringToChar:@""]);

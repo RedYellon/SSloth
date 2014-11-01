@@ -9,7 +9,7 @@ using UnityEditor;
 
 public class SocialPlatfromSettings : ScriptableObject {
 
-	public const string VERSION_NUMBER = "3.6";
+	public const string VERSION_NUMBER = "3.8";
 
 	public bool showPermitions = true;
 	public bool ShowActions = true;

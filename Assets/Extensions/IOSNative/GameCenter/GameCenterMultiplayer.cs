@@ -9,6 +9,8 @@
 
 
 using UnityEngine;
+using System;
+using UnionAssets.FLE;
 using System.Collections;
 using System.Collections.Generic;
 #if (UNITY_IPHONE && !UNITY_EDITOR) || SA_DEBUG_MODE
@@ -19,12 +21,14 @@ public class GameCenterMultiplayer : EventDispatcher {
 
 	public const string PLAYER_CONNECTED = "player_connected";
 	public const string PLAYER_DISCONNECTED = "player_disconnected";
-
-
 	public const string MATCH_STARTED = "match_started";
-
-
 	public const string DATA_RECEIVED = "data_received";
+
+	public static Action<string> OnPlayerConnected = delegate {};
+	public static Action<string> OnPlayerDisconnected = delegate {};
+	public static Action<GameCenterMatchData> OnMatchStarted = delegate {};
+	public static Action<GameCenterDataPackage> OnDataReceived = delegate {};
+
 	
 	#if (UNITY_IPHONE && !UNITY_EDITOR) || SA_DEBUG_MODE
 	[DllImport ("__Internal")]
@@ -81,9 +85,10 @@ public class GameCenterMultiplayer : EventDispatcher {
 		#endif
 	}
 
-	public void SendDataToAll(byte[] buffer, int sendType) {
-		#if (UNITY_IPHONE && !UNITY_EDITOR) || SA_DEBUG_MODE
+	public void SendDataToAll(byte[] buffer,  GameCenterDataSendType dataType) {
 
+		#if (UNITY_IPHONE && !UNITY_EDITOR) || SA_DEBUG_MODE
+			int sendType = (int) dataType;
 			string b = "";
 			int len = buffer.Length;
 			for(int i = 0; i < len; i++) {
@@ -98,8 +103,9 @@ public class GameCenterMultiplayer : EventDispatcher {
 		#endif
 	}
 
-	public void sendDataToPlayers(byte[] buffer, int sendType, params object[] players) {
+	public void sendDataToPlayers(byte[] buffer, GameCenterDataSendType dataType, params object[] players) {
 		#if (UNITY_IPHONE && !UNITY_EDITOR) || SA_DEBUG_MODE
+			int sendType = (int) dataType;
 			string ids = "";
 			int len = players.Length;
 			for(int i = 0; i < len; i++) {
@@ -165,10 +171,12 @@ public class GameCenterMultiplayer : EventDispatcher {
 
 
 	private void OnGameCenterPlayerConnected(string playerID) {
+		OnPlayerConnected(playerID);
 		dispatch (PLAYER_CONNECTED, playerID);
 	}
 
 	private void OnGameCenterPlayerDisconnected(string playerID) {
+		OnPlayerDisconnected(playerID);
 		dispatch (PLAYER_DISCONNECTED, playerID);
 	}
 
@@ -187,6 +195,7 @@ public class GameCenterMultiplayer : EventDispatcher {
 
 		_match = new GameCenterMatchData (ids);
 
+		OnMatchStarted(_match);
 		dispatch (MATCH_STARTED, _match);
 	}
 
@@ -196,6 +205,7 @@ public class GameCenterMultiplayer : EventDispatcher {
 
 		GameCenterDataPackage package = new GameCenterDataPackage (data[0], data [1]);
 
+		OnDataReceived(package);
 		dispatch (DATA_RECEIVED, package);
 	}
 

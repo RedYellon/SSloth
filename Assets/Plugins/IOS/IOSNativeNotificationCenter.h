@@ -18,5 +18,6 @@
 - (void) showNotificationBanner: (NSString*) title message: (NSString*) message ;
 - (void) cancelNotifications;
 - (void) applicationIconBadgeNumber: (int)badges;
+- (void) RegisterForNotifications;
 
 @end

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnionAssets.FLE;
 using System.Collections;
 using System.Collections.Generic;
 using System;
@@ -6,11 +7,18 @@ using System;
 public class WP8InAppPurchasesManager : EventDispatcherBase {
 	
 	private static WP8InAppPurchasesManager _instance = null;
+
+	private bool _IsInitialized = false;
 	
 	private List<WP8ProductTemplate> _products =  new List<WP8ProductTemplate>();
 		
 	public const string  INITIALIZED = "PRODUCTS_DETAILS_LOADED";
 	public const string  PRODUCT_PURCHASE_FINISHED = "PRODUCT_PURCHASE_FINISHED";
+
+
+	public Action<WP8_InAppsInitResult> OnInitComplete   = delegate {};
+	public Action<WP8PurchseResponce> OnPurchaseFinished = delegate {};
+
 
 	public static WP8InAppPurchasesManager instance {
 		get {
@@ -40,6 +48,12 @@ public class WP8InAppPurchasesManager : EventDispatcherBase {
 		}
 	}
 
+	public bool IsInitialized {
+		get {
+			return _IsInitialized;
+		}
+	}
+
 	public WP8ProductTemplate GetProductById(string id) {
 		foreach(WP8ProductTemplate p in _products) {
 			if(p.ProductId.Equals(id)) {
@@ -52,9 +66,13 @@ public class WP8InAppPurchasesManager : EventDispatcherBase {
 		
 	private void ProductsDetailsDelegate(string data) {
 				
+		WP8_InAppsInitResult result;
+
 		if(data.Equals(string.Empty)) {
 			Debug.Log("InAppPurchaseManager, you have no avaiable products");
-			dispatch(INITIALIZED, _products);
+			result = new WP8_InAppsInitResult();
+			dispatch(INITIALIZED, result);
+			OnInitComplete(result);
 			return;
 		}
 		
@@ -74,7 +92,12 @@ public class WP8InAppPurchasesManager : EventDispatcherBase {
 			_products.Add(tpl);
 			
 		}
-		dispatch(INITIALIZED, _products);
+
+		_IsInitialized = true;
+		result = new WP8_InAppsInitResult();
+
+		dispatch(INITIALIZED, result);
+		OnInitComplete(result);
 	}
 	
 	private void ProductPurchseDelegate(string data) {
@@ -96,6 +119,8 @@ public class WP8InAppPurchasesManager : EventDispatcherBase {
 		
 		WP8PurchseResponce recponce =  new WP8PurchseResponce(code, info_str);
 		recponce.productId = productID;
+
+		OnPurchaseFinished(recponce);
 		dispatch(PRODUCT_PURCHASE_FINISHED, recponce);
 	}
 }

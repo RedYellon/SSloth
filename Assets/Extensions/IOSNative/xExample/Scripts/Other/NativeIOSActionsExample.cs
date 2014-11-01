@@ -8,11 +8,9 @@ public class NativeIOSActionsExample : BaseIOSFeaturePreview {
 
 
 	void Awake() {
-		IOSSharedApplication.instance.addEventListener(IOSSharedApplication.URL_SCHEME_EXISTS, UrlExcists);
-		IOSSharedApplication.instance.addEventListener(IOSSharedApplication.URL_SCHEME_NOT_FOUND, UrlNotFound);
 
 
-	
+		IOSSharedApplication.OnUrCheckResultAction += OnUrCheckResultAction;
 	}
 
 
@@ -109,22 +107,16 @@ public class NativeIOSActionsExample : BaseIOSFeaturePreview {
 
 	}
 
-	private void UrlExcists(CEvent e) {
-		string url = e.data as string;
-		IOSMessage.Create("Url Exists", "The " + url + " is registred" );
-	}
-
-
-	private void UrlNotFound(CEvent e) {
-		string url = e.data as string;
-		IOSMessage.Create("Url Exists", "The " + url + " wasn't registred" );
-	}
-
 
 	
 
 	private void OnImage (IOSImagePickResult result) {
 		if(result.IsSucceeded) {
+
+			//destroying old texture
+			Destroy(darawTexgture);
+
+			//applaying new texture
 			darawTexgture = result.image;
 			IOSMessage.Create("Success", "Image Successfully Loaded, Image size: " + result.image.width + "x" + result.image.height);
 		} else {
@@ -140,6 +132,15 @@ public class NativeIOSActionsExample : BaseIOSFeaturePreview {
 			IOSMessage.Create("Success", "Image Successfully saved to Camera Roll");
 		} else {
 			IOSMessage.Create("Success", "Image Save Failed");
+		}
+	}
+
+	private void OnUrCheckResultAction (ISN_CheckUrlResult result) {
+
+		if(result.IsSucceeded) {
+			IOSMessage.Create("Url Exists", "The " + result.url + " is registred" );
+		} else {
+			IOSMessage.Create("Url Exists", "The " + result.url + " wasn't registred");
 		}
 	}
 }

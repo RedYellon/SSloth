@@ -25,7 +25,7 @@ public class AnalyticsUseExample : MonoBehaviour {
 
 
 	void Start() {
-		//Tracking firest screen
+		//Tracking first screen
 		AndroidGoogleAnalytics.instance.SendView("Home Screen");
 
 		//Send event example + 1 more implementation

@@ -9,10 +9,16 @@
 
 
 using UnityEngine;
+using System;
+using UnionAssets.FLE;
 using System.Collections;
 using System.Collections.Generic;
 
 public class WP8Dialog : WP8PopupBase {
+
+
+	public Action<WP8DialogResult> OnComplete = delegate {};
+
 
 	//--------------------------------------
 	// INITIALIZE
@@ -49,11 +55,13 @@ public class WP8Dialog : WP8PopupBase {
 	
 	
 	public void OnOkDel() {
+		OnComplete(WP8DialogResult.YES);
 		dispatch(BaseEvent.COMPLETE, WP8DialogResult.YES);
 		Destroy(gameObject);
 	}
 	
 	public void OnCancelDel() {
+		OnComplete(WP8DialogResult.NO);
 		dispatch(BaseEvent.COMPLETE, WP8DialogResult.NO);
 		Destroy(gameObject);
 	}

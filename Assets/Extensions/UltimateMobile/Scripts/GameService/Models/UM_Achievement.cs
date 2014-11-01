@@ -9,7 +9,7 @@ public class UM_Achievement  {
 
 
 	public bool IsIncremental;
-	public string IOSId;
-	public string AndroidId;
+	public string IOSId = string.Empty;
+	public string AndroidId = string.Empty;
 	
 }

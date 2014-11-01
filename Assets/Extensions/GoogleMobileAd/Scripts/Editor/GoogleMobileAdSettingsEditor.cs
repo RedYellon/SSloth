@@ -19,18 +19,19 @@ public class GoogleMobileAdSettingsEditor : Editor {
 	GUIContent WP8_UnitAdId  	 = new GUIContent("Banners Ad Unit Id [?]:",  "WP8 Banners Ad Unit Id ");
 	GUIContent WP8_InterstAdId   = new GUIContent("Interstitials Ad Unit Id [?]:", "WP8 Interstitials Ad Unit Id");
 
-
-
 	
 	GUIContent SdkVersion   = new GUIContent("Plugin Version [?]", "This is Plugin version.  If you have problems or compliments please include this so we know exactly what version to look out for.");
 	GUIContent SupportEmail = new GUIContent("Support [?]", "If you have any technical quastion, feel free to drop an e-mail");
 
+	GUIContent deviceNameLabel = new GUIContent("Device Name [?]:", "Name of your device. Just for you");
+	GUIContent deviceIdLabel = new GUIContent("Device ID [?]:", "ID of your device. You can get ot from console log");
+
 
 	private GoogleMobileAdSettings settings;
 
-	private bool IsIOSSettinsOpened = true;
-	private bool IsAndroidSettinsOpened = true;
-	private bool IsWP8SettinsOpened = true;
+
+
+
 
 
 
@@ -38,6 +39,30 @@ public class GoogleMobileAdSettingsEditor : Editor {
 
 
 	public override void OnInspectorGUI() {
+
+
+		#if UNITY_WEBPLAYER
+		EditorGUILayout.HelpBox("Editing Google Mobile Ad Settings not avaliable with web player platfrom. Please swith to any other platfrom under Build Seting menu", MessageType.Warning);
+		EditorGUILayout.BeginHorizontal();
+		EditorGUILayout.Space();
+
+		if(GUILayout.Button("Switch To WP8",  GUILayout.Width(120))) {
+			EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTarget.WP8Player);
+		}
+
+		if(GUILayout.Button("Switch To Android",  GUILayout.Width(120))) {
+			EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTarget.Android);
+		}
+
+		if(GUILayout.Button("Switch To IOS",  GUILayout.Width(120))) {
+			EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTarget.iPhone);
+		}
+		EditorGUILayout.EndHorizontal();
+		
+		return;
+		
+		#endif
+
 		settings = target as GoogleMobileAdSettings;
 
 		GUI.changed = false;
@@ -47,6 +72,8 @@ public class GoogleMobileAdSettingsEditor : Editor {
 		GeneralOptions();
 		EditorGUILayout.Space();
 		MainSettings();
+		EditorGUILayout.Space();
+		TestDevices();
 		EditorGUILayout.Space();
 		AboutGUI();
 	
@@ -147,57 +174,138 @@ public class GoogleMobileAdSettingsEditor : Editor {
 		
 	}
 
+	public void TestDevices() {
+		settings.IsTestSettinsOpened = EditorGUILayout.Foldout(settings.IsTestSettinsOpened, "Test Devices");
+		if(settings.IsTestSettinsOpened) {
+
+			if(GoogleMobileAdSettings.Instance.testDevices.Count == 0) {
+				EditorGUILayout.HelpBox("No Test Devices Registred so far", MessageType.Info);
+			}
+			foreach(GADTestDevice device in GoogleMobileAdSettings.Instance.testDevices) {
+				
+				EditorGUI.indentLevel = 1;
+				EditorGUILayout.BeginVertical (GUI.skin.box);
+				device.IsOpen = EditorGUILayout.Foldout(device.IsOpen, device.Name);
+				if(device.IsOpen) {
+					EditorGUI.indentLevel = 2;
+					
+					
+					EditorGUILayout.BeginHorizontal();
+					EditorGUILayout.LabelField(deviceNameLabel);
+					device.Name	 	= EditorGUILayout.TextField(device.Name);
+					EditorGUILayout.EndHorizontal();
+					
+					
+					
+					EditorGUILayout.BeginHorizontal();
+					EditorGUILayout.LabelField(deviceIdLabel);
+					device.ID	 	= EditorGUILayout.TextField(device.ID);
+					if(device.ID.Length > 0) {
+						device.ID = device.ID.Trim();
+					}
+					EditorGUILayout.EndHorizontal();
+					
+					
+					
+					EditorGUILayout.BeginHorizontal();
+					EditorGUILayout.Space();
+					
+
+					
+					if(GUILayout.Button("Remove",  GUILayout.Width(80))) {
+						GoogleMobileAdSettings.Instance.RemoveDevice(device);
+						return;
+					}
+					EditorGUILayout.EndHorizontal();
+					EditorGUILayout.Space();
+					
+				}
+				
+				EditorGUILayout.EndVertical ();
+				
+			}
+
+			EditorGUI.indentLevel = 0;
+			EditorGUILayout.BeginHorizontal();
+			
+			EditorGUILayout.Space();
+			if(GUILayout.Button("Register New Device",  GUILayout.Width(135))) {
+				GoogleMobileAdSettings.Instance.AddDevice(new GADTestDevice());
+			}
+			
+			EditorGUILayout.EndHorizontal();
+		}
+	}
 
 	public void MainSettings() {
 
 		EditorGUILayout.HelpBox("Google Mobile Ad Plugin", MessageType.None);
 		EditorGUILayout.Space();
 
-		IsIOSSettinsOpened = EditorGUILayout.Foldout(IsIOSSettinsOpened, "IOS");
-		if(IsIOSSettinsOpened) {
+		settings.IsIOSSettinsOpened = EditorGUILayout.Foldout(settings.IsIOSSettinsOpened, "IOS");
+		if(settings.IsIOSSettinsOpened) {
 			EditorGUILayout.BeginHorizontal();
 			EditorGUILayout.LabelField(IOS_UnitAdId);
 			settings.IOS_BannersUnitId	 	= EditorGUILayout.TextField(settings.IOS_BannersUnitId);
-			settings.IOS_BannersUnitId		= settings.IOS_BannersUnitId.Trim();
+			if(settings.IOS_BannersUnitId.Length > 0) {
+				settings.IOS_BannersUnitId		= settings.IOS_BannersUnitId.Trim();
+			}
+
 			EditorGUILayout.EndHorizontal();
 			
 			EditorGUILayout.BeginHorizontal();
 			EditorGUILayout.LabelField(IOS_InterstAdId);
 			settings.IOS_InterstisialsUnitId	 	= EditorGUILayout.TextField(settings.IOS_InterstisialsUnitId);
-			settings.IOS_InterstisialsUnitId		= settings.IOS_InterstisialsUnitId.Trim();
+			if(settings.IOS_InterstisialsUnitId.Length > 0) {
+				settings.IOS_InterstisialsUnitId		= settings.IOS_InterstisialsUnitId.Trim();
+			}
+
 			EditorGUILayout.EndHorizontal();
 		}
 
 
-		IsAndroidSettinsOpened = EditorGUILayout.Foldout(IsAndroidSettinsOpened, "Android");
-		if(IsAndroidSettinsOpened) {
+		settings.IsAndroidSettinsOpened = EditorGUILayout.Foldout(settings.IsAndroidSettinsOpened, "Android");
+		if(settings.IsAndroidSettinsOpened) {
 			EditorGUILayout.BeginHorizontal();
 			EditorGUILayout.LabelField(Android_UnitAdId);
 			settings.Android_BannersUnitId	 	= EditorGUILayout.TextField(settings.Android_BannersUnitId);
-			settings.Android_BannersUnitId		= settings.Android_BannersUnitId.Trim();
+			if(settings.Android_BannersUnitId.Length > 0) {
+				settings.Android_BannersUnitId		= settings.Android_BannersUnitId.Trim();
+			}
+
+
 			EditorGUILayout.EndHorizontal();
 			
 			EditorGUILayout.BeginHorizontal();
 			EditorGUILayout.LabelField(Android_InterstAdId);
 			settings.Android_InterstisialsUnitId	 	= EditorGUILayout.TextField(settings.Android_InterstisialsUnitId);
-			settings.Android_InterstisialsUnitId		= settings.Android_InterstisialsUnitId.Trim();
+			if(settings.Android_InterstisialsUnitId.Length > 0) {
+				settings.Android_InterstisialsUnitId		= settings.Android_InterstisialsUnitId.Trim();
+			}
+
 			EditorGUILayout.EndHorizontal();
 		}
 
 
 
-		IsWP8SettinsOpened = EditorGUILayout.Foldout(IsWP8SettinsOpened, "WP8");
-		if(IsWP8SettinsOpened) {
+		settings.IsWP8SettinsOpened = EditorGUILayout.Foldout(settings.IsWP8SettinsOpened, "WP8");
+		if(settings.IsWP8SettinsOpened) {
 			EditorGUILayout.BeginHorizontal();
 			EditorGUILayout.LabelField(WP8_UnitAdId);
 			settings.WP8_BannersUnitId	 	= EditorGUILayout.TextField(settings.WP8_BannersUnitId);
-			settings.WP8_BannersUnitId		= settings.WP8_BannersUnitId.Trim();
+			if(settings.WP8_BannersUnitId.Length > 0) {
+				settings.WP8_BannersUnitId		= settings.WP8_BannersUnitId.Trim();
+			}
+
 			EditorGUILayout.EndHorizontal();
 			
 			EditorGUILayout.BeginHorizontal();
 			EditorGUILayout.LabelField(WP8_InterstAdId);
 			settings.WP8_InterstisialsUnitId	 	= EditorGUILayout.TextField(settings.WP8_InterstisialsUnitId);
-			settings.WP8_InterstisialsUnitId		= settings.WP8_InterstisialsUnitId.Trim();
+			if(settings.WP8_InterstisialsUnitId.Length > 0) {
+				settings.WP8_InterstisialsUnitId		= settings.WP8_InterstisialsUnitId.Trim();
+			}
+
 			EditorGUILayout.EndHorizontal();
 		}
 	}

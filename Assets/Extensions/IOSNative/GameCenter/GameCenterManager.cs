@@ -11,6 +11,7 @@
 
 using UnityEngine;
 using System;
+using UnionAssets.FLE;
 using System.Collections;
 using System.Collections.Generic;
 #if (UNITY_IPHONE && !UNITY_EDITOR) || SA_DEBUG_MODE
@@ -45,6 +46,7 @@ public class GameCenterManager : MonoBehaviour {
 
 	//Actions
 	public static Action<ISN_Result> OnAuthFinished  = delegate{};
+
 	public static Action<ISN_Result> OnScoreSubmited = delegate{};
 	public static Action<ISN_PlayerScoreLoadedResult> OnPlayerScoreLoaded = delegate{};
 	public static Action<ISN_Result> OnScoresListLoaded = delegate{};
@@ -120,6 +122,7 @@ public class GameCenterManager : MonoBehaviour {
 	private  static bool _IsAchievmentInfoLoaded = false;
 
 
+
 	private static List<AchievementTemplate> _achievements = new List<AchievementTemplate> ();
 	private static EventDispatcherBase _dispatcher  = new EventDispatcherBase ();
 
@@ -129,6 +132,9 @@ public class GameCenterManager : MonoBehaviour {
 
 
 	private static GameCenterPlayerTemplate _player = null;
+
+
+	private const string ISN_GC_PP_KEY = "ISN_GameCenterManager";
 
 	//--------------------------------------
 	// INITIALIZE
@@ -238,8 +244,7 @@ public class GameCenterManager : MonoBehaviour {
 		_getLeadrBoardScore(leaderBoradrId, (int) timeSpan, (int) collection);
 		#endif
 	}
-
-
+	
 
 	private IEnumerator loadCurrentPlayerScoreLocal(string leaderBoradrId, GCBoardTimeSpan timeSpan = GCBoardTimeSpan.ALL_TIME, GCCollectionType collection = GCCollectionType.GLOBAL ) {
 		yield return new WaitForSeconds(2f);
@@ -247,8 +252,8 @@ public class GameCenterManager : MonoBehaviour {
 	}
 
 
+	[System.Obsolete("getScore is deprecated, use loadCurrentPlayerScore instead")]
 	public static void getScore(string leaderBoradrId, GCBoardTimeSpan timeSpan = GCBoardTimeSpan.ALL_TIME, GCCollectionType collection = GCCollectionType.GLOBAL) {
-		Debug.LogWarning("getScore is deprecated, use loadCurrentPlayerScore instead");
 		loadCurrentPlayerScore(leaderBoradrId, timeSpan, collection);
 	}
 
@@ -339,6 +344,10 @@ public class GameCenterManager : MonoBehaviour {
 				tpl.progress = 0f;
 			}
 		#endif
+
+		if(IOSNativeSettings.Instance.UsePPForAchievements) {
+			ResetStoredProgress();
+		}
 	}
 
 
@@ -358,6 +367,12 @@ public class GameCenterManager : MonoBehaviour {
 			ISN_CacheManager.SaveAchievmentRequest(achievementId, percent);
 		}
 
+
+		if(IOSNativeSettings.Instance.UsePPForAchievements) {
+			SaveAchievementProgress(achievementId, percent);
+		}
+
+
 		#if (UNITY_IPHONE && !UNITY_EDITOR) || SA_DEBUG_MODE
 			_submitAchievement(percent, achievementId, isCompleteNotification);
 		#endif
@@ -372,9 +387,14 @@ public class GameCenterManager : MonoBehaviour {
 
 	public static float getAchievementProgress(string id) {
 		float progress = 0f;
-		foreach(AchievementTemplate tpl in _achievements) {
-			if(tpl.id == id) {
-				return tpl.progress;
+
+		if(IOSNativeSettings.Instance.UsePPForAchievements) {
+			progress = GetStoredAchievementProgress(id);
+		} else {
+			foreach(AchievementTemplate tpl in _achievements) {
+				if(tpl.id == id) {
+					return tpl.progress;
+				}
 			}
 		}
 
@@ -765,9 +785,37 @@ public class GameCenterManager : MonoBehaviour {
 			}
 		}
 
+		if(IOSNativeSettings.Instance.UsePPForAchievements) {
+			SaveAchievementProgress(tpl.id, tpl.progress);
+		}
+
 		if(!isContains) {
 			_achievements.Add (tpl);
 		}
+	}
+
+
+	private static void ResetStoredProgress() {
+		foreach(AchievementTemplate t in _achievements) {
+			PlayerPrefs.DeleteKey(ISN_GC_PP_KEY + t.id);
+		}
+	}
+
+	private static void SaveAchievementProgress(string achievementId, float progress) {
+
+		float currentProgress =  GetStoredAchievementProgress(achievementId);
+		if(progress > currentProgress) {
+			PlayerPrefs.SetFloat(ISN_GC_PP_KEY + achievementId, progress);
+		}
+	}
+
+	private static float GetStoredAchievementProgress(string achievementId) {
+		float v = 0f;
+		if(PlayerPrefs.HasKey(ISN_GC_PP_KEY + achievementId)) {
+			v = PlayerPrefs.GetFloat(ISN_GC_PP_KEY + achievementId);
+		} 
+
+		return v;
 	}
 	
 	//--------------------------------------

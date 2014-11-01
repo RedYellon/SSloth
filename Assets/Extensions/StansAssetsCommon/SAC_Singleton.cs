@@ -10,6 +10,7 @@
  
 
 using UnityEngine;
+using UnionAssets.FLE;
 using System.Collections;
 
 public abstract class SAC_Singleton<T> : EventDispatcher where T : MonoBehaviour {

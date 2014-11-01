@@ -11,6 +11,8 @@
 
 
 using UnityEngine;
+using System;
+using UnionAssets.FLE;
 using System.Collections;
 
 #if (UNITY_IPHONE && !UNITY_EDITOR && !CODE_DISABLED) || SA_DEBUG_MODE
@@ -61,7 +63,13 @@ public class IOSADBanner :  EventDispatcherBase, GoogleMobileAdBanner  {
 
 	private int _width 	= 0;
 	private int _height = 0;
-	
+
+
+	private Action<GoogleMobileAdBanner> _OnLoadedAction 				= delegate {};
+	private Action<GoogleMobileAdBanner> _OnFailedLoadingAction 		= delegate {};
+	private Action<GoogleMobileAdBanner> _OnOpenedAction 				= delegate {};
+	private Action<GoogleMobileAdBanner> _OnClosedAction 				= delegate {};
+	private Action<GoogleMobileAdBanner> _OnLeftApplicationAction 	= delegate {};
 	
 	
 	//--------------------------------------
@@ -185,8 +193,8 @@ public class IOSADBanner :  EventDispatcherBase, GoogleMobileAdBanner  {
 
 
 	public void SetDimentions(int w, int h) {
-		_width = w;
-		_height = h;
+		_width = Mathf.FloorToInt(w * (Screen.dpi / 160f));
+		_height =Mathf.FloorToInt(h * (Screen.dpi / 160f)); 
 	}
 	
 	
@@ -279,7 +287,55 @@ public class IOSADBanner :  EventDispatcherBase, GoogleMobileAdBanner  {
 		}
 	}
 	
+	//--------------------------------------
+	//  Actions
+	//--------------------------------------
 	
+	
+	public Action<GoogleMobileAdBanner> OnLoadedAction {
+		get {
+			return _OnLoadedAction;
+		}
+		set {
+			_OnLoadedAction = value;
+		}
+	}
+	
+	public Action<GoogleMobileAdBanner> OnFailedLoadingAction {
+		get {
+			return _OnFailedLoadingAction;
+		}
+		set {
+			_OnFailedLoadingAction = value;
+		}
+	}
+	
+	public Action<GoogleMobileAdBanner> OnOpenedAction {
+		get {
+			return _OnOpenedAction;
+		}
+		set {
+			_OnOpenedAction = value;
+		}
+	}
+	
+	public Action<GoogleMobileAdBanner> OnClosedAction {
+		get {
+			return _OnClosedAction;
+		}
+		set {
+			_OnClosedAction = value;
+		}
+	}
+	
+	public Action<GoogleMobileAdBanner> OnLeftApplicationAction {
+		get {
+			return _OnLeftApplicationAction;
+		}
+		set {
+			_OnLeftApplicationAction = value;
+		}
+	}
 	
 	
 	//--------------------------------------
@@ -299,23 +355,28 @@ public class IOSADBanner :  EventDispatcherBase, GoogleMobileAdBanner  {
 			Show();
 			firstLoad = false;
 		}
-		
+
+		_OnLoadedAction(this);
 		dispatch(GoogleMobileAdEvents.ON_BANNER_AD_LOADED);
 	}
 	
 	public void OnBannerAdFailedToLoad() {
+		_OnFailedLoadingAction(this);
 		dispatch(GoogleMobileAdEvents.ON_BANNER_AD_FAILED_LOADING);
 	}
 	
 	public void OnBannerAdOpened() {
+		_OnOpenedAction(this);
 		dispatch(GoogleMobileAdEvents.ON_BANNER_AD_OPENED);
 	}
 	
 	public void OnBannerAdClosed() {
+		_OnClosedAction(this);
 		dispatch(GoogleMobileAdEvents.ON_BANNER_AD_CLOSED);
 	}
 	
 	public void OnBannerAdLeftApplication() {
+		_OnLeftApplicationAction(this);
 		dispatch(GoogleMobileAdEvents.ON_BANNER_AD_LEFT_APPLICATION);
 	}
 }
