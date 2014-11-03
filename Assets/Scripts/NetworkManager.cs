@@ -11,9 +11,12 @@ public class NetworkManager : MonoBehaviour
 
 	private const string typeName = "UniqueGameName";
 	private const string gameName = "RoomName";
+	private HostData [] hostList;
 
 	#endregion
 
+
+	#region Networking
 
 	//
 	//
@@ -30,6 +33,41 @@ public class NetworkManager : MonoBehaviour
 	{
 		Debug.Log ("Server Initializied");
 	}
+
+
+	//
+	//
+	private void RefreshHostList ()
+	{
+		MasterServer.RequestHostList (typeName);
+	}
+
+
+	//
+	//
+	void OnMasterServerEvent (MasterServerEvent msEvent)
+	{
+		if (msEvent == MasterServerEvent.HostListReceived)
+			hostList = MasterServer.PollHostList ();
+	}
+
+
+	//
+	//
+	private void JoinServer (HostData hostData)
+	{
+		Network.Connect (hostData);
+	}
+
+
+	//
+	//
+	void OnConnectedToServer ()
+	{
+		Debug.Log ("Server Joined");
+	}
+
+	#endregion
 
 
 	#region Button Response
