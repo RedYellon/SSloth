@@ -23,6 +23,8 @@ public class SceneController : MonoBehaviour
 		
 		// The scene we start at
 		public int startScene = 1;
+		// The high score scene
+		public GameObject highScoreParent;
 		
 		#endregion
 		
@@ -77,14 +79,17 @@ public class SceneController : MonoBehaviour
 		{
 			// If we are changing to the main menu scene
 			case 1:
+				highScoreParent.SetActive (false);
 				mainMenuCont.Setup ();
 			break;
 			// If we are changing to the game scene
 			case 2:
+				highScoreParent.SetActive (false);
 				//gameCont.Setup ();
 			break;
 			// If we are changing to the high score scene
 			case 3:
+				highScoreParent.SetActive (true);
 				highScoreCont.Setup ();
 				cloudBounce.StopBounce ();
 			break;

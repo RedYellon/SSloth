@@ -23,7 +23,7 @@ MonoBehaviour:
   DefaultStoreProductsView: []
   checkInternetBeforeLoadRequestl: 0
   ShowStoreKitParams: 0
-  ShowGCParams: 1
+  ShowGCParams: 0
   ShowAchivmentsParamsParams: 0
   ShowOtherParams: 0
   ShowCameraAndGallryParams: 0

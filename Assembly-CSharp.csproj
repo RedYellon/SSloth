@@ -5,7 +5,7 @@
 	<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
 	<ProductVersion>10.0.20506</ProductVersion>
 	<SchemaVersion>2.0</SchemaVersion>
-	<ProjectGuid>{E3D7AD9B-2036-0CDE-D714-8A908DEB2FD7}</ProjectGuid>
+	<ProjectGuid>{6254ABEA-D8B6-E0BD-DEBA-5F4F3B525A85}</ProjectGuid>
 	<OutputType>Library</OutputType>
 	<AppDesignerFolder>Properties</AppDesignerFolder>
 	<RootNamespace></RootNamespace>
@@ -19,7 +19,7 @@
 	<DebugType>full</DebugType>
 	<Optimize>false</Optimize>
 	<OutputPath>Temp\bin\Debug\</OutputPath>
-	<DefineConstants>DEBUG;TRACE;UNITY_4_6_0;UNITY_4_6;UNITY_ANDROID;ENABLE_MICROPHONE;ENABLE_TEXTUREID_MAP;ENABLE_UNITYEVENTS;ENABLE_NEW_HIERARCHY ;ENABLE_AUDIO_FMOD;ENABLE_MONO;ENABLE_TERRAIN;ENABLE_SUBSTANCE;ENABLE_GENERICS;INCLUDE_WP8SUPPORT;ENABLE_WWW;ENABLE_IMAGEEFFECTS;ENABLE_4_6_FEATURES;INCLUDE_WP_BLUE_SUPPORT;ENABLE_WEBCAM;INCLUDE_METROSUPPORT;RENDER_SOFTWARE_CURSOR;ENABLE_NETWORK;ENABLE_PHYSICS;ENABLE_CACHING;ENABLE_CLOTH;UNITY_ANDROID_API;ENABLE_2D_PHYSICS;ENABLE_SHADOWS;ENABLE_AUDIO;ENABLE_NAVMESH_CARVING;ENABLE_SINGLE_INSTANCE_BUILD_SETTING;ENABLE_PROFILER;UNITY_EDITOR;UNITY_EDITOR_OSX;UNITY_PRO_LICENSE</DefineConstants>
+	<DefineConstants>DEBUG;TRACE;UNITY_4_6_0;UNITY_4_6;UNITY_IPHONE;ENABLE_MICROPHONE;ENABLE_TEXTUREID_MAP;ENABLE_UNITYEVENTS;ENABLE_NEW_HIERARCHY ;ENABLE_AUDIO_FMOD;ENABLE_MONO;ENABLE_TERRAIN;ENABLE_SUBSTANCE;ENABLE_GENERICS;INCLUDE_WP8SUPPORT;ENABLE_WWW;ENABLE_IMAGEEFFECTS;UNITY_IPHONE_API;ENABLE_4_6_FEATURES;INCLUDE_WP_BLUE_SUPPORT;ENABLE_WEBCAM;INCLUDE_METROSUPPORT;ENABLE_NETWORK;ENABLE_PHYSICS;ENABLE_CACHING;ENABLE_CLOTH;ENABLE_2D_PHYSICS;ENABLE_GAMECENTER;UNITY_IOS;ENABLE_SHADOWS;ENABLE_AUDIO;ENABLE_NAVMESH_CARVING;ENABLE_SINGLE_INSTANCE_BUILD_SETTING;ENABLE_PROFILER;UNITY_EDITOR;UNITY_EDITOR_OSX;UNITY_PRO_LICENSE</DefineConstants>
 	<ErrorReport>prompt</ErrorReport>
 	<WarningLevel>4</WarningLevel>
 	<NoWarn>0169</NoWarn>
@@ -119,8 +119,6 @@
      <Compile Include="Assets\Extensions\FlashLikeEvents\Events\Data\BaseEvent.cs" />
      <Compile Include="Assets\Extensions\FlashLikeEvents\Events\Templates\CEvent.cs" />
      <Compile Include="Assets\Extensions\FlashLikeEvents\Events\interfaces\IDispatcher.cs" />
-     <Compile Include="Assets\Extensions\FlashLikeEvents\Example\Scripts\ExampleListner.cs" />
-     <Compile Include="Assets\Extensions\FlashLikeEvents\Example\Scripts\FLButtonExample.cs" />
      <Compile Include="Assets\Extensions\GoogleAnalytics\Core\GoogleAnalytics.cs" />
      <Compile Include="Assets\Extensions\GoogleAnalytics\Core\GoogleAnalyticsClient.cs" />
      <Compile Include="Assets\Extensions\GoogleAnalytics\Core\GoogleAnalyticsRequestCache.cs" />
@@ -370,6 +368,8 @@
      <Compile Include="Assets\Extensions\WP8Native\PopUps\WP8Message.cs" />
      <Compile Include="Assets\Extensions\WP8Native\PopUps\WP8RateUsPopUp.cs" />
      <Compile Include="Assets\Extensions\WP8Native\PopUps\base\WP8PopupBase.cs" />
+     <Compile Include="Assets\Extensions\WP8Native\Templates\Results\WP8_InAppsInitResult.cs" />
+     <Compile Include="Assets\Extensions\WP8Native\Templates\Results\WP8_Result.cs" />
      <Compile Include="Assets\Extensions\WP8Native\Utils\WP8NativeUtils.cs" />
      <Compile Include="Assets\Extensions\WP8Native\WPUtils\WPN_TextureLoader.cs" />
      <Compile Include="Assets\Extensions\WP8Native\xExamples\Scripts\Base\WP8FeaturesExample.cs" />
@@ -413,6 +413,7 @@
      <Compile Include="Assets\Scripts\MainMenuController.cs" />
      <Compile Include="Assets\Scripts\MenuBackgroundTransitionController.cs" />
      <Compile Include="Assets\Scripts\MovingPropsController.cs" />
+     <Compile Include="Assets\Scripts\NetworkManager.cs" />
      <Compile Include="Assets\Scripts\NewHighScoreLabel.cs" />
      <Compile Include="Assets\Scripts\NewLabelPulse.cs" />
      <Compile Include="Assets\Scripts\ParallaxScrollController.cs" />
@@ -563,18 +564,18 @@
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/GUISystem/4.6.0/UnityEngine.UI.dll</HintPath>
  </Reference>
  <Reference Include="GoogleAdsWP8">
- <HintPath>/Users/Mike/Development/Projects/Super Sloth/SuperSloth_Unity/Assets/Plugins/GoogleAdsWP8.dll</HintPath>
+ <HintPath>/Users/michaelstephens/Desktop/Projects/Super Sloth/Assets/Plugins/GoogleAdsWP8.dll</HintPath>
  </Reference>
  <Reference Include="WP8Native">
- <HintPath>/Users/Mike/Development/Projects/Super Sloth/SuperSloth_Unity/Assets/Plugins/WP8Native.dll</HintPath>
+ <HintPath>/Users/michaelstephens/Desktop/Projects/Super Sloth/Assets/Plugins/WP8Native.dll</HintPath>
  </Reference>
  <Reference Include="WP8PopUps">
- <HintPath>/Users/Mike/Development/Projects/Super Sloth/SuperSloth_Unity/Assets/Plugins/WP8PopUps.dll</HintPath>
+ <HintPath>/Users/michaelstephens/Desktop/Projects/Super Sloth/Assets/Plugins/WP8PopUps.dll</HintPath>
  </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
-      <Project>{38299ADA-E15E-8777-034F-F1FE03D36F07}</Project>      <Name>Assembly-CSharp-firstpass</Name>    </ProjectReference>
+      <Project>{F9C14F1E-2368-B039-9DBB-F04A95981D1E}</Project>      <Name>Assembly-CSharp-firstpass</Name>    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

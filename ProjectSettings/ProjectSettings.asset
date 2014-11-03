@@ -56,6 +56,7 @@ PlayerSettings:
   visibleInBackground: 0
   macFullscreenMode: 2
   d3d9FullscreenMode: 1
+  d3d11ForceExclusiveMode: 0
   xboxSpeechDB: 0
   xboxEnableHeadOrientation: 0
   xboxEnableGuest: 0
@@ -71,7 +72,7 @@ PlayerSettings:
   metroEnableLowLatencyPresentationAPI: 0
   productGUID: 049640af112f14be1b08916381c0df8f
   iPhoneBundleVersion: 1.4
-  AndroidBundleVersionCode: 12
+  AndroidBundleVersionCode: 13
   AndroidMinSdkVersion: 14
   AndroidPreferredInstallLocation: 1
   aotOptions: 
@@ -84,15 +85,23 @@ PlayerSettings:
   APKExpansionFiles: 0
   StripUnusedMeshComponents: 0
   iPhoneSdkVersion: 988
-  iPhoneTargetOSVersion: 24
+  iPhoneTargetOSVersion: 26
   uIPrerenderedIcon: 0
   uIRequiresPersistentWiFi: 0
   uIStatusBarHidden: 1
   uIExitOnSuspend: 0
   uIStatusBarStyle: 0
-  iPhoneSplashScreen: {fileID: 0}
-  iPhoneHighResSplashScreen: {fileID: 0}
-  iPhoneTallHighResSplashScreen: {fileID: 0}
+  iPhoneSplashScreen: {fileID: 2800000, guid: 799e451ca20cc419d9e4888d1412780e, type: 3}
+  iPhoneHighResSplashScreen: {fileID: 2800000, guid: 799e451ca20cc419d9e4888d1412780e,
+    type: 3}
+  iPhoneTallHighResSplashScreen: {fileID: 2800000, guid: 799e451ca20cc419d9e4888d1412780e,
+    type: 3}
+  iPhone47inSplashScreen: {fileID: 2800000, guid: 799e451ca20cc419d9e4888d1412780e,
+    type: 3}
+  iPhone55inPortraitSplashScreen: {fileID: 2800000, guid: 799e451ca20cc419d9e4888d1412780e,
+    type: 3}
+  iPhone55inLandscapeSplashScreen: {fileID: 2800000, guid: 799e451ca20cc419d9e4888d1412780e,
+    type: 3}
   iPadPortraitSplashScreen: {fileID: 0}
   iPadHighResPortraitSplashScreen: {fileID: 0}
   iPadLandscapeSplashScreen: {fileID: 0}

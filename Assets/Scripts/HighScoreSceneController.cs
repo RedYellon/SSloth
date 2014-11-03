@@ -42,6 +42,8 @@ public class HighScoreSceneController : MonoBehaviour
 		public GameObject [] leaderboardsObjects;
 		//
 		public ParticleSystem dustHitParticles;
+		//
+		public GameObject sceneObj;
 	
 	
 			#region Stats
@@ -533,6 +535,9 @@ public class HighScoreSceneController : MonoBehaviour
 		_noEraseDataButton = GameObject.Find ("EraseDataNoButt");
 		_yesEraseDataButton.SetActive (false);
 		_noEraseDataButton.SetActive (false);
+
+		//
+		sceneObj.SetActive (false);
 	}
 	
 	#endregion

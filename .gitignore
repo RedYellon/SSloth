@@ -20,9 +20,12 @@
 
 # All platforms
 Library
+Libraries
 Temp
+Builds
 *.csproj
 *.pidb
 *.unityproj
 *.sln
 *.userprefs
+Builds/1.4_nov1_7/Unity-iPhone.xcodeproj/project.xcworkspace/xcuserdata/michaelstephens.xcuserdatad/UserInterfaceState.xcuserstate
