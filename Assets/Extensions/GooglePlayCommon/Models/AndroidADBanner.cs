@@ -50,7 +50,7 @@ public class AndroidADBanner : EventDispatcherBase, GoogleMobileAdBanner {
 		_anchor = anchor;
 	
 
-		AndroidNative.CreateBannerAd (gravity, (int) _size, _id);
+		AN_GoogleAdProxy.CreateBannerAd (gravity, (int) _size, _id);
 
 	}
 
@@ -59,7 +59,7 @@ public class AndroidADBanner : EventDispatcherBase, GoogleMobileAdBanner {
 		_size = size;
 		
 		
-		AndroidNative.CreateBannerAdPos (x, y, (int) _size, _id);
+		AN_GoogleAdProxy.CreateBannerAdPos (x, y, (int) _size, _id);
 		
 	}
 
@@ -74,7 +74,7 @@ public class AndroidADBanner : EventDispatcherBase, GoogleMobileAdBanner {
 		}
 
 		_IsOnScreen = false;
-		AndroidNative.HideAd (_id);
+		AN_GoogleAdProxy.HideAd (_id);
 	}
 
 
@@ -85,7 +85,7 @@ public class AndroidADBanner : EventDispatcherBase, GoogleMobileAdBanner {
 		}
 
 		_IsOnScreen = true;
-		AndroidNative.ShowAd (_id);
+		AN_GoogleAdProxy.ShowAd (_id);
 	}
 
 
@@ -95,18 +95,18 @@ public class AndroidADBanner : EventDispatcherBase, GoogleMobileAdBanner {
 			return;
 		}
 
-		AndroidNative.RefreshAd (_id);
+		AN_GoogleAdProxy.RefreshAd (_id);
 	}
 
 
 	public void SetBannerPosition(int x, int y) {
-		AndroidNative.SetBannerPosition(x, y, id);
+		AN_GoogleAdProxy.SetBannerPosition(x, y, id);
 	}
 
 
 	public void SetBannerPosition(TextAnchor anchor) {
 		_anchor = anchor;
-		AndroidNative.SetBannerPosition(gravity, id);
+		AN_GoogleAdProxy.SetBannerPosition(gravity, id);
 	}
 
 
@@ -274,7 +274,7 @@ public class AndroidADBanner : EventDispatcherBase, GoogleMobileAdBanner {
 	public void OnBannerAdLoaded()  {
 
 		if(destroyOnLoad) {
-			AndroidNative.DestroyBanner(id);
+			AN_GoogleAdProxy.DestroyBanner(id);
 			return;
 		}
 		_IsLoaded = true;

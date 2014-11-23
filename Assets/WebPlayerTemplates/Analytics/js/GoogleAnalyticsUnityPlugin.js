@@ -1,7 +1,5 @@
 ﻿function SendGA (host, data) {
-	
 
-	host = "http://posttestserver.com/post.php?dir=GA";
 	var postData =  $.getQueryParameters(data);
 
  	console.log(postData);

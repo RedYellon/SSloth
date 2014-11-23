@@ -80,7 +80,7 @@ Renderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
-  m_SortingLayerID: 0
+  m_SortingLayerID: 3974584279
   m_SortingOrder: 0
 --- !u!23 &2300002
 Renderer:
@@ -100,7 +100,7 @@ Renderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
-  m_SortingLayerID: 0
+  m_SortingLayerID: 3974584279
   m_SortingOrder: 0
 --- !u!33 &3300000
 MeshFilter:

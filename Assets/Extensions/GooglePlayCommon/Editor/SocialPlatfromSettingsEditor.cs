@@ -9,12 +9,13 @@ using System.Reflection;
 public class SocialPlatfromSettingsEditor : Editor {
 
 
-	
+
 
 	static GUIContent TConsumerKey   = new GUIContent("API Key [?]:", "Twitter register app consumer key");
 	static GUIContent TConsumerSecret   = new GUIContent("API Secret [?]:", "Twitter register app consumer secret");
+	static GUIContent FBdkVersion   = new GUIContent("Facebook SDK Version [?]", "Version of Unity Facebook SDK Plugin");
 
-
+	
 	
 	static GUIContent SdkVersion   = new GUIContent("Plugin Version [?]", "This is Plugin version.  If you have problems or compliments please include this so we know exactly what version to look out for.");
 	static GUIContent SupportEmail = new GUIContent("Support [?]", "If you have any technical quastion, feel free to drop an e-mail");
@@ -29,6 +30,13 @@ public class SocialPlatfromSettingsEditor : Editor {
 	private const string version_info_file = "Plugins/StansAssets/Versions/MSP_VersionInfo.txt"; 
 	
 
+
+	void Awake() {
+		if(IsInstalled && IsUpToDate) {
+			UpdateManifest();
+		}
+	}
+
 	public override void OnInspectorGUI() {
 
 
@@ -42,7 +50,13 @@ public class SocialPlatfromSettingsEditor : Editor {
 		}
 
 		if(GUILayout.Button("Switch To IOS",  GUILayout.Width(130))) {
+
+			#if UNITY_3_5 || UNITY_4_0 || UNITY_4_0_1 || UNITY_4_1 || UNITY_4_2 || UNITY_4_3 || UNITY_4_5 || UNITY_4_6
 			EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTarget.iPhone);
+			#else
+			EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTarget.iOS);
+			#endif
+
 		}
 		EditorGUILayout.EndHorizontal();
 		
@@ -55,10 +69,10 @@ public class SocialPlatfromSettingsEditor : Editor {
 		GUI.changed = false;
 
 
-		if(IsFullVersion) {
-			GeneralOptions();
-			EditorGUILayout.Space();
-		}
+
+		GeneralOptions();
+		EditorGUILayout.Space();
+
 
 		FacebookSettings();
 		EditorGUILayout.Space();
@@ -124,11 +138,25 @@ public class SocialPlatfromSettingsEditor : Editor {
 		}
 	}
 
+	public static bool IsFacebookInstalled {
+		get {
+			if(!FileStaticAPI.IsFolderExists("Facebook")) {
+				return false;
+			} else {
+				return true;
+			}
+		}
+	}
+
 
 
 	private void GeneralOptions() {
 		
-
+		if(!IsFullVersion) {
+			EditorGUILayout.HelpBox("Mobile Social Plugin v" + SocialPlatfromSettings.VERSION_NUMBER + " is installed", MessageType.Info);
+			Actions();
+			return;
+		}
 		
 		if(!IsInstalled) {
 			EditorGUILayout.HelpBox("Install Required ", MessageType.Error);
@@ -194,47 +222,227 @@ public class SocialPlatfromSettingsEditor : Editor {
 
 			}
 		}
-		
-		
+
 		EditorGUILayout.Space();
 		
 	}
 
 
+	public static void DrawAPIsList() {
+		EditorGUILayout.BeginHorizontal();
+		GUI.enabled = false;
+		EditorGUILayout.Toggle("Facebook",  IsFacebookInstalled);
+		GUI.enabled = true;
+		SocialPlatfromSettings.Instance.TwitterAPI = EditorGUILayout.Toggle("Twitter",  SocialPlatfromSettings.Instance.TwitterAPI);
+		EditorGUILayout.EndHorizontal();
+		
+		
+		EditorGUILayout.BeginHorizontal();
+		SocialPlatfromSettings.Instance.NativeSharingAPI = EditorGUILayout.Toggle("Native Sharing",  SocialPlatfromSettings.Instance.NativeSharingAPI);
+		SocialPlatfromSettings.Instance.InstagramAPI = EditorGUILayout.Toggle("Instagram",  SocialPlatfromSettings.Instance.InstagramAPI);
+		EditorGUILayout.EndHorizontal();
+	}
+
+	public static void UpdateManifest() {
+		
+		if(!SocialPlatfromSettings.Instance.KeepManifestClean) {
+			return;
+		}
+		
+		AN_ManifestManager.Refresh();
+		
+		AN_ManifestTemplate Manifest =  AN_ManifestManager.GetManifest();
+		AN_ApplicationTemplate application =  Manifest.ApplicationTemplate;
+		AN_ActivityTemplate launcherActivity = application.GetLauncherActivity();
+	
+		
+		////////////////////////
+		//TwitterAPI
+		////////////////////////
+		foreach(KeyValuePair<int, AN_ActivityTemplate> entry in application.Activities) {
+			//TODO get intents array
+			AN_ActivityTemplate act = entry.Value;
+			AN_PropertyTemplate intent = act.GetIntentFilterWithName("android.intent.action.VIEW");
+			if(intent != null) {
+				AN_PropertyTemplate data = intent.GetPropertyWithTag("data");
+				if(data.GetValue("android:scheme") == "oauth") {
+					act.RemoveProperty(intent);
+				}
+			}
+		} 
+
+		if(SocialPlatfromSettings.Instance.TwitterAPI) {
+			if(launcherActivity != null) {
+
+				AN_PropertyTemplate intent_filter = launcherActivity.GetOrCreateIntentFilterWithName("android.intent.action.VIEW");
+				intent_filter.GetOrCreatePropertyWithName("category", "android.intent.category.DEFAULT");
+				intent_filter.GetOrCreatePropertyWithName("category", "android.intent.category.BROWSABLE");
+				AN_PropertyTemplate data = intent_filter.GetOrCreatePropertyWithTag("data");
+				data.SetValue("android:scheme", "oauth");
+				data.SetValue("android:host", PlayerSettings.bundleIdentifier);
+			} 
+		} else {
+			if(launcherActivity != null) {
+				AN_PropertyTemplate intent_filter = launcherActivity.GetOrCreateIntentFilterWithName("android.intent.action.VIEW");
+				launcherActivity.RemoveProperty(intent_filter);
+			}
+		}
+		
+		////////////////////////
+		//FB API
+		////////////////////////
+		AN_PropertyTemplate ApplicationId_meta = application.GetOrCreatePropertyWithName("meta-data", "com.facebook.sdk.ApplicationId");
+		AN_ActivityTemplate LoginActivity = application.GetOrCreateActivityWithName("com.facebook.LoginActivity");
+		AN_ActivityTemplate FBUnityLoginActivity = application.GetOrCreateActivityWithName("com.facebook.unity.FBUnityLoginActivity");
+		AN_ActivityTemplate FBUnityDeepLinkingActivity = application.GetOrCreateActivityWithName("com.facebook.unity.FBUnityDeepLinkingActivity");
+		if(IsFacebookInstalled) {
+			ApplicationId_meta.Value = "fb_app_id";
+			LoginActivity.SetValue("android:label", "@string/app_name");
+			LoginActivity.SetValue("android:theme", "@android:style/Theme.Translucent.NoTitleBar");
+			FBUnityLoginActivity.SetValue("android:theme", "@android:style/Theme.Translucent.NoTitleBar.Fullscreen");
+			FBUnityDeepLinkingActivity.SetValue("android:exported", "true");
+			
+		} else {
+			application.RemoveProperty(ApplicationId_meta);
+			application.RemoveActivity(LoginActivity);
+			application.RemoveActivity(FBUnityLoginActivity);
+			application.RemoveActivity(FBUnityDeepLinkingActivity);
+		}
+		
+		
+		////////////////////////
+		//NativeSharingAPI
+		////////////////////////
+		AN_PropertyTemplate provider = application.GetOrCreatePropertyWithName("provider", "android.support.v4.content.FileProvider");
+		if(SocialPlatfromSettings.Instance.NativeSharingAPI) {
+			provider.SetValue("android:authorities", PlayerSettings.bundleIdentifier + ".fileprovider");
+			provider.SetValue("android:exported", "false");
+			provider.SetValue("android:grantUriPermissions", "true");
+			AN_PropertyTemplate provider_meta = provider.GetOrCreatePropertyWithName("meta-data", "android.support.FILE_PROVIDER_PATHS");
+			provider_meta.SetValue("android:resource", "@xml/file_paths");
+		} else {
+			application.RemoveProperty(provider);
+		}
+		
+
+		
+		List<string> permissions = GetRequiredPermissions();
+		foreach(string p in permissions) {
+			Manifest.AddPermission(p);
+		}
+		
+		AN_ManifestManager.SaveManifest();
+	}
+
+	public static List<string> GetRequiredPermissions() {
+		List<string> permissions =  new List<string>();
+		permissions.Add("android.permission.INTERNET");
+
+		if(SocialPlatfromSettings.Instance.NativeSharingAPI || SocialPlatfromSettings.Instance.InstagramAPI) {
+			permissions.Add("android.permission.WRITE_EXTERNAL_STORAGE");
+		}
+		
+		return permissions;
+	}
+
 	private void Actions() {
 		EditorGUILayout.Space();
+
+
+		EditorGUILayout.BeginHorizontal();
+		EditorGUILayout.LabelField("Keep Android Mnifest Clean");
+		
+		EditorGUI.BeginChangeCheck();
+		SocialPlatfromSettings.Instance.KeepManifestClean = EditorGUILayout.Toggle(SocialPlatfromSettings.Instance.KeepManifestClean);
+		if(EditorGUI.EndChangeCheck()) {
+			UpdateManifest();
+		}
+		
+		if(GUILayout.Button("[?]",  GUILayout.Width(25))) {
+			Application.OpenURL("http://goo.gl/018lnQ");
+		}
+		EditorGUILayout.Space();
+		EditorGUILayout.Space();
+		
+		EditorGUILayout.EndHorizontal();
+
+
+		SocialPlatfromSettings.Instance.ShowAPIS = EditorGUILayout.Foldout(SocialPlatfromSettings.Instance.ShowAPIS, "Mobile Social Plugin APIs");
+		if(SocialPlatfromSettings.Instance.ShowAPIS) {
+			EditorGUI.indentLevel++;
+
+			EditorGUI.BeginChangeCheck();
+			DrawAPIsList();
+			if(EditorGUI.EndChangeCheck()) {
+				UpdateManifest();
+			}
+			
+			
+			EditorGUI.indentLevel--;
+			EditorGUILayout.Space();
+		}
+
 		SocialPlatfromSettings.Instance.ShowActions = EditorGUILayout.Foldout(SocialPlatfromSettings.Instance.ShowActions, "More Actions");
 		if(SocialPlatfromSettings.Instance.ShowActions) {
-			
-			if(!FileStaticAPI.IsFolderExists("Facebook")) {
+				
+			if(!IsFacebookInstalled) {
 				GUI.enabled = false;
 			}	
-			
+				
+			EditorGUILayout.BeginHorizontal();
+			EditorGUILayout.Space();
+				
 			if(GUILayout.Button("Remove Facebook SDK",  GUILayout.Width(160))) {
-				
-				
 				bool result = EditorUtility.DisplayDialog(
 					"Removing Facebook SDK",
 					"Warning action can not be undone without reimporting the plugin",
 					"Remove",
 					"Cansel");
-				
 				if(result) {
 					FileStaticAPI.DeleteFolder(PluginsInstalationUtil.ANDROID_DESTANATION_PATH + "facebook");
 					FileStaticAPI.DeleteFolder("Facebook");
 					FileStaticAPI.DeleteFolder("Extensions/GooglePlayCommon/Social/Facebook");
 					FileStaticAPI.DeleteFile("Extensions/MobileSocialPlugin/Example/Scripts/MSPFacebookUseExample.cs");
 					FileStaticAPI.DeleteFile("Extensions/MobileSocialPlugin/Example/Scripts/MSP_FacebookAnalyticsExample.cs");
-					
 				}
-				
+					
 			}
+				
 			GUI.enabled = true;
-			
+			EditorGUILayout.EndHorizontal();
+			EditorGUILayout.Space();
+				
+				
+			EditorGUILayout.BeginHorizontal();
+			EditorGUILayout.Space();
+			if(GUILayout.Button("Reset Settings",  GUILayout.Width(160))) {
+				ResetSettings();
+			}
+				
+			if(GUILayout.Button("Load Example Settings",  GUILayout.Width(160))) {
+				LoadExampleSettings();
+			}
+				
+				
+			EditorGUILayout.EndHorizontal();
+				
 		}
 	}
 
+	public static void LoadExampleSettings() {
 
+		SocialPlatfromSettings.Instance.TWITTER_CONSUMER_KEY = "wEvDyAUr2QabVAsWPDiGwg";
+		SocialPlatfromSettings.Instance.TWITTER_CONSUMER_SECRET = "igRxZbOrkLQPNLSvibNC3mdNJ5tOlVOPH3HNNKDY0";
+
+	}
+
+	public static void ResetSettings() {
+		FileStaticAPI.DeleteFile("Extensions/GooglePlayCommon/Resources/SocialSettings.asset");
+		SocialPlatfromSettings.Instance.ShowActions = true;
+		Selection.activeObject = SocialPlatfromSettings.Instance;
+	}
+	
+	
 	private static string newPermition = "";
 	public static void FacebookSettings() {
 		EditorGUILayout.HelpBox("Facebook Settings", MessageType.None);
@@ -323,6 +531,9 @@ public class SocialPlatfromSettingsEditor : Editor {
 		EditorGUILayout.Space();
 		
 		SelectableLabelField(SdkVersion, SocialPlatfromSettings.VERSION_NUMBER);
+		if(IsFacebookInstalled) {
+			SelectableLabelField(FBdkVersion, SocialPlatfromSettings.FB_SDK_VERSION_NUMBER);
+		}
 		SelectableLabelField(SupportEmail, "stans.assets@gmail.com");
 
 		

@@ -17,7 +17,7 @@ public class IOSStoreKitResponse  {
 	public InAppPurchaseState state;
 	public string receipt;
 
-	public string error = string.Empty;
+	public IOSStoreKitError error;
 
 
 }

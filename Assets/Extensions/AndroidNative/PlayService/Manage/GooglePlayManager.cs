@@ -34,10 +34,12 @@ public class GooglePlayManager : SA_Singleton<GooglePlayManager> {
 	public const string AVALIABLE_DEVICE_ACCOUNTS_LOADED  = "avaliable_device_accounts_loaded";
 	public const string OAUTH_TOCKEN_LOADED  			 = "oauth_tocken_loaded";
 
+
+	//Actions
 	public static Action<GP_GamesResult> ActionSoreSubmited 							= delegate {};
 	public static Action<GP_GamesResult> ActionSoreUpdatedd								= delegate {};
 	public static Action<GooglePlayResult> ActionLeaderboardsLoeaded 					= delegate {};
-	public static Action<GooglePlayResult> ActionFriendsLoeaded 						= delegate {};
+	public static Action<GooglePlayResult> ActionFriendsListLoaded 						= delegate {};
 	public static Action<GP_GamesResult> ActionAchievementUpdated 						= delegate {};
 	public static Action<GooglePlayResult> ActionAchievementsLoeaded 					= delegate {};
 	public static Action<GooglePlayResult> ActionScoreRequestReceived 					= delegate {};
@@ -68,6 +70,8 @@ public class GooglePlayManager : SA_Singleton<GooglePlayManager> {
 
 	private string _loadedAuthTocken = "";
 	private string _currentAccount = "";
+
+	private static bool _IsLeaderboardsDataLoaded = false;
 	
 
 
@@ -93,21 +97,21 @@ public class GooglePlayManager : SA_Singleton<GooglePlayManager> {
 	//--------------------------------------
 
 	public void RetriveDeviceGoogleAccounts() {
-		AndroidNative.loadGoogleAccountNames();
+		AN_GMSGeneralProxy.loadGoogleAccountNames();
 	}
 
 	public void LoadTocken(string accountName,  string scopes) {
-		AndroidNative.loadToken(accountName, scopes);
+		AN_GMSGeneralProxy.loadToken(accountName, scopes);
 
 	}
 
 	public void LoadTocken() {
-		AndroidNative.loadToken();
+		AN_GMSGeneralProxy.loadToken();
 		
 	}
 
 	public void InvalidateToken(string token) {
-		AndroidNative.invalidateToken(token);
+		AN_GMSGeneralProxy.invalidateToken(token);
 	}
 
 
@@ -115,104 +119,104 @@ public class GooglePlayManager : SA_Singleton<GooglePlayManager> {
  
 	public void showAchievementsUI() {
 		if (!GooglePlayConnection.CheckState ()) { return; }
-		AndroidNative.showAchivmentsUI ();
+		AN_GMSGeneralProxy.showAchivmentsUI ();
 	}
 
 	public void showLeaderBoardsUI() {
 		if (!GooglePlayConnection.CheckState ()) { return; }
-		AndroidNative.showLeaderBoardsUI ();
+		AN_GMSGeneralProxy.showLeaderBoardsUI ();
 	}
 
 	public void showLeaderBoard(string leaderboardName) {
 		if (!GooglePlayConnection.CheckState ()) { return; }
-		AndroidNative.showLeaderBoard (leaderboardName);
+		AN_GMSGeneralProxy.showLeaderBoard (leaderboardName);
 	}
 
 	public void showLeaderBoardById(string leaderboardId) {
 		if (!GooglePlayConnection.CheckState ()) { return; }
-		AndroidNative.showLeaderBoardById (leaderboardId);
+		AN_GMSGeneralProxy.showLeaderBoardById (leaderboardId);
 	}
 	
 	public void submitScore(string leaderboardName, long score) {
 		if (!GooglePlayConnection.CheckState ()) { return; }
-		AndroidNative.submitScore (leaderboardName, score);
+		AN_GMSGeneralProxy.submitScore (leaderboardName, score);
 	}
 
 	public void submitScoreById(string leaderboardId, long score) {
 		if (!GooglePlayConnection.CheckState ()) { return; }
-		AndroidNative.submitScoreById (leaderboardId, score);
+		AN_GMSGeneralProxy.submitScoreById (leaderboardId, score);
 	}
 
 	public void loadLeaderBoards() {
 		if (!GooglePlayConnection.CheckState ()) { return; }
-		AndroidNative.loadLeaderBoards ();
+		AN_GMSGeneralProxy.loadLeaderBoards ();
 	}
 
 
 	public void UpdatePlayerScore(string leaderboardId, GPBoardTimeSpan span, GPCollectionType collection) {
 		if (!GooglePlayConnection.CheckState ()) { return; }
-		AndroidNative.UpdatePlayerScore(leaderboardId, (int) span, (int) collection);
+		AN_GMSGeneralProxy.UpdatePlayerScore(leaderboardId, (int) span, (int) collection);
 	}
 
 
 
 	public void loadPlayerCenteredScores(string leaderboardId, GPBoardTimeSpan span, GPCollectionType collection, int maxResults) {
 		if (!GooglePlayConnection.CheckState ()) { return; }
-		AndroidNative.loadPlayerCenteredScores(leaderboardId, (int) span, (int) collection, maxResults);
+		AN_GMSGeneralProxy.loadPlayerCenteredScores(leaderboardId, (int) span, (int) collection, maxResults);
 	}
 	
 	public void loadTopScores(string leaderboardId, GPBoardTimeSpan span, GPCollectionType collection, int maxResults) {
 		if (!GooglePlayConnection.CheckState ()) { return; }
-		AndroidNative.loadTopScores(leaderboardId, (int) span, (int) collection, maxResults);
+		AN_GMSGeneralProxy.loadTopScores(leaderboardId, (int) span, (int) collection, maxResults);
 	}
 
 
 	public void reportAchievement(string achievementName) {
 		if (!GooglePlayConnection.CheckState ()) { return; }
-		AndroidNative.reportAchievement (achievementName);
+		AN_GMSGeneralProxy.reportAchievement (achievementName);
 	}
 
 	public void reportAchievementById(string achievementId) {
 		if (!GooglePlayConnection.CheckState ()) { return; }
-		AndroidNative.reportAchievementById (achievementId);
+		AN_GMSGeneralProxy.reportAchievementById (achievementId);
 	}
 
 
 	public void revealAchievement(string achievementName) {
 		if (!GooglePlayConnection.CheckState ()) { return; }
-		AndroidNative.revealAchievement (achievementName);
+		AN_GMSGeneralProxy.revealAchievement (achievementName);
 	}
 
 	public void revealAchievementById(string achievementId) {
 		if (!GooglePlayConnection.CheckState ()) { return; }
-		AndroidNative.revealAchievementById (achievementId);
+		AN_GMSGeneralProxy.revealAchievementById (achievementId);
 	}
 
 	public void incrementAchievement(string achievementName, int numsteps) {
 		if (!GooglePlayConnection.CheckState ()) { return; }
-		AndroidNative.incrementAchievement (achievementName, numsteps.ToString());
+		AN_GMSGeneralProxy.incrementAchievement (achievementName, numsteps.ToString());
 	}
 
 	public void incrementAchievementById(string achievementId, int numsteps) {
 		if (!GooglePlayConnection.CheckState ()) { return; }
-		AndroidNative.incrementAchievementById (achievementId, numsteps.ToString());
+		AN_GMSGeneralProxy.incrementAchievementById (achievementId, numsteps.ToString());
 	}
 
 	public void loadAchievements() {
 
 		if (!GooglePlayConnection.CheckState ()) { return; }
-		AndroidNative.loadAchievements ();
+		AN_GMSGeneralProxy.loadAchievements ();
 	}
 
 	public void resetAchievement(string achievementId) {
 		if (!GooglePlayConnection.CheckState ()) { return; }
-		AndroidNative.resetAchievement(achievementId);
+		AN_GMSGeneralProxy.resetAchievement(achievementId);
 
 	}
 
 	public void ResetAllAchievements() {
 		if (!GooglePlayConnection.CheckState ()) { return; }
-		AndroidNative.ResetAllAchievements();
+		AN_GMSGeneralProxy.ResetAllAchievements();
 		
 	}
 
@@ -221,7 +225,7 @@ public class GooglePlayManager : SA_Singleton<GooglePlayManager> {
 
 	public void resetLeaderBoard(string leaderboardId) {
 		if (!GooglePlayConnection.CheckState ()) { return; }
-		AndroidNative.resetLeaderBoard(leaderboardId);
+		AN_GMSGeneralProxy.resetLeaderBoard(leaderboardId);
 
 		if(leaderBoards.ContainsKey(leaderboardId)) {
 			leaderBoards.Remove(leaderboardId);
@@ -232,7 +236,7 @@ public class GooglePlayManager : SA_Singleton<GooglePlayManager> {
 
 	public void loadConnectedPlayers() {
 		if (!GooglePlayConnection.CheckState ()) { return; }
-		AndroidNative.loadConnectedPlayers ();
+		AN_GMSGeneralProxy.loadConnectedPlayers ();
 	}
 
 
@@ -246,7 +250,7 @@ public class GooglePlayManager : SA_Singleton<GooglePlayManager> {
 		byte[] val = icon.EncodeToPNG();
 		string bytesString = System.Convert.ToBase64String (val);
 
-		AndroidNative.sendGiftRequest((int) type, playload, requestLifetimeDays, bytesString, description);
+		AN_GMSGiftsProxy.sendGiftRequest((int) type, playload, requestLifetimeDays, bytesString, description);
 
 	}
 
@@ -259,7 +263,7 @@ public class GooglePlayManager : SA_Singleton<GooglePlayManager> {
 	public void ShowRequestsAccepDialog() {
 		if (!GooglePlayConnection.CheckState ()) { return; }
 
-		AndroidNative.showRequestAccepDialog();
+		AN_GMSGiftsProxy.showRequestAccepDialog();
 	}
 
 	public void AcceptRequests(params string[] ids) {
@@ -270,7 +274,7 @@ public class GooglePlayManager : SA_Singleton<GooglePlayManager> {
 		}
 		
 		
-		AndroidNative.acceptRequests(string.Join(AndroidNative.DATA_SPLITTER, ids));
+		AN_GMSGiftsProxy.acceptRequests(string.Join(AndroidNative.DATA_SPLITTER, ids));
 	}
 
 
@@ -282,7 +286,7 @@ public class GooglePlayManager : SA_Singleton<GooglePlayManager> {
 		}
 		
 		
-		AndroidNative.dismissRequest(string.Join(AndroidNative.DATA_SPLITTER, ids));
+		AN_GMSGiftsProxy.dismissRequest(string.Join(AndroidNative.DATA_SPLITTER, ids));
 	}
 
 
@@ -381,6 +385,11 @@ public class GooglePlayManager : SA_Singleton<GooglePlayManager> {
 		}
 	}
 
+	public static bool IsLeaderboardsDataLoaded {
+		get {
+			return _IsLeaderboardsDataLoaded;
+		}
+	}
 
 	//--------------------------------------
 	// EVENTS
@@ -566,6 +575,8 @@ public class GooglePlayManager : SA_Singleton<GooglePlayManager> {
 			Debug.Log ("Loaded: " + _leaderBoards.Count + " Leaderboards");
 		}
 
+		_IsLeaderboardsDataLoaded = true;
+
 		ActionLeaderboardsLoeaded(result);
 		dispatch (LEADERBOARDS_LOEADED, result);
 
@@ -673,7 +684,7 @@ public class GooglePlayManager : SA_Singleton<GooglePlayManager> {
 		
 		
 		Debug.Log ("OnPlayersLoaded, total:" + players.Count.ToString());
-		ActionFriendsLoeaded(result);
+		ActionFriendsListLoaded(result);
 		dispatch (FRIENDS_LOADED, result);
 	}
 

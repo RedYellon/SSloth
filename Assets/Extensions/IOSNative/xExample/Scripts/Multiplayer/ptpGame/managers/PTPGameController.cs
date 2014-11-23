@@ -63,9 +63,9 @@ public class PTPGameController : MonoBehaviour {
 		GameObject s = Instantiate(pref) as GameObject;
 		s.transform.position = pos;
 
-		s.renderer.enabled = true;
-		s.renderer.material = new Material (s.renderer.material);
-		s.renderer.material.color = Color.red;
+		s.GetComponent<Renderer>().enabled = true;
+		s.GetComponent<Renderer>().material = new Material (s.GetComponent<Renderer>().material);
+		s.GetComponent<Renderer>().material.color = Color.red;
 
 		spheres.Add (s);
 
@@ -75,9 +75,9 @@ public class PTPGameController : MonoBehaviour {
 		GameObject s = Instantiate(pref) as GameObject;
 		s.transform.position = pos;
 
-		s.renderer.enabled = true;
-		s.renderer.material = new Material (s.renderer.material);
-		s.renderer.material.color = Color.green;
+		s.GetComponent<Renderer>().enabled = true;
+		s.GetComponent<Renderer>().material = new Material (s.GetComponent<Renderer>().material);
+		s.GetComponent<Renderer>().material.color = Color.green;
 
 		spheres.Add (s);
 	}

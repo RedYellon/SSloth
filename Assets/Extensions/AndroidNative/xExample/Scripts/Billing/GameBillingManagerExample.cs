@@ -179,6 +179,11 @@ public class GameBillingManagerExample : MonoBehaviour {
 
 
 	private static void UpdateStoreData() {
+
+		foreach(GoogleProductTemplate p in AndroidInAppPurchaseManager.instance.inventory.products) {
+			Debug.Log("Loaded product: " + p.title);
+		}
+
 		//chisking if we already own some consuamble product but forget to consume those
 		if(AndroidInAppPurchaseManager.instance.inventory.IsProductPurchased(COINS_ITEM)) {
 			consume(COINS_ITEM);

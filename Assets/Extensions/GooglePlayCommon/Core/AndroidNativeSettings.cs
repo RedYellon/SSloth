@@ -10,13 +10,14 @@ using UnityEditor;
 
 public class AndroidNativeSettings : ScriptableObject {
 
-	public const string VERSION_NUMBER = "4.8";
-	public const string GOOGLE_PLAY_SDK_VERSION_NUMBER = "6111000";
+	public const string VERSION_NUMBER = "4.92";
+	public const string GOOGLE_PLAY_SDK_VERSION_NUMBER = "6171000";
 
 
 	public bool EnablePlusAPI 		= true;
 	public bool EnableGamesAPI 		= true;
 	public bool EnableAppStateAPI 	= true;
+	public bool EnableDriveAPI 		= false;
 	public bool LoadProfileIcons 	= true;
 	public bool LoadProfileImages 	= true;
 
@@ -33,6 +34,22 @@ public class AndroidNativeSettings : ScriptableObject {
 
 
 
+	public bool ShowPluginSettings = false;
+	public bool ShowAppPermissions = false;
+	public bool EnableBillingAPI = true;
+	public bool EnablePSAPI = true;
+	public bool EnableSocialAPI = true;
+	public bool EnableCameraAPI = true;
+
+
+	public bool ExpandNativeAPI = false;
+	public bool ExpandPSAPI = false;
+	public bool ExpandBillingAPI = false;
+	public bool ExpandSocialAPI = false;
+	public bool ExpandCameraAPI = false;
+
+
+
 	public bool ShowStoreKitParams = false;
 	public bool ShowCameraAndGalleryParams = false;
 	public bool ShowPSSettings = false;
@@ -40,14 +57,37 @@ public class AndroidNativeSettings : ScriptableObject {
 	public bool GCMSettingsActinve = false;
 
 
+	//APIs:
+	public bool LocalNotificationsAPI = true; 
+	public bool ImmersiveModeAPI = true;
+	public bool ApplicationInformationAPI = true;
+	public bool ExternalAppsAPI = true;
+	public bool PoupsandPreloadersAPI = true;
+
+
+	public bool InAppPurchasesAPI = true;
+
+
+	public bool GooglePlayServicesAPI = true;
+	public bool PlayServicesAdvancedSignInAPI = true;
+	public bool GoogleButtonAPI = true;
+	public bool AnalyticsAPI = true;
+	public bool GoogleCloudSaveAPI = true;
+	public bool PushNotificationsAPI = true;
+	public bool GoogleMobileAdAPI = true;
+	
+
+	public bool GalleryAPI = true;
+	public bool CameraAPI = true;
+
+	public bool KeepManifestClean = true;
+	
+
 	public string GCM_SenderId = "YOUR_SENDER_ID_HERE";
 
 
 	public string base64EncodedPublicKey = "REPLACE_WITH_YOUR_PUBLIC_KEY";
 	public List<string> InAppProducts = new List<string>();
-
-
-
 
 
 	public const string ANSettingsAssetName = "AndroidNativeSettings";
@@ -101,5 +141,7 @@ public class AndroidNativeSettings : ScriptableObject {
 			}
 		}
 	}
+
+
 
 }

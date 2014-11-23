@@ -93,7 +93,7 @@ static GCHelper *sharedHelper = nil;
     
 }
 
-- (void)findMatchWithMinPlayers:(int)minPlayers maxPlayers:(int)maxPlayers  {
+- (void)findMatchWithMinPlayers:(int)minPlayers maxPlayers:(int)maxPlayers playerGroup:(int)playerGroup {
     
     
     NSLog(@"findMatchWithMinPlayers");
@@ -101,12 +101,12 @@ static GCHelper *sharedHelper = nil;
     GKMatchRequest *request = [[GKMatchRequest alloc] init];
     request.minPlayers = minPlayers;
     request.maxPlayers = maxPlayers;
+    request.playerGroup = playerGroup;
     
     GKMatchmakerViewController *mmvc = [[GKMatchmakerViewController alloc] initWithMatchRequest:request];
     mmvc.matchmakerDelegate = self;
     
     [self startMatchViewController:mmvc];
-    
     
 }
 
@@ -358,8 +358,8 @@ static GCHelper *sharedHelper = nil;
 extern "C" {
     
     
-    void _findMatch (int minPlayers, int maxPlayers) {
-        [[GCHelper sharedInstance] findMatchWithMinPlayers:minPlayers maxPlayers:maxPlayers];
+    void _findMatch (int minPlayers, int maxPlayers, int playerGroup) {
+        [[GCHelper sharedInstance] findMatchWithMinPlayers:minPlayers maxPlayers:maxPlayers playerGroup:playerGroup];
     }
     
     

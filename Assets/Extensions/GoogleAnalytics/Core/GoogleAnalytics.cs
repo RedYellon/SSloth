@@ -95,13 +95,13 @@ public class GoogleAnalytics : MonoBehaviour {
 		
 		if (paused) {
 			Client.CreateHit(GoogleAnalyticsHitType.APPVIEW);
-			Client.SetContentDescription(GoogleAnalyticsSettings.Instance.AppName + " - Enter Background");
+			Client.SetScreenName(GoogleAnalyticsSettings.Instance.AppName + " - Enter Background");
 
 			Client.EndSession();
 			Client.Send();
 		} else {
 			Client.CreateHit(GoogleAnalyticsHitType.APPVIEW);
-			Client.SetContentDescription(GoogleAnalyticsSettings.Instance.AppName + " - Enter Foreground");
+			Client.SetScreenName(GoogleAnalyticsSettings.Instance.AppName + " - Enter Foreground");
 
 			Client.StartSession();
 			Client.Send();
@@ -115,7 +115,7 @@ public class GoogleAnalytics : MonoBehaviour {
 		}
 
 		Client.CreateHit(GoogleAnalyticsHitType.APPVIEW);
-		Client.SetContentDescription(GoogleAnalyticsSettings.Instance.AppName + " - Quit");
+		Client.SetScreenName(GoogleAnalyticsSettings.Instance.AppName + " - Quit");
 		Client.EndSession();
 		Client.Send();
 	}
@@ -132,7 +132,7 @@ public class GoogleAnalytics : MonoBehaviour {
 		if(type == LogType.Exception) {
 			Client.CreateHit (GoogleAnalyticsHitType.EXCEPTION);
 			Client.SetExceptionDescription (logString);
-			Client.SetContentDescription (Application.loadedLevelName);
+			Client.SetScreenName (Application.loadedLevelName);
 			Client.SetDocumentTitle (stackTrace);
 			Client.SetIsFatalException (false);
 			Client.Send ();
@@ -142,7 +142,7 @@ public class GoogleAnalytics : MonoBehaviour {
 		if(type == LogType.Error) {
 			Client.CreateHit (GoogleAnalyticsHitType.EXCEPTION);
 			Client.SetExceptionDescription (logString);
-			Client.SetContentDescription (Application.loadedLevelName);
+			Client.SetScreenName (Application.loadedLevelName);
 			Client.SetDocumentTitle (stackTrace);
 			Client.SetIsFatalException (false);
 			Client.Send ();
@@ -228,7 +228,12 @@ public class GoogleAnalytics : MonoBehaviour {
 			#endif
 		#else
 			byte[] data = System.Text.Encoding.UTF8.GetBytes(request);
-			Instance.StartCoroutine(Instance.SendAnalytics(data, request));
+			if(GoogleAnalyticsSettings.Instance.IsRequetsCachingEnabled) {
+				Instance.StartCoroutine(Instance.SendAnalytics(data, request));
+			} else {
+				SendSkipCache(request);
+			}
+			
 		#endif
 	}
 
@@ -269,7 +274,7 @@ public class GoogleAnalytics : MonoBehaviour {
 			Client.SetScreenResolution(Screen.currentResolution.width, Screen.currentResolution.height);
 			Client.SetViewportSize(Screen.width, Screen.height);
 			Client.SetUserLanguage(Application.systemLanguage.ToString());
-			Client.SetContentDescription(GoogleAnalyticsSettings.Instance.LevelPrefix + CurrentLevelName + GoogleAnalyticsSettings.Instance.LevelPostfix);
+			Client.SetScreenName(GoogleAnalyticsSettings.Instance.LevelPrefix + CurrentLevelName + GoogleAnalyticsSettings.Instance.LevelPostfix);
 		
 			Client.Send();
 		}

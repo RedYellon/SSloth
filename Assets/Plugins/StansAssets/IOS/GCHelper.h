@@ -38,6 +38,6 @@
 - (void) sendDataBytes: (NSData*) data requestType: (int) requestType;
 - (void) sendDataBytes: (NSData*) data toPlayers:(NSArray*) toPlayers requestType:(int) requestType;
 
-- (void)findMatchWithMinPlayers:(int)minPlayers maxPlayers:(int)maxPlayers;
+- (void)findMatchWithMinPlayers:(int)minPlayers maxPlayers:(int)maxPlayers playerGroup:(int)playerGroup;
 
 @end

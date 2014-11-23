@@ -165,6 +165,11 @@ public class GoogleAnalyticsClient  {
 		builder.Append(time);
 	}
 
+
+	//--------------------------------------
+	//  Session
+	//--------------------------------------
+
 	public void StartSession() {
 		builder.Append("&sc=start");
 	}
@@ -173,9 +178,25 @@ public class GoogleAnalyticsClient  {
 		builder.Append("&sc=end");
 	}
 
+	public void IPOverride (string ip) {
+		AppendData("uip", ip);
+	}
+
+	public void UserAgentOverride (string userAgent) {
+		AppendData("ua", userAgent);
+	}
+
+
+
+	//--------------------------------------
+	//  Traffic Sources
+	//--------------------------------------
+
+
 	public void SetDocumentReferrer(string url) {
 		AppendData("dr", url, "Document Referrer", 2048);
 	}
+
 
 	public void SetCampaignName(string name) {
 		AppendData("cn", name, "Campaign Name", 100);
@@ -294,8 +315,8 @@ public class GoogleAnalyticsClient  {
 		AppendData("dt", title, "Document Title", 1500);
 	}
 
-	public void SetContentDescription(string description) {
-		AppendData("cd", description, "Content Description", 2048);
+	public void SetScreenName(string name) {
+		AppendData("cd", name, "Screen Name", 2048);
 	}
 
 	public void SetLinkID(string id) {
@@ -314,6 +335,11 @@ public class GoogleAnalyticsClient  {
 	public void SetApplicationVersion(string version) {
 		AppendData("av", version, "Application Version", 100);
 	}
+
+	public void SetApplicationInstallerID(string identifier) {
+		AppendData("aiid", identifier, "Application Installer ID", 150);
+	}
+
 
 
 	//--------------------------------------
@@ -384,9 +410,89 @@ public class GoogleAnalyticsClient  {
 	}
 
 	public void SetCurrencyCode(string code) {
-		AppendData("cu", code, "Currency Code", 500,  GoogleAnalyticsHitType.ITEM, GoogleAnalyticsHitType.TRANSACTION);
+		AppendData("cu", code, "Currency Code", 10,  GoogleAnalyticsHitType.ITEM, GoogleAnalyticsHitType.TRANSACTION);
 	}
 
+
+	//--------------------------------------
+	// Enhanced E-CommerceL
+	//--------------------------------------
+
+	public void SetProductSKU(int productIndex, string sku) {
+		AppendData("pr" + productIndex.ToString() + "id", sku, "Product SKU", 500);
+	}
+
+	public void SetProductName(int productIndex, string name) {
+		AppendData("pr" + productIndex.ToString() + "nm", name, "Product Name", 500);
+	}
+
+	public void ProductBrand(int productIndex, string brand) {
+		AppendData("pr" + productIndex.ToString() + "br", brand, "Product Brand ", 500);
+	}
+
+	public void ProductCategory(int productIndex, string category) {
+		AppendData("pr" + productIndex.ToString() + "ca", category, "Product Category ", 500);
+	}
+
+	public void ProductVariant(int productIndex, string variant) {
+		AppendData("pr" + productIndex.ToString() + "va", variant, "Product Variant ", 500);
+	}
+
+	public void ProductPrice(int productIndex, float prise) {
+		AppendData("pr" + productIndex.ToString() + "pr", FloatToCurrency(prise));
+	}
+
+	public void ProductQuantity(int productIndex, int quantit) {
+		AppendData("pr" + productIndex.ToString() + "qt", quantit.ToString());
+	}
+
+
+	public void ProductCouponCode(int productIndex, string couponCode) {
+		AppendData("pr" + productIndex.ToString() + "cc", couponCode, "Product Coupon Code", 500);
+	}
+
+	public void ProductPosition(int productIndex, int pos) {
+		AppendData("pr" + productIndex.ToString() + "ps", pos.ToString());
+	}
+
+	public void ProductCustomDimension(int productIndex, int index, string val) {
+		AppendData("pr" + productIndex.ToString() + "cd" + index.ToString(), val);
+	}
+
+	public void ProductCustomMetric(int productIndex, int index, int metric) {
+		AppendData("pr" + productIndex.ToString() + "cm" + index.ToString(), metric.ToString());
+	}
+
+	public void ProductAction(string action) {
+		AppendData("pa", action);
+	}
+
+	public void CouponCode(string couponCode) {
+		AppendData("tcc", couponCode);
+	}
+
+	public void ProductActionList(string val) {
+		AppendData("pal", val);
+	}
+
+
+	public void CheckoutStep(int val) {
+		AppendData("cos", val.ToString());
+	}
+
+	public void CheckoutStepOption(string val) {
+		AppendData("col", val);
+	}
+
+	/*
+	public void ProductImpressionListName(int productIndex, string val) {
+		AppendData("il" + productIndex.ToString() + "nm", val);
+	}
+
+	public void ProductImpressionListName(int productIndex, string val) {
+		AppendData("il" + productIndex.ToString() + "nm", val);
+	}
+	*/
 
 
 	//--------------------------------------
@@ -502,7 +608,7 @@ public class GoogleAnalyticsClient  {
 		SetDocumentTitle(title);
 
 		if(!description.Equals(string.Empty)) {
-			SetContentDescription(description);
+			SetScreenName(description);
 		}
 
 		if(!linkId.Equals(string.Empty)) {
@@ -518,7 +624,7 @@ public class GoogleAnalyticsClient  {
 		SetEventCategory(category);
 		SetEventAction(action);
 
-		SetContentDescription(GoogleAnalyticsSettings.Instance.LevelPrefix + Application.loadedLevelName + GoogleAnalyticsSettings.Instance.LevelPostfix);
+		SetScreenName(GoogleAnalyticsSettings.Instance.LevelPrefix + Application.loadedLevelName + GoogleAnalyticsSettings.Instance.LevelPostfix);
 
 
 		
@@ -539,11 +645,12 @@ public class GoogleAnalyticsClient  {
 
 
 		SetTransactionID(id);
-		if(affiliation.Length > 0) {
+
+		if(!string.IsNullOrEmpty(affiliation)) {
 			SetTransactionAffiliation(affiliation);
 		}
 
-		if(currencyCode.Length > 0) {
+		if(!string.IsNullOrEmpty(currencyCode)) {
 			SetCurrencyCode(currencyCode);
 		}
 
@@ -573,11 +680,11 @@ public class GoogleAnalyticsClient  {
 		SetItemPrice(price);
 		SetItemQuantity(quantity);
 
-		if(category.Length > 0) {
+		if( !string.IsNullOrEmpty(category) ) {
 			SetItemCategory(category);
 		}
 		
-		if(currencyCode.Length > 0) {
+		if(!string.IsNullOrEmpty(currencyCode)) {
 			SetCurrencyCode(currencyCode);
 		}
 
@@ -621,7 +728,7 @@ public class GoogleAnalyticsClient  {
 
 	public void SendScreenHit(string screenName) {
 		CreateHit(GoogleAnalyticsHitType.APPVIEW);
-		SetContentDescription(screenName);
+		SetScreenName(screenName);
 		Send();
 	}
 

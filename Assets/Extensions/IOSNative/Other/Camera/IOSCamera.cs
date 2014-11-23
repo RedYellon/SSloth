@@ -40,7 +40,12 @@ public class IOSCamera : ISN_Singleton<IOSCamera> {
 	private static extern void _ISN_GetImageFromCamera();
 
 	[DllImport ("__Internal")]
+	private static extern void _ISN_GetVideoPathFromAlbum();
+
+	[DllImport ("__Internal")]
 	private static extern void _ISN_GetImageFromAlbum();
+
+
 
 	[DllImport ("__Internal")]
 	private static extern void _ISN_InitCamerAPI(float compressionRate, int maxSize, int encodingType);
@@ -74,6 +79,11 @@ public class IOSCamera : ISN_Singleton<IOSCamera> {
 		StartCoroutine(SaveScreenshot());
 	}
 
+	public void GetVideoPathFromAlbum() {
+		#if (UNITY_IPHONE && !UNITY_EDITOR) || SA_DEBUG_MODE
+		_ISN_GetVideoPathFromAlbum();
+		#endif
+	}
 
 	public void GetImageFromCamera() {
 		#if (UNITY_IPHONE && !UNITY_EDITOR) || SA_DEBUG_MODE

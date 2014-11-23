@@ -21,4 +21,6 @@ MonoBehaviour:
   IsAndroidSettinsOpened: 1
   IsWP8SettinsOpened: 1
   IsTestSettinsOpened: 1
+  ShowActions: 0
+  KeepManifestClean: 1
   testDevices: []

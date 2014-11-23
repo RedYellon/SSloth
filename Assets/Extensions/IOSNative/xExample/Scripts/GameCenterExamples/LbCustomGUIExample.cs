@@ -47,7 +47,7 @@ public class LbCustomGUIExample : MonoBehaviour {
 		}
 
 		if(GUI.Button(new Rect(600, 10, 150, 50), "Load Global Scores")) {
-			GameCenterManager.loadScore(leaderBoardId, 1, 10, GCBoardTimeSpan.ALL_TIME, GCCollectionType.GLOBAL);
+			GameCenterManager.loadScore(leaderBoardId, 50, 150, GCBoardTimeSpan.ALL_TIME, GCCollectionType.GLOBAL);
 		}
 
 		Color defaultColor = GUI.color;

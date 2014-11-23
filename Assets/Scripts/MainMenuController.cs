@@ -5,7 +5,7 @@
  	www.michaeljohnstephens.com
  	
  	Created:		February 14, 2014
- 	Last Edited:	September 15, 2014
+ 	Last Edited:	November 22, 2014
  	
  	Controls the functions and behavior of the main menu "scene".
 */
@@ -250,7 +250,7 @@ public class MainMenuController : MonoBehaviour
 				ButtonTouched (inputCont.GetTouchRaycastObject ());
 			}
 			
-			if ((Input.mousePosition.x < (Screen.width / 2)) && optionsFoldoutIsShowing)
+			if ((Input.mousePosition.x < (Screen.width / 2)) && creditsScrollerIsShowing)
 			{
 				creditsScrollerIsShowing = false;
 				scrollThing.SetActive (false);

@@ -12,8 +12,6 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class MNAndroidRateUsPopUp : MNPopup {
-	
-
 
 	public string yes;
 	public string later;
@@ -51,9 +49,8 @@ public class MNAndroidRateUsPopUp : MNPopup {
 	
 	
 	public void init() {
-		MNAndroidNative.showRateDialog(title, message, yes, later, no, url);
+		MNAndroidNative.showRateDialog(title, message, yes, later, no);
 	}
-	
 	
 	//--------------------------------------
 	//  GET/SET
@@ -67,6 +64,7 @@ public class MNAndroidRateUsPopUp : MNPopup {
 		int index = System.Convert.ToInt16(buttonIndex);
 		switch(index) {
 			case 0: 
+				MNAndroidNative.OpenAppRatingPage(url);
 				dispatch(BaseEvent.COMPLETE, MNDialogResult.RATED);
 				break;
 			case 1:

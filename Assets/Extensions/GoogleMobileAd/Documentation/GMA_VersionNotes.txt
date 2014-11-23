@@ -1,3 +1,30 @@
+4.0:
+Android Manifest Generation
+Android Manifest Cleaup
+Resources clean up
+
+
+
+3.9:
+Editor Improvments
+Dependencies clean up
+Plugin does not requiers main activity anymore.
+Red more here: http://goo.gl/9PBhHz
+
+
+Fixes:
+IOS destory banner fixed
+
+
+3.8:
+Goggle Ad SDK version updated
+
+Refactor:
+Flash Like event system now use own namespace: UnionAssets.FLE
+
+Read More:
+http://goo.gl/3yt8Rq
+
 3.7:
 IOS Banner size fixed
 Post Process script improved

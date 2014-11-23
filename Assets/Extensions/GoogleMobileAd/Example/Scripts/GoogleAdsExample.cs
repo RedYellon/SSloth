@@ -336,6 +336,11 @@ public class GoogleAdsExample : MonoBehaviour {
 		Debug.Log("OnInterstitialLoaded catched with C# Actions usage");
 	}
 
+	void OnOpenedAction (GoogleMobileAdBanner banner) {
+		banner.OnOpenedAction -= OnOpenedAction;
+		Debug.Log("Banner was just clicked");
+	}
+
 	private void OnBannerLoadedAction (GoogleMobileAdBanner banner) {
 		banner.OnLoadedAction -= OnBannerLoadedAction;
 		banner.Show();

@@ -34,27 +34,22 @@ public class AndroidNativeUtility : SA_Singleton<AndroidNativeUtility> {
 		AndroidNative.runPackage(packageName);
 	}
 
-	public void LoadGoogleAccountNames() {
-		AndroidNative.loadGoogleAccountNames();
-	}
-
-
 
 	//--------------------------------------
 	// Static Methods
 	//--------------------------------------
 
 	public static void ShowPreloader(string title, string message) {
-		AndroidNative.ShowPreloader(title, message);
+		AN_PoupsProxy.ShowPreloader(title, message);
 	}
 	
 	public static void HidePreloader() {
-		AndroidNative.HidePreloader();
+		AN_PoupsProxy.HidePreloader();
 	}
 
 
 	public static void OpenAppRatingPage(string url) {
-		AndroidNative.OpenAppRatePage(url);
+		AN_PoupsProxy.OpenAppRatePage(url);
 	}
 
 

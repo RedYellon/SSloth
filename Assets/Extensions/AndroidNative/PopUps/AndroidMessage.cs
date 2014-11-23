@@ -45,7 +45,7 @@ public class AndroidMessage : BaseAndroidPopup {
 	//--------------------------------------
 	
 	public void init() {
-		AndroidNative.showMessage(title, message, ok);
+		AN_PoupsProxy.showMessage(title, message, ok);
 	}
 	
 	//--------------------------------------

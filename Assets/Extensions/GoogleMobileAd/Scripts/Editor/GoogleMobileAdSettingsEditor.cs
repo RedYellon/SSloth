@@ -26,21 +26,16 @@ public class GoogleMobileAdSettingsEditor : Editor {
 	GUIContent deviceNameLabel = new GUIContent("Device Name [?]:", "Name of your device. Just for you");
 	GUIContent deviceIdLabel = new GUIContent("Device ID [?]:", "ID of your device. You can get ot from console log");
 
-
 	private GoogleMobileAdSettings settings;
-
-
-
-
-
-
-
 	private const string version_info_file = "Plugins/StansAssets/Versions/GMA_VersionInfo.txt"; 
 
+	void Awake() {
+		if (IsInstalled && IsUpToDate) {
+			UpdateManifest();
+		}
+	}
 
 	public override void OnInspectorGUI() {
-
-
 		#if UNITY_WEBPLAYER
 		EditorGUILayout.HelpBox("Editing Google Mobile Ad Settings not avaliable with web player platfrom. Please swith to any other platfrom under Build Seting menu", MessageType.Warning);
 		EditorGUILayout.BeginHorizontal();
@@ -55,7 +50,11 @@ public class GoogleMobileAdSettingsEditor : Editor {
 		}
 
 		if(GUILayout.Button("Switch To IOS",  GUILayout.Width(120))) {
+			#if UNITY_3_5 || UNITY_4_0 || UNITY_4_0_1 || UNITY_4_1 || UNITY_4_2 || UNITY_4_3 || UNITY_4_5 || UNITY_4_6
 			EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTarget.iPhone);
+			#else
+			EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTarget.iOS);
+			#endif
 		}
 		EditorGUILayout.EndHorizontal();
 		
@@ -87,7 +86,7 @@ public class GoogleMobileAdSettingsEditor : Editor {
 
 	public static bool IsInstalled {
 		get {
-			if(FileStaticAPI.IsFileExists(PluginsInstalationUtil.ANDROID_DESTANATION_PATH + "androidnative.jar") && FileStaticAPI.IsFileExists(PluginsInstalationUtil.IOS_DESTANATION_PATH + "GoogleMobileAdBanner.h")) {
+			if(FileStaticAPI.IsFileExists(version_info_file)) {
 				return true;
 			} else {
 				return false;
@@ -120,8 +119,7 @@ public class GoogleMobileAdSettingsEditor : Editor {
 	
 	public static void UpdateVersionInfo() {
 		FileStaticAPI.Write(version_info_file, GoogleMobileAdSettings.VERSION_NUMBER);
-
-	
+		UpdateManifest ();
 	}
 
 
@@ -165,13 +163,104 @@ public class GoogleMobileAdSettingsEditor : Editor {
 				
 			} else {
 				EditorGUILayout.HelpBox("Google Mobile Ad Plugin v" + GoogleMobileAdSettings.VERSION_NUMBER + " is installed", MessageType.Info);
-				
+
+				PluginSettings();
+				Actions();
 			}
 		}
 		
 		
 		EditorGUILayout.Space();
 		
+	}
+	
+
+	private void PluginSettings() {
+		EditorGUILayout.Space();
+		EditorGUILayout.HelpBox("Plugin Settings", MessageType.None);
+		
+
+
+		EditorGUILayout.BeginHorizontal();
+		EditorGUILayout.LabelField("Keep Android Manifest Clean");
+		
+		EditorGUI.BeginChangeCheck();
+		GoogleMobileAdSettings.Instance.KeepManifestClean = EditorGUILayout.Toggle(GoogleMobileAdSettings.Instance.KeepManifestClean);
+		if(EditorGUI.EndChangeCheck()) {
+			UpdateManifest();
+		}
+		
+		if(GUILayout.Button("[?]",  GUILayout.Width(27))) {
+			Application.OpenURL("http://goo.gl/5rLoDV");
+		}
+		EditorGUILayout.Space();
+		EditorGUILayout.Space();
+		
+		EditorGUILayout.EndHorizontal();
+	}
+
+	private void Actions() {
+		EditorGUILayout.Space();
+		GoogleMobileAdSettings.Instance.ShowActions = EditorGUILayout.Foldout(GoogleMobileAdSettings.Instance.ShowActions, "More Actions");
+		if(GoogleMobileAdSettings.Instance.ShowActions) {
+
+			EditorGUILayout.BeginHorizontal();
+			EditorGUILayout.Space();
+			
+			if(GUILayout.Button("Open Manifest ",  GUILayout.Width(160))) {
+				UnityEditorInternal.InternalEditorUtility.OpenFileAtLineExternal("Assets" + AN_ManifestManager.MANIFEST_FILE_PATH, 1);
+			}
+			
+			EditorGUILayout.EndHorizontal();
+			EditorGUILayout.Space();
+
+			EditorGUILayout.BeginHorizontal();
+			EditorGUILayout.Space();
+			if(GUILayout.Button("Reset Settings",  GUILayout.Width(160))) {
+				ResetSettings();
+			}
+			
+			if(GUILayout.Button("Load Example Settings",  GUILayout.Width(160))) {
+				LoadExampleSettings();
+			}
+			
+			
+			EditorGUILayout.EndHorizontal();
+			
+		}
+	}
+
+
+	public static void LoadExampleSettings() {
+		
+		GoogleMobileAdSettings.Instance.Android_BannersUnitId = "ca-app-pub-6101605888755494/1824764765";
+		GoogleMobileAdSettings.Instance.Android_InterstisialsUnitId = "ca-app-pub-6101605888755494/3301497967";
+
+		GoogleMobileAdSettings.Instance.IOS_BannersUnitId = "ca-app-pub-6101605888755494/1852640761";
+		GoogleMobileAdSettings.Instance.IOS_InterstisialsUnitId = "ca-app-pub-6101605888755494/3329373962";
+
+
+
+		GoogleMobileAdSettings.Instance.WP8_BannersUnitId = "ca-app-pub-6101605888755494/8658089162";
+		GoogleMobileAdSettings.Instance.WP8_InterstisialsUnitId = "ca-app-pub-6101605888755494/1134822367";
+
+
+		GoogleMobileAdSettings.Instance.testDevices.Clear();
+		GADTestDevice dev = new GADTestDevice();
+		dev.ID = "6B9FA8031AEFDC4758B7D8987F77A5A6";
+		dev.Name = "Nexus 7";
+		dev.IsOpen = false;
+		GoogleMobileAdSettings.Instance.AddDevice(dev);
+
+
+		
+		
+	}
+	
+	public static void ResetSettings() {
+		FileStaticAPI.DeleteFile("Extensions/GoogleMobileAd/Resources/GoogleMobileAdSettings.asset");
+		GoogleMobileAdSettings.Instance.ShowActions = true;
+		Selection.activeObject = GoogleMobileAdSettings.Instance;
 	}
 
 	public void TestDevices() {
@@ -337,6 +426,34 @@ public class GoogleMobileAdSettingsEditor : Editor {
 		EditorUtility.SetDirty(GoogleMobileAdSettings.Instance);
 		#endif
 	}
-	
+
+	public static void UpdateManifest() {
+		if(!GoogleMobileAdSettings.Instance.KeepManifestClean) {
+			return;
+		}
+		
+		AN_ManifestManager.Refresh();
+		
+		AN_ManifestTemplate Manifest =  AN_ManifestManager.GetManifest();
+		AN_ApplicationTemplate application =  Manifest.ApplicationTemplate;
+		AN_ActivityTemplate launcherActivity = application.GetLauncherActivity();
+
+		AN_ActivityTemplate AdActivity = application.GetOrCreateActivityWithName("com.google.android.gms.ads.AdActivity");
+		AdActivity.SetValue("android:configChanges", "keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize");
+
+
+		if(launcherActivity != null) {
+			AN_PropertyTemplate ForwardNativeEventsToDalvik = launcherActivity.GetOrCreatePropertyWithName("meta-data",  "unityplayer.ForwardNativeEventsToDalvik");
+			ForwardNativeEventsToDalvik.SetValue("android:value", "true");
+		}
+			
+
+
+		AN_PropertyTemplate games_version = application.GetOrCreatePropertyWithName("meta-data",  "com.google.android.gms.version");
+	    games_version.SetValue("android:value", "@integer/google_play_services_version");
+
+
+		AN_ManifestManager.SaveManifest();
+	}	
 	
 }

@@ -49,13 +49,6 @@ static SocialGate *_sharedInstance;
     }
     
     
-    
-   
-    
-    
-    
-   
-    
    
     
     UIViewController *vc =  UnityGetGLViewController();

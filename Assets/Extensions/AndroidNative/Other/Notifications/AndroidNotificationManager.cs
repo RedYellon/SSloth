@@ -22,7 +22,9 @@ public class AndroidNotificationManager : SA_Singleton<AndroidNotificationManage
 	private const string DATA_SPLITTER = "|";
 
 
-
+	void Awake() {
+		DontDestroyOnLoad(gameObject);
+	}
 
 	
 	//--------------------------------------
@@ -143,7 +145,7 @@ public class AndroidNotificationManager : SA_Singleton<AndroidNotificationManage
 	}
 
 
-	public  List<LocalNotificationTemplate> LoadPendingNotifications() {
+	public  List<LocalNotificationTemplate> LoadPendingNotifications(bool includeAll=false) {
 
 		string data = string.Empty;
 		if(PlayerPrefs.HasKey(PP_KEY)) {
@@ -156,7 +158,7 @@ public class AndroidNotificationManager : SA_Singleton<AndroidNotificationManage
 			string[] notifications = data.Split(DATA_SPLITTER [0]);
 			foreach(string n in notifications) {
 				LocalNotificationTemplate notification = new LocalNotificationTemplate(n);
-				if(!notification.IsFired) {
+				if(!notification.IsFired || includeAll) {
 					tpls.Add(notification);
 				}
 			}

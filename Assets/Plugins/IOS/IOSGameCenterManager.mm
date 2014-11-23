@@ -29,18 +29,21 @@ static NSMutableArray *loadedPlayersIds;
 
 
 
-- (void) reportScore: (long) score forCategory: (NSString*) category {
-    NSLog(@"reportScore: ");
+- (void) reportScore: (long long) score forCategory: (NSString*) category {
+    NSLog(@"reportScore: %lld", score);
     NSLog(@"category %@", category);
+    
+
     
     GKScore *scoreReporter = [[[GKScore alloc] initWithCategory:category] autorelease];
     scoreReporter.value = score;
+    
     [scoreReporter reportScoreWithCompletionHandler: ^(NSError *error) {
         if (error != nil) {
             UnitySendMessage("GameCenterManager", "onScoreSubmitedFailed", [ISNDataConvertor NSStringToChar:@""]);
-            NSLog(@"got error while score sibmiting");
+            NSLog(@"got error while score sibmiting: %@", error.description);
         } else {
-            NSLog(@"new hing score sumbited succsess: %li", score);
+            NSLog(@"new hing score sumbited succsess: %lld", score);
             
             
             
@@ -49,7 +52,7 @@ static NSMutableArray *loadedPlayersIds;
             
             [data appendString:category];
             [data appendString:@","];
-            [data appendString:[NSString stringWithFormat: @"%ld", score]];
+            [data appendString:[NSString stringWithFormat: @"%lld", score]];
  
     
             NSString *str = [[data copy] autorelease];
@@ -228,12 +231,27 @@ static NSMutableArray *loadedPlayersIds;
                     
                     NSMutableString * data = [[NSMutableString alloc] init];
                     
+                    if(localPlayer.playerID != nil) {
+                         [data appendString:localPlayer.playerID];
+                    } else {
+                         [data appendString:@""];
+                    }
+                    [data appendString:@","];
                     
-                    [data appendString:localPlayer.playerID];
+                    
+                    if(localPlayer.displayName != nil) {
+                        [data appendString:localPlayer.displayName];
+                    } else {
+                        [data appendString:@""];
+                    }
                     [data appendString:@","];
-                    [data appendString:localPlayer.displayName];
-                    [data appendString:@","];
-                    [data appendString:localPlayer.alias];
+                    
+                    
+                    if(localPlayer.alias != nil) {
+                        [data appendString:localPlayer.alias];
+                    } else {
+                        [data appendString:@""];
+                    }
                     
                 
                     
@@ -269,6 +287,10 @@ static NSMutableArray *loadedPlayersIds;
 - (void) loadAchievements {
     [GKAchievement loadAchievementsWithCompletionHandler:^(NSArray *achievements, NSError *error) {
         if (error == nil) {
+            NSLog(@"loadAchievementsWithCompletionHandler");
+            NSLog(@"count %lu", (unsigned long)achievements.count);
+            
+            
             isAchievementsWasLoaded = TRUE;
             NSMutableString * data = [[NSMutableString alloc] init];
             BOOL first = YES;
@@ -315,6 +337,7 @@ static NSMutableArray *loadedPlayersIds;
     GKLeaderboard *board = [[GKLeaderboard alloc] init];
     
     if(board != nil) {
+
         
         board.range = NSMakeRange(from, to);
         board.category = category;
@@ -449,16 +472,22 @@ static NSMutableArray *loadedPlayersIds;
         [loadedPlayersIds addObject:player.playerID];
         
         [player loadPhotoForSize:GKPhotoSizeSmall withCompletionHandler:^(UIImage *photo, NSError *error) {
+        
+                NSString *encodedImage = @"";
             
                 
-                NSString *encodedImage = @"";
                 if (photo == nil) {
-                     NSLog(@"no photo for user with ID: %@", uid);
+                    NSLog(@"no photo for user with ID: %@", uid);
                 } else {
                     NSData *imageData = UIImagePNGRepresentation(photo);
+                    NSLog(@"imageData.length:  %i", imageData.length);
                     encodedImage = [imageData base64Encoding];
-                   //  NSLog(@"encodedImage for user: %@", encodedImage);
+                    //  NSLog(@"encodedImage for user: %@", encodedImage);
                 }
+            
+            
+            
+            
                 
             
                 NSMutableString * data = [[NSMutableString alloc] init];
@@ -726,6 +755,7 @@ extern "C" {
     }
     
     void _showAchievements() {
+        //[GCManager authenticateLocalPlayer];
         [GCManager showAchievements];
     }
     
@@ -772,8 +802,7 @@ extern "C" {
  
         NSString* lid = [ISNDataConvertor charToNSString:leaderBoradrId];
         NSString* scoreValue = [ISNDataConvertor charToNSString:score];
-       
-       
+         
         [GCManager reportScore:[scoreValue longLongValue] forCategory:lid];
     }
     

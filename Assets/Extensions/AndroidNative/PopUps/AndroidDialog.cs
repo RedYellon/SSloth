@@ -46,7 +46,7 @@ public class AndroidDialog : BaseAndroidPopup {
 	//--------------------------------------
 	
 	public void init() {
-		AndroidNative.showDialog(title, message, yes, no);
+		AN_PoupsProxy.showDialog(title, message, yes, no);
 	}
 	
 	//--------------------------------------

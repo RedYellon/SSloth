@@ -88,7 +88,7 @@ public class AndroidPopUpExamples : MonoBehaviour {
 			
 		}
 
-		AndroidNative.showMessage("Result", result.ToString() + " button pressed");
+		AN_PoupsProxy.showMessage("Result", result.ToString() + " button pressed");
 	}
 
 
@@ -106,13 +106,13 @@ public class AndroidPopUpExamples : MonoBehaviour {
 
 		}
 			
-		AndroidNative.showMessage("Result", result.ToString() + " button pressed");
+		AN_PoupsProxy.showMessage("Result", result.ToString() + " button pressed");
 	}
 
 
 
 	private void OnMessageClose() {
-		AndroidNative.showMessage("Result", "Message Closed");
+		AN_PoupsProxy.showMessage("Result", "Message Closed");
 	}
 	
 

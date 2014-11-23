@@ -21,8 +21,8 @@ public class PreviewScreenUtil : EventDispatcher
 	
 	
 	public static Rect getObjectBounds(GameObject obj) {
-		if(obj.renderer != null) {
-			return getRendererBounds(obj.renderer);
+		if(obj.GetComponent<Renderer>() != null) {
+			return getRendererBounds(obj.GetComponent<Renderer>());
 		} else {
 			return new Rect();
 		}

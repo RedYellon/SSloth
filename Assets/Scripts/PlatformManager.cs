@@ -5,7 +5,7 @@
  	www.michaeljohnstephens.com
  	
  	Created:		February 13, 2014
- 	Last Edited:	August 13, 2014
+ 	Last Edited:	November 22, 2014
  	
  	Coordinates the platforms.
 */
@@ -20,97 +20,99 @@ public class PlatformManager : MonoBehaviour
 {
 	#region Variables
 	
-		#region Public
-		
-		// The array of platform colors, in order
-		public Color [] platformColors;
-		// The color of platforms with stars on them
-		public Color starPlatformColor;
-		// The two X positions of the beginning platforms
-		public float beginningPlatXPos1 = 1.903751f;
-		public float beginningPlatXPos2 = 7.149028f;
-		// The size of the platform object pool
-		public int platformPoolSize = 8;
-		// The platform gameObject
-		public GameObject platformPrefab;
-		// The star prefabs
-		public GameObject goldStarPrefab;
-		public GameObject silverStarPrefab;
-		public GameObject bronzeStarPrefab;
-		// Platforms will despawn to the left of this point
-		public float platformDespawnXPos;
-		// The current move speed of the platforms
-		public float beginningPlatformMoveSpeed = 5.0f;
-		//
-		public Vector2 platformRegSpawnRateRange = new Vector2 (300, 450);
-		public Vector2 platformSpecSpawnRateRange = new Vector2 (450, 2000);
-		// How quickly the platform move speed increases
-		public float platformMoveSpeedIncreaseRate = 0.0001f;
-		// The chance (%) of spawning a special platform
-		public int specialPlatformSpawnChance = 30;
-		// The chance (%) of spawning a star platform
-		public int starPlatformSpawnChance = 33;
-		
-			#region Spawn
-			
-			// The X position that platforms spawn at
-			public float spawnXPos = 11.4f;
-			// The maximum and minimum Y values that platforms can spawn between
-			public Vector2 maxSpawnRange = Vector2.zero;
-			
-			#endregion
+	#region Public
 	
-		#endregion
+	// The array of platform colors, in order
+	public Color [] platformColors;
+	// The color of platforms with stars on them
+	public Color starPlatformColor;
+	// The two X positions of the beginning platforms
+	public float beginningPlatXPos1 = 1.903751f;
+	public float beginningPlatXPos2 = 7.149028f;
+	// The size of the platform object pool
+	public int platformPoolSize = 8;
+	// The platform gameObject
+	public GameObject platformPrefab;
+	// The star prefabs
+	public GameObject goldStarPrefab;
+	public GameObject silverStarPrefab;
+	public GameObject bronzeStarPrefab;
+	// Platforms will despawn to the left of this point
+	public float platformDespawnXPos;
+	// The current move speed of the platforms
+	public float beginningPlatformMoveSpeed = 5.0f;
+	//
+	public Vector2 platformRegSpawnRateRange = new Vector2 (300, 450);
+	public Vector2 platformSpecSpawnRateRange = new Vector2 (450, 2000);
+	// How quickly the platform move speed increases
+	public float platformMoveSpeedIncreaseRate = 0.0001f;
+	// The chance (%) of spawning a special platform
+	public int specialPlatformSpawnChance = 30;
+	// The chance (%) of spawning a star platform
+	public int starPlatformSpawnChance = 33;
 	
-		#region Private
-		
-		// The list of platforms on the screen
-		public PlatformController [] platforms; 
-		public List <StarBehavior> stars = new List <StarBehavior> ();
-		// The position that platforms wait at before they are deployed
-		private Vector3 platformStagingPosition;
-		// The current color index for the next spawned platform
-		private int platColorIndex = 0;
-		// If the platforms are increasing in speed
-		private bool isIncreasingSpeed = false;
-		// The previous platform that was spawned
-		private Vector3 previousSpawnPos = Vector3.zero;
-		// If platforms can be spawned
-		private bool canSpawnPlatforms = false;
-		// If the game has started
-		private bool gameIsStarted = false;
-		
-		// The current move speed of the platforms
-		private float platformMoveSpeed = 5.0f;
-		// The current number of ticks to spawn a regular platform
-		private int currentTicks = 0;
-		// The current number of ticks to spawn a random platform
-		private int currentRandomTicks = 0;
-		// The number of ticks needed to pass for the next regular platform to spawn
-		private int ticksToNextSpawn = 50;
-		// The number of ticks needed to pass for the next random platform to spawn
-		private int ticksToNextRandomSpawn = 200;
-		// The current number of ticks to decrement the regular platform spawn time
-		private int decrementTicks = 0;
-		// The maximum number of ticks between individual platform spawns
-		private float spawnRateRegDifference = 150;
-		private float spawnRateSpecDifference = 1500;
-		// The platform holder gameobject
-		private Transform platformHolder;
-		// The temporary platform move speed percentage (for when we only want to temporarily change move speed)
-		private float temporaryMoveSpeedVariable = 1;
-		//
-		private Vector3 platParentOffscreenPos = new Vector3 (0, -9, 0);
-		//
-		private Vector3 platParentTargPos;
-		//
-		private bool goPlatParentMove = false;
-		
-		#endregion
+	#region Spawn
+	
+	// The X position that platforms spawn at
+	public float spawnXPos = 11.4f;
+	// The maximum and minimum Y values that platforms can spawn between
+	public Vector2 maxSpawnRange = Vector2.zero;
 	
 	#endregion
 	
-			
+	#endregion
+	
+	#region Private
+	
+	// The list of platforms on the screen
+	public PlatformController [] platforms; 
+	public List <StarBehavior> stars = new List <StarBehavior> ();
+	// The position that platforms wait at before they are deployed
+	private Vector3 platformStagingPosition;
+	// The current color index for the next spawned platform
+	private int platColorIndex = 0;
+	// If the platforms are increasing in speed
+	private bool isIncreasingSpeed = false;
+	// The previous platform that was spawned
+	private Vector3 previousSpawnPos = Vector3.zero;
+	// If platforms can be spawned
+	private bool canSpawnPlatforms = false;
+	// If the game has started
+	private bool gameIsStarted = false;
+	
+	// The current move speed of the platforms
+	private float platformMoveSpeed = 0.0f;
+	// The current number of ticks to spawn a regular platform
+	private int currentTicks = 0;
+	// The current number of ticks to spawn a random platform
+	private int currentRandomTicks = 0;
+	// The number of ticks needed to pass for the next regular platform to spawn
+	private int ticksToNextSpawn = 50;
+	// The number of ticks needed to pass for the next random platform to spawn
+	private int ticksToNextRandomSpawn = 200;
+	// The current number of ticks to decrement the regular platform spawn time
+	private int decrementTicks = 0;
+	// The maximum number of ticks between individual platform spawns
+	private float spawnRateRegDifference = 150;
+	private float spawnRateSpecDifference = 1500;
+	// The platform holder gameobject
+	private Transform platformHolder;
+	// The temporary platform move speed percentage (for when we only want to temporarily change move speed)
+	private float temporaryMoveSpeedVariable = 1;
+	//
+	private Vector3 platParentOffscreenPos = new Vector3 (0, -9, 0);
+	//
+	private Vector3 platParentTargPos;
+	//
+	private bool goPlatParentMove = false;
+	// If the platforms should have the chance of icicles
+	private bool _platformsAreIcy = false;
+	
+	#endregion
+	
+	#endregion
+	
+	
 	#region Spawning
 	
 	// Spawns a platform
@@ -135,7 +137,7 @@ public class PlatformManager : MonoBehaviour
 		
 		// We need to make sure we haven't spawned a platform on top of another one
 		if (previousSpawnPos != Vector3.zero)
-		if (Mathf.Abs (ySpawnPos - previousSpawnPos.y) < 1.0f)
+			if (Mathf.Abs (ySpawnPos - previousSpawnPos.y) < 1.0f)
 		{
 			if (ySpawnPos > previousSpawnPos.y)
 				ySpawnPos = (Mathf.Min (ySpawnPos + 1.5f, maxSpawnRange.y));
@@ -156,7 +158,7 @@ public class PlatformManager : MonoBehaviour
 				p.transform.localPosition = spawnPos;
 				p.ActivatePlatform ();
 				p.StartMovingPlatform ();
-				p.gameObject.renderer.enabled = true;
+				p.gameObject.GetComponent<Renderer>().enabled = true;
 				break;
 			}
 		}
@@ -193,7 +195,7 @@ public class PlatformManager : MonoBehaviour
 			}
 			
 			// Turn the renderer for the base platform off
-			p.gameObject.renderer.enabled = false;
+			p.gameObject.GetComponent <Renderer> ().enabled = false;
 		}
 		// Now we need to check for random star spawn
 		else if (Random.Range (0, 100) <= starPlatformSpawnChance)
@@ -212,6 +214,14 @@ public class PlatformManager : MonoBehaviour
 			}
 		}
 		
+		// If we can, we should check for a random icicle spawn
+		if (_platformsAreIcy)
+		{
+			int r = Random.Range (0, 10);
+			if (r <= 3)
+				p.icicleSprite.SetActive (true);
+		}
+		
 		// Set the previous platform position
 		previousSpawnPos = spawnPos;
 	}
@@ -225,8 +235,8 @@ public class PlatformManager : MonoBehaviour
 		platforms [1].transform.localPosition = new Vector3 (beginningPlatXPos2, -0.871768f, 0f);
 		platforms [0].ActivatePlatform ();
 		platforms [1].ActivatePlatform ();
-		platforms [0].gameObject.renderer.enabled = true;
-		platforms [1].gameObject.renderer.enabled = true;
+		platforms [0].gameObject.GetComponent<Renderer>().enabled = true;
+		platforms [1].gameObject.GetComponent<Renderer>().enabled = true;
 		SetPlatformColor (platforms [0]);
 		SetPlatformColor (platforms [1]);
 	}
@@ -330,6 +340,25 @@ public class PlatformManager : MonoBehaviour
 	#endregion
 	
 	
+	#region Themes
+	
+	// Sets whether snow is active
+	// Called from EventManager.cs
+	public void SetSnowIsActive (bool b)
+	{
+		// Activate the snow sprites on the platforms
+		for (int i = 0; i < platforms.Length; i++)
+		{
+			platforms [i].snowSprite.SetActive (b);
+		}
+		
+		// Ice sprites will be activated randomly at spawn
+		_platformsAreIcy = b;
+	}
+	
+	#endregion
+	
+	
 	#region Public
 	
 	// Removes the given star from the master star list
@@ -346,6 +375,7 @@ public class PlatformManager : MonoBehaviour
 		isIncreasingSpeed = false;
 		platformMoveSpeed = beginningPlatformMoveSpeed;
 		temporaryMoveSpeedVariable = 1;
+		platformMoveSpeed = 0.0f;
 		canSpawnPlatforms = false;
 		ResetTickCounts ();
 		
@@ -380,7 +410,7 @@ public class PlatformManager : MonoBehaviour
 		// If this method is accidentally called twice, escape to prevent bugs
 		if (gameIsStarted) return;
 		else gameIsStarted = true;
-			
+		
 		// Clear the screen
 		ResetScreenObjects ();
 		
@@ -545,7 +575,6 @@ public class PlatformManager : MonoBehaviour
 	// Called initially from Awake ()
 	private void AssignVariables ()
 	{
-		platformMoveSpeed = beginningPlatformMoveSpeed;
 		platColorIndex = Random.Range (0, platformColors.Length);
 		platformStagingPosition = new Vector3 (spawnXPos, 0f, 0f);
 		platformHolder = GameObject.Find ("*PlatformHolder").transform;

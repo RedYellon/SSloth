@@ -37,6 +37,11 @@ public class GoogleAnalyticsSettingsEditor : Editor {
 	GUIContent EditorAnalytics  = new GUIContent("Send From Editor [?]", "Enable sending analytics from Unity Editor");
 
 
+	GUIContent EnableCachingLabel  = new GUIContent("Enable Caching [?]", "When Internet Connection is not avaliable event hits will be saved ad sended when connection is recovered ");
+	GUIContent EnableQueueTimeLabel  = new GUIContent("Enable Queue Time [?]", "Queue Time to report time when hit was occured. But values greater than four hours may lead to hits not being processed.");
+	
+
+
 	GUIContent UsePlaterSettingLabel  = new GUIContent("Use Player Settings [?]", "Use Player setting as app name and version info");
 
 
@@ -319,6 +324,13 @@ public class GoogleAnalyticsSettingsEditor : Editor {
 			settings.UseHTTPS = EditorGUILayout.Toggle(UseHttpsLabel, settings.UseHTTPS);
 			settings.StringEscaping = EditorGUILayout.Toggle(StringEscape, settings.StringEscaping);
 			settings.EditorAnalytics = EditorGUILayout.Toggle(EditorAnalytics, settings.EditorAnalytics);
+		}
+
+		GoogleAnalyticsSettings.Instance.showCParams = EditorGUILayout.Foldout(GoogleAnalyticsSettings.Instance.showCParams, "Requests Caching Parameters");
+		if(GoogleAnalyticsSettings.Instance.showCParams) {
+		
+			settings.IsRequetsCachingEnabled = EditorGUILayout.Toggle(EnableCachingLabel,   settings.IsRequetsCachingEnabled);
+			settings.IsQueueTimeEnabled 	 = EditorGUILayout.Toggle(EnableQueueTimeLabel, settings.IsQueueTimeEnabled);
 		}
 	}
 

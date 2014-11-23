@@ -121,12 +121,13 @@ public class IOSInAppPurchaseManager : EventDispatcher {
 		if(!_IsStoreLoaded) {
 
 			Debug.LogWarning("buyProduct shouldn't be called before store kit initialized"); 
-			SendTransactionFailEvent(productId, "Store kit not yet initialized");
+			SendTransactionFailEvent(productId, "Store kit not yet initialized", IOSTransactionErrorCode.SKErrorPaymentNotAllowed);
 
 			return;
 		} else {
 			if(!_IsInAppPurchasesEnabled) {
-				SendTransactionFailEvent(productId, "In App Purchases Disabled");
+				SendTransactionFailEvent(productId, "In App Purchases Disabled", IOSTransactionErrorCode.SKErrorPaymentNotAllowed);
+				return;
 			}
 		}
 
@@ -318,7 +319,7 @@ public class IOSInAppPurchaseManager : EventDispatcher {
 		string[] data;
 		data = array.Split("|" [0]);
 
-		SendTransactionFailEvent(data [0], data [1]);
+		SendTransactionFailEvent(data [0], data [1], (IOSTransactionErrorCode) System.Convert.ToInt32( data [2]));
 	}
 	
 	
@@ -404,11 +405,17 @@ public class IOSInAppPurchaseManager : EventDispatcher {
 	}
 
 
-	private void SendTransactionFailEvent(string productIdentifier, string error) {
+	private void SendTransactionFailEvent(string productIdentifier, string errorDescribtion, IOSTransactionErrorCode errorCode) {
 		IOSStoreKitResponse response = new IOSStoreKitResponse ();
 		response.productIdentifier = productIdentifier;
-		response.error =  error;
 		response.state = InAppPurchaseState.Failed;
+
+
+		response.error =  new IOSStoreKitError();
+		response.error.description = errorDescribtion;
+		response.error.code = errorCode;
+
+
 		
 		
 		dispatch(TRANSACTION_COMPLETE, response);

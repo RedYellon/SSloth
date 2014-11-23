@@ -60,6 +60,26 @@ static ISNCamera *_sharedInstance;
 }
 
 
+-(void) GetVideoPathFromAlbum {
+    [self GetVideo];
+}
+
+
+
+
+
+- (void)GetVideo {
+    UIViewController *vc =  UnityGetGLViewController();
+    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+    picker.delegate = self;
+    picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    picker.mediaTypes = [[NSArray alloc] initWithObjects:(NSString *)kUTTypeMovie,      nil];
+    [vc presentViewController:picker animated:YES completion:nil];
+    [picker release];
+}
+
+
+
 
 -(void) GetImage: (UIImagePickerControllerSourceType )source {
     UIViewController *vc =  UnityGetGLViewController();
@@ -83,50 +103,52 @@ static ISNCamera *_sharedInstance;
 -(void) imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     UIViewController *vc =  UnityGetGLViewController();
     [vc dismissViewControllerAnimated:YES completion:nil];
-    //[vc dismissModalViewControllerAnimated:YES];
-    
-    UIImage *photo = [info objectForKey:UIImagePickerControllerOriginalImage];
-    
-    NSString *encodedImage = @"";
-    if (photo == nil) {
-         NSLog(@"no photo");
-    } else {
-        
-        NSLog(@"MaxImageSize: %i", [self MaxImageSize]);
-        if(photo.size.width > [self MaxImageSize]) {
-           CGSize s = CGSizeMake([self MaxImageSize], [self MaxImageSize]);
-            
-            CGFloat new_height = [self MaxImageSize] / (photo.size.width / photo.size.height);
-            s.height = new_height;
-
-            
-         
-            photo =   [ISNCamera imageWithImage:photo scaledToSize:s];
-            
-        }
-        
-        
-        
-        //NSData *imageData =  UIImagePNGRepresentation(photo);
-        
-        NSData *imageData = nil;
-        NSLog(@"ImageCompressionRate: %f", [self ImageCompressionRate]);
-        if([self encodingType] == 0) {
-            imageData = UIImagePNGRepresentation(photo);
+    // ee added video support
+    NSString *mediaType = [info objectForKey: UIImagePickerControllerMediaType]; // get media type
+    // if mediatype is video
+    if (CFStringCompare ((__bridge CFStringRef) mediaType, kUTTypeMovie, 0) == kCFCompareEqualTo) {
+        NSURL *videoUrl=(NSURL*)[info objectForKey:UIImagePickerControllerMediaURL];
+        NSString *moviePath = [videoUrl path];
+        UnitySendMessage("IOSCamera", "OnVideoPickedEvent", [ISNDataConvertor NSStringToChar:moviePath]);
+    }
+    else{
+        // it must be an image
+        UIImage *photo = [info objectForKey:UIImagePickerControllerOriginalImage];
+        NSString *encodedImage = @"";
+        if (photo == nil) {
+            NSLog(@"no photo");
         } else {
-            imageData = UIImageJPEGRepresentation(photo, [self ImageCompressionRate]);
+           // NSLog(@"MaxImageSize: %i", [self MaxImageSize]);
+           //  NSLog(@"photo.size.width: %f", photo.size.width);
+            
+            if(photo.size.width > [self MaxImageSize]) {
+                 NSLog(@"resizing image");
+                CGSize s = CGSizeMake([self MaxImageSize], [self MaxImageSize]);
+                CGFloat new_height = [self MaxImageSize] / (photo.size.width / photo.size.height);
+                s.height = new_height;
+                
+                photo =   [ISNCamera imageWithImage:photo scaledToSize:s];
+                
+               //  NSLog(@"photo.size.width: %f", photo.size.width);
+              //   NSLog(@"photo.size.height: %f", photo.size.height);
+                
+                
+            }
+            
+            NSData *imageData = nil;
+            NSLog(@"ImageCompressionRate: %f", [self ImageCompressionRate]);
+            if([self encodingType] == 0) {
+                imageData = UIImagePNGRepresentation(photo);
+            } else {
+                imageData = UIImageJPEGRepresentation(photo, [self ImageCompressionRate]);
+            }
+            encodedImage = [imageData base64Encoding];
         }
         
-        encodedImage = [imageData base64Encoding];
+        UnitySendMessage("IOSCamera", "OnImagePickedEvent", [ISNDataConvertor NSStringToChar:encodedImage]);
+        
     }
     
-   
-    
-    
-   UnitySendMessage("IOSCamera", "OnImagePickedEvent", [ISNDataConvertor NSStringToChar:encodedImage]);
-    
-    
-
 }
 
 + (UIImage *)imageWithImage:(UIImage *)image scaledToSize:(CGSize)newSize {
@@ -165,7 +187,9 @@ extern "C" {
         [[ISNCamera sharedInstance] GetImageFromCamera];
     }
     
-    
+    void _ISN_GetVideoPathFromAlbum() {
+        [[ISNCamera sharedInstance] GetVideoPathFromAlbum];
+    }
     
     void _ISN_GetImageFromAlbum() {
         [[ISNCamera sharedInstance] GetImageFromAlbum];
@@ -173,7 +197,7 @@ extern "C" {
     
     void _ISN_InitCamerAPI(float compressionRate, int maxSize, int encodingType) {
         [[ISNCamera sharedInstance] setImageCompressionRate:compressionRate];
-        [[ISNCamera sharedInstance] setMaxImageSize:maxSize];
+        [[ISNCamera sharedInstance] setMaxImageSize:maxSize / 2];
         [[ISNCamera sharedInstance] setEncodingType:encodingType];
     }
 

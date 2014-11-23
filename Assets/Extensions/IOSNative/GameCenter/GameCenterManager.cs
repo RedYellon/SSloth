@@ -643,7 +643,7 @@ public class GameCenterManager : MonoBehaviour {
 
 	private void onAchievementsLoaded(string array) {
 
-		ISN_Result result = new ISN_Result (false);
+		ISN_Result result = new ISN_Result (true);
 		if(array.Equals(string.Empty)) {
 			OnAchievementsLoaded (result);
 			dispatcher.dispatch (GAME_CENTER_ACHIEVEMENTS_LOADED, result);
@@ -718,7 +718,13 @@ public class GameCenterManager : MonoBehaviour {
 		GameCenterPlayerTemplate p =  new GameCenterPlayerTemplate(playerId, displayName, alias);
 		p.SetAvatar(avatar);
 
-		_players.Add(playerId, p);
+
+		if(_players.ContainsKey(playerId)) {
+			_players[playerId] = p;
+		} else {
+			_players.Add(playerId, p);
+		}
+
 		if(p.playerId == _player.playerId) {
 			_player = p;
 		}

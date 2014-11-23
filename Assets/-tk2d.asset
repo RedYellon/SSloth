@@ -116,7 +116,7 @@ MonoBehaviour:
     - slothJump1
     - slothRun1
     - slothLand
-    - ostritch_fixed
+    - giraffeHead_1
     - grass
     - weed
     - platform_Dirty_fly
@@ -142,26 +142,39 @@ MonoBehaviour:
     - cloud_5
     - cloud_6
     - blankCircle
-    - 
+    - snow_3
     - blankSquare
     - newStar
     - PlatformCrackEffect
-    - 
-    - 
+    - snow_2
+    - snow_1
     - butterfly_2
     - butterfly_1
     - Balloon
     - PlatformDirtyOn
-    - llama_fixed
+    - llamaHead_1
     - rock_1_fixed
     - PlatformDirtyOff
-    - 
-    - 
-    - 
-    - 
-    - 
+    - icicle_1
+    - icicle_2
+    - snowflake_5
+    - snowflake_4
+    - snowflake_1
     - Balloon_2_fixed
-    - Giraffe_fixed
+    - ostritchHead_1
+    - snowflake_3
+    - snowflake_2
+    - snoflakeface_4
+    - snoflakeface_1
+    - snoflakeface_3
+    - snoflakeface_2
+    - snoflakeface_5
+    - ostritchNeck
+    - giraffeHead_2
+    - llamaNeck
+    - ostritchHead_2
+    - llamaHead_2
+    - giraffeNeck
     spriteTextureGUIDs:
     - 20ef99a41a6e54c808743ca46ff5692b
     - 40845dec67d774ed0a8d31902af895c9
@@ -174,7 +187,7 @@ MonoBehaviour:
     - c11e8cecfb5f84f11a82ec11fcfcb12a
     - e0483b12061864b98be498c8071088e0
     - ef96d901d4ba44a35a45ab2b012e2c1a
-    - 095537c219dce47e3a3de9a258f3c02b
+    - 2d6e8594ce2ee469fb7b57cc8c574401
     - 94f6fe817771446e7bdf1d2e40c8e1f1
     - 05ca708dee77c4d60a165c48c7f5f6ba
     - 9c62a0f93a0b94a5b93fbca8983823e1
@@ -200,26 +213,39 @@ MonoBehaviour:
     - e56eea1bd79d340ddb43acbd07afadf9
     - e76d5c9cb43d546e5a836e9200914d22
     - 682eadfb1e0d14736b6dfe18db69db9d
-    - 
+    - 957e42876ba284ad0a5680f9dbe44dcb
     - 58af877347d7749dea04aa76cc380891
     - 7552d15f20b104053ac71e76a144636e
     - 485e125d351ba460b926482393e7fb69
-    - 
-    - 
+    - 9cdf252527e4d48ca83179e01fccc9ee
+    - c77a8ae000d354b8b8ff58a52720654e
     - 053908a93b5ba4ed5b976542af1a39f6
     - efa1f77721e7b4f4589de9dcfa1a33ad
     - d201fbadab6c64e0db18d73fce81f6f7
     - 2e9fa97eaccb24406abd2fb4a9a995b4
-    - 14c56a9d94c5a4778b6f34ecc697ac68
+    - 34dbbf0051fbb4e1881ee021828195d6
     - 22147eb3070474747a6220667eca57cd
     - b2ba70a659ccb489e9b436b814c3e9f1
-    - 
-    - 
-    - 
-    - 
-    - 
+    - def743301a57442d493c83cfe07e28fc
+    - ebdef642a6b1c4495b9a5407e8500da8
+    - 5da31e74475f14d18a215cb02fbfbf36
+    - 847f72e1301d246fdb4c5e77f148b298
+    - a28517f5bbe4246df916d9075bad55ce
     - 61f1023e843184ca0b805707e9e01d41
-    - 67edce1bdb9844a1098dadcc7fa10aae
+    - 4c978676af83a4f658ab13c1b2fd4e76
+    - a508b5cda647f41be9283c034ab55ac4
+    - bc878c6111b5f42fab01a3d954f33f71
+    - 06eb5869bf04d4bb4bc9c1d3e8cf2dbc
+    - 19ffd56fa72ff4711a5f4b2ce1f47c3f
+    - 30c8367043b8a4f7c8f258763ed45d80
+    - 711443136d92a468aadb64e967006154
+    - 95f8a94fecaaf4b2aa285fb8ff723bfe
+    - 60265851229d94539882a19bb936b76e
+    - 74ef4862a091e4e22b5cb23f33ad1ce0
+    - 99e1e9921bf9d42db9096b0fcda8eda1
+    - c2913865a38e749aeb819a5df2961f2d
+    - ec30537e557af4685a18a67dd36c02fd
+    - f62bd7041b274493094c6e9211117f19
     spriteTextureTimeStamps:
     - 1411667960
     - 1411667960
@@ -232,6 +258,7 @@ MonoBehaviour:
     - 1411667960
     - 1411667960
     - 1411667960
+    - 1416757346
     - 1411667960
     - 1411667960
     - 1411667960
@@ -257,27 +284,39 @@ MonoBehaviour:
     - 1411667960
     - 1411667960
     - 1411667960
-    - 1411667960
-    - 0
-    - 1411667960
+    - 1416296888
     - 1411667960
     - 1411667960
-    - 0
-    - 0
     - 1411667960
+    - 1416296888
+    - 1416296886
     - 1411667960
     - 1411667960
     - 1411667960
     - 1411667960
+    - 1416757417
     - 1411667960
     - 1411667960
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
+    - 1416295664
+    - 1416295668
+    - 1416415742
+    - 1416415718
+    - 1416415634
     - 1411667960
-    - 1411667960
+    - 1416757474
+    - 1416418092
+    - 1416415678
+    - 1416415852
+    - 1416415796
+    - 1416415834
+    - 1416415812
+    - 1416415868
+    - 1416757502
+    - 1416757384
+    - 1416757459
+    - 1416757487
+    - 1416757434
+    - 1416757403
     managedSpriteCollection: 0
     loadable: 0
     assetName: 

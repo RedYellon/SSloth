@@ -10,7 +10,7 @@ using UnityEditor;
 
 public class IOSNativeSettings : ScriptableObject {
 
-	public const string VERSION_NUMBER = "5.3";
+	public const string VERSION_NUMBER = "5.4";
 
 	public string AppleId = "XXXXXXXXX";
 

@@ -346,7 +346,7 @@ public class IOSADBanner :  EventDispatcherBase, GoogleMobileAdBanner  {
 	
 	public void OnBannerAdLoaded()  {
 		if(destroyOnLoad) {
-			AndroidNative.DestroyBanner(id);
+			IOSAdMobController.instance.DirectBannerDestory(id);
 			return;
 		}
 

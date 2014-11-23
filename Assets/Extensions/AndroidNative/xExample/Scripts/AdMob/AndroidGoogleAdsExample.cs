@@ -18,8 +18,8 @@ public class AndroidGoogleAdsExample : MonoBehaviour {
 
 	
 	//replace with your ids
-	private const string MY_BANNERS_AD_UNIT_ID		 = "/82848719/LaooLA";//"ca-app-pub-6101605888755494/1824764765"; 
-	private const string MY_INTERSTISIALS_AD_UNIT_ID = "/82848719/LaooLA";// //"ca-app-pub-6101605888755494/3301497967"; 
+	private const string MY_BANNERS_AD_UNIT_ID		 = "ca-app-pub-6101605888755494/1824764765"; 
+	private const string MY_INTERSTISIALS_AD_UNIT_ID =  "ca-app-pub-6101605888755494/3301497967"; 
 
 	
 	private GoogleMobileAdBanner banner1;
@@ -288,7 +288,7 @@ public class AndroidGoogleAdsExample : MonoBehaviour {
 	private void OnInAppRequest(CEvent e) {
 		//getting product id
 		string productId = (string) e.data;
-		AndroidNative.showMessage ("In App Request", "In App Request for product Id: " + productId + " received");
+		AN_PoupsProxy.showMessage ("In App Request", "In App Request for product Id: " + productId + " received");
 
 
 		//Then you should perfrom purchase  for this product id, using this or another game billing plugin

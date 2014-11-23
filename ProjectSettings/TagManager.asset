@@ -40,7 +40,75 @@ TagManager:
   User Layer 30: 
   User Layer 31: 
   m_SortingLayers:
+  - name: BackgroundStripes
+    userID: 1
+    uniqueID: 2245944471
+    locked: 0
+  - name: CloudPoles
+    userID: 14
+    uniqueID: 1444083455
+    locked: 0
+  - name: TimeTint
+    userID: 13
+    uniqueID: 1193898877
+    locked: 0
+  - name: Stars
+    userID: 3
+    uniqueID: 3020160705
+    locked: 0
+  - name: Clouds
+    userID: 2
+    uniqueID: 1148128095
+    locked: 0
+  - name: Middleground
+    userID: 4
+    uniqueID: 801984571
+    locked: 0
+  - name: SkyStuff
+    userID: 10
+    uniqueID: 354811139
+    locked: 0
+  - name: Platforms
+    userID: 5
+    uniqueID: 1293892095
+    locked: 0
+  - name: Player
+    userID: 6
+    uniqueID: 886264763
+    locked: 0
+  - name: Foreground
+    userID: 7
+    uniqueID: 3974584279
+    locked: 0
+  - name: MaskedUI
+    userID: 16
+    uniqueID: 1996094631
+    locked: 0
+  - name: BackgroundScreenEffects
+    userID: 17
+    uniqueID: 4275159545
+    locked: 0
+  - name: ScreenBlackTint
+    userID: 15
+    uniqueID: 1002936617
+    locked: 0
+  - name: UI
+    userID: 8
+    uniqueID: 1960341009
+    locked: 0
   - name: Default
     userID: 0
     uniqueID: 0
+    locked: 0
+  - name: ForegroundScreenEffects
+    userID: 9
+    uniqueID: 1109383759
+    locked: 0
+  - name: Animals
+    userID: 11
+    uniqueID: 692722789
+    locked: 0
+  - name: ScreenOcclusion
+    userID: 12
+    uniqueID: 1071521459
     locked: 0

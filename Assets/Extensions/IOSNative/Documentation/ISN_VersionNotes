@@ -1,3 +1,25 @@
+5.5:
+
+Fixes:
+Dialog Popups button order fixed
+Getting image from camera / gallery scale fixed
+Game Center IOS7 crash fixed 
+
+
+5.4:
+
+Fixes:
+GameCenterManager.OnAchievementsLoaded action result fixed
+GameCenter long long score submission fixed
+TransactionServer error description fixed
+
+IOSStoreKitError object added as representation of transaction error, update in-app purchases guide can be found here: http://goo.gl/CkP6GU
+
+
+5.3.1:
+Game Center Exception fixed
+Playmaker actions compilation fixed
+
 5.3:
 
 Updates:

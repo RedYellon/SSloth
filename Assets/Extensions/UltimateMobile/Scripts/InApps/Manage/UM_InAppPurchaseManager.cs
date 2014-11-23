@@ -2,6 +2,7 @@
 using UnionAssets.FLE;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 
 public class UM_InAppPurchaseManager : SA_Singleton<UM_InAppPurchaseManager> {
 
@@ -151,6 +152,32 @@ public class UM_InAppPurchaseManager : SA_Singleton<UM_InAppPurchaseManager> {
 		return false;
 
 	}
+
+
+	public List<UM_InAppProduct> InAppProducts {
+		get {
+			return UltimateMobileSettings.Instance.InAppProducts;
+		}
+	}
+
+	public UM_InAppProduct GetProductById(string id) {
+		return UltimateMobileSettings.Instance.GetProductById(id);
+	}
+	
+	
+	public UM_InAppProduct GetProductByIOSId(string id) {
+		return UltimateMobileSettings.Instance.GetProductByIOSId(id);
+	}
+	
+	
+	public UM_InAppProduct GetProductByAndroidId(string id) {
+		return UltimateMobileSettings.Instance.GetProductByAndroidId(id);
+	}
+	
+	public UM_InAppProduct GetProductByWp8Id(string id) {
+		return UltimateMobileSettings.Instance.GetProductByWp8Id(id);
+	}
+
 
 	//--------------------------------------
 	// Get / SET
@@ -352,6 +379,8 @@ public class UM_InAppPurchaseManager : SA_Singleton<UM_InAppPurchaseManager> {
 			}
 		}
 
+
+		OnBillingConnectFinishedAction(r);
 		dispatch(ON_BILLING_CONNECT_FINISHED, r);
 		
 	}

@@ -14,7 +14,7 @@ public class GooglePlusAPI : SA_Singleton<GooglePlusAPI> {
 	public void clearDefaultAccount() {
 		if (!GooglePlayConnection.CheckState ()) { return; }
 
-		AndroidNative.clearDefaultAccount();
+		AN_GMSGeneralProxy.clearDefaultAccount();
 		GooglePlayConnection.instance.disconnect();
 	}
 }

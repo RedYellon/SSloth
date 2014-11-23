@@ -22,8 +22,9 @@ public class GooglePlayConnection : SA_Singleton<GooglePlayConnection> {
 	public const string PLAYER_DISCONNECTED   			= "player_disconnected";
 
 	//Actions
-	public static Action<GPConnectionState> ActionConnectionStateChanged =  delegate {};
 	public static Action<GooglePlayConnectionResult> ActionConnectionResultReceived =  delegate {};
+
+	public static Action<GPConnectionState> ActionConnectionStateChanged =  delegate {};
 	public static Action ActionPlayerConnected =  delegate {};
 	public static Action ActionPlayerDisconnected =  delegate {};
 
@@ -61,7 +62,11 @@ public class GooglePlayConnection : SA_Singleton<GooglePlayConnection> {
 			connectionString += "PlusAPI";
 		}
 
-		AndroidNative.playServiceInit(connectionString);
+		if(AndroidNativeSettings.Instance.EnableDriveAPI) {
+			connectionString += "DriveAPI";
+		}
+
+		AN_GMSGeneralProxy.playServiceInit(connectionString);
 
 		_isInitialized = true;
 	}
@@ -83,9 +88,9 @@ public class GooglePlayConnection : SA_Singleton<GooglePlayConnection> {
 		}
 
 		if(accountName != null) {
-			AndroidNative.playServiceConnect (accountName);
+			AN_GMSGeneralProxy.playServiceConnect (accountName);
 		} else {
-			AndroidNative.playServiceConnect ();
+			AN_GMSGeneralProxy.playServiceConnect ();
 		}
 
 	}
@@ -97,7 +102,7 @@ public class GooglePlayConnection : SA_Singleton<GooglePlayConnection> {
 		}
 
 		OnStateChange(GPConnectionState.STATE_DISCONNECTED);
-		AndroidNative.playServiceDisconnect ();
+		AN_GMSGeneralProxy.playServiceDisconnect ();
 
 	}
 

@@ -119,8 +119,8 @@ public class DeathScreen : MonoBehaviour
 	
 		#region Private
 		
-		// The reset mask object renderer
-		private Renderer resetMaskRend;
+		// The screen mask
+		private tk2dSprite screenMask;
 		//
 		private bool isFadingInResetMask = false;
 		private bool isFadingOutResetMask = false;
@@ -225,7 +225,7 @@ public class DeathScreen : MonoBehaviour
 	// Called every frame from Update ()
 	void FadeInResetMask ()
 	{
-		resetMaskRend.material.color = Color.Lerp (resetMaskRend.material.color, new Color (resetMaskRend.material.color.r, resetMaskRend.material.color.g, resetMaskRend.material.color.b, resetMaskFadeInAlpha), Time.deltaTime * fadeInResetMaskRate);
+		screenMask.color = Color.Lerp (screenMask.color, new Color (screenMask.color.r, screenMask.color.g, screenMask.color.b, resetMaskFadeInAlpha), Time.deltaTime * fadeInResetMaskRate);
 	}
 	
 	
@@ -233,7 +233,7 @@ public class DeathScreen : MonoBehaviour
 	// Called every frame from Update ()
 	void FadeOutResetMask ()
 	{
-		resetMaskRend.material.color = Color.Lerp (resetMaskRend.material.color, new Color (resetMaskRend.material.color.r, resetMaskRend.material.color.g, resetMaskRend.material.color.b, 0.0f), Time.deltaTime * fadeOutResetMaskRate);
+		screenMask.color = Color.Lerp (screenMask.color, new Color (screenMask.color.r, screenMask.color.g, screenMask.color.b, 0.0f), Time.deltaTime * fadeOutResetMaskRate);
 	}
 	
 	
@@ -526,7 +526,7 @@ public class DeathScreen : MonoBehaviour
 		// Move death screen objects out of the way
 		isFadingInResetMask = false;
 		isFadingOutResetMask = false;
-		resetMaskRend.material.color = Color.clear;
+		screenMask.color = Color.clear;
 		_socialShareFoldoutOpen = false;
 		_isInTargetMode = false;
 		if (_isHighScore) newHighLabel.EndMove ();
@@ -812,7 +812,7 @@ public class DeathScreen : MonoBehaviour
 		shareCont = GetComponent <SocialShare> ();
 		eventManager = GetComponent <EventManager> ();
 		camCont = GameObject.Find ("Main Camera").GetComponent <CameraController> ();
-		resetMaskRend = GameObject.Find ("ScreenMask").renderer;
+		screenMask = GameObject.Find ("ScreenMask").GetComponent <tk2dSprite> ();
 		screenFlash = GameObject.Find ("ScreenFlasher").GetComponent <Flash> ();
 		playerCont = GameObject.Find ("Player").GetComponent <PlayerController> ();
 		dykText1.text = "";

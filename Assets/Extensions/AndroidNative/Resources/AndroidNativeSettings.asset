@@ -14,6 +14,7 @@ MonoBehaviour:
   EnablePlusAPI: 1
   EnableGamesAPI: 1
   EnableAppStateAPI: 1
+  EnableDriveAPI: 0
   LoadProfileIcons: 1
   LoadProfileImages: 1
   LoadQuestsImages: 1
@@ -23,11 +24,38 @@ MonoBehaviour:
   GalleryFolderName: Super Sloth
   MaxImageLoadSize: 512
   CameraCaptureMode: 0
+  ShowPluginSettings: 0
+  ShowAppPermissions: 0
+  EnableBillingAPI: 1
+  EnablePSAPI: 1
+  EnableSocialAPI: 1
+  EnableCameraAPI: 1
+  ExpandNativeAPI: 0
+  ExpandPSAPI: 0
+  ExpandBillingAPI: 0
+  ExpandSocialAPI: 0
+  ExpandCameraAPI: 0
   ShowStoreKitParams: 0
   ShowCameraAndGalleryParams: 0
   ShowPSSettings: 0
   ShowActions: 0
   GCMSettingsActinve: 0
+  LocalNotificationsAPI: 1
+  ImmersiveModeAPI: 1
+  ApplicationInformationAPI: 1
+  ExternalAppsAPI: 1
+  PoupsandPreloadersAPI: 1
+  InAppPurchasesAPI: 1
+  GooglePlayServicesAPI: 1
+  PlayServicesAdvancedSignInAPI: 1
+  GoogleButtonAPI: 1
+  AnalyticsAPI: 1
+  GoogleCloudSaveAPI: 1
+  PushNotificationsAPI: 1
+  GoogleMobileAdAPI: 1
+  GalleryAPI: 1
+  CameraAPI: 1
+  KeepManifestClean: 1
   GCM_SenderId: YOUR_SENDER_ID_HERE
   base64EncodedPublicKey: REPLACE_WITH_YOUR_PUBLIC_KEY
   InAppProducts: []

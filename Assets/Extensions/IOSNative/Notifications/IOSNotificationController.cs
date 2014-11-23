@@ -9,13 +9,20 @@
 
 
 
-using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 #if (UNITY_IPHONE && !UNITY_EDITOR) || SA_DEBUG_MODE
 using System.Runtime.InteropServices;
 #endif
+
+
+#if UNITY_3_5 || UNITY_4_0 || UNITY_4_0_1 || UNITY_4_1 || UNITY_4_2 || UNITY_4_3 || UNITY_4_5 || UNITY_4_6
+using UnityEngine;
+#else
+using UnityEngine.iOS;
+#endif
+
 
 public class IOSNotificationController : ISN_Singleton<IOSNotificationController>
 {
@@ -82,7 +89,7 @@ public class IOSNotificationController : ISN_Singleton<IOSNotificationController
 	void FixedUpdate() {
 		if(NotificationServices.remoteNotificationCount > 0) {
 			foreach(var rn in NotificationServices.remoteNotifications) {
-				Debug.Log("Remote Noti: " + rn.alertBody);
+				UnityEngine.Debug.Log("Remote Noti: " + rn.alertBody);
 				IOSNotificationController.instance.ShowNotificationBanner("", rn.alertBody);
 				dispatch(REMOTE_NOTIFICATION_RECEIVED, rn);
 				OnRemoteNotificationReceived(rn);
@@ -175,12 +182,12 @@ public class IOSNotificationController : ISN_Singleton<IOSNotificationController
 	private int GetNextId {
 		get {
 			int id = 1;
-			if(PlayerPrefs.HasKey(PP_ID_KEY)) {
-				id = PlayerPrefs.GetInt(PP_ID_KEY);
+			if(UnityEngine.PlayerPrefs.HasKey(PP_ID_KEY)) {
+				id = UnityEngine.PlayerPrefs.GetInt(PP_ID_KEY);
 				id++;
 			} 
 			
-			PlayerPrefs.SetInt(PP_ID_KEY, id);
+			UnityEngine.PlayerPrefs.SetInt(PP_ID_KEY, id);
 			return id;
 		}
 		

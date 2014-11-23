@@ -11,7 +11,7 @@ using UnityEditor;
 
 public class GoogleAnalyticsSettings : ScriptableObject {
 
-	public static string VERSION_NUMBER = "2.1";
+	public static string VERSION_NUMBER = "2.3";
 
 
 
@@ -25,6 +25,7 @@ public class GoogleAnalyticsSettings : ScriptableObject {
 
 	public bool showAdditionalParams = false;
 	public bool showAdvancedParams = false;
+	public bool showCParams = false;
 	
 	public bool showAccounts = true;
 	public bool showPlatfroms = false;
@@ -43,6 +44,10 @@ public class GoogleAnalyticsSettings : ScriptableObject {
 
 	public bool IsTestingModeEnabled = false;
 	public int TestingModeAccIndex = 0;
+
+
+	public bool IsRequetsCachingEnabled= true;
+	public bool IsQueueTimeEnabled = true;
 	
 
 	public bool AutoLevelTracking = true;
@@ -85,12 +90,7 @@ public class GoogleAnalyticsSettings : ScriptableObject {
 					// If not found, autocreate the asset object.
 					instance = CreateInstance<GoogleAnalyticsSettings>();
 					#if UNITY_EDITOR
-					string properPath = Path.Combine(Application.dataPath, AnalyticsSettingsPath);
-					if (!Directory.Exists(properPath)) {
-						Debug.Log("X");
-						AssetDatabase.CreateFolder("Extensions/", "GoogleAnalytics");
-						AssetDatabase.CreateFolder("Extensions/GoogleAnalytics", "Resources");
-					}
+					FileStaticAPI.CreateFolder(AnalyticsSettingsPath);
 					
 					string fullPath = Path.Combine(Path.Combine("Assets", AnalyticsSettingsPath),
 					                               AnalyticsSettingsAssetName + AnalyticsSettingsAssetExtension

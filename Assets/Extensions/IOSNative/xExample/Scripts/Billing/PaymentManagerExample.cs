@@ -108,6 +108,8 @@ public class PaymentManagerExample {
 		case InAppPurchaseState.Failed:
 			//Our purchase flow is failed.
 			//We can unlock intrefase and repor user that the purchase is failed. 
+			Debug.Log("Transaction failed with error, code: " + responce.error.code);
+			Debug.Log("Transaction failed with error, description: " + responce.error.description);
 			break;
 		}
 

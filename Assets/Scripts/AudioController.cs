@@ -82,6 +82,11 @@ public class AudioController : MonoBehaviour
 		public AudioClip whooshClip;
 		public AudioClip applauseClip;
 		public AudioClip shingClip;
+		public AudioClip cheatButtonClip;
+		public AudioClip cheatFailedClip;
+		public AudioClip cheatSucceededClip;
+		public AudioClip animalBlinkClip;
+		public AudioClip animalLeaveClip;
 		// The happy sounds
 		public AudioClip [] happySounds;
 		// The angry sounds
@@ -232,7 +237,7 @@ public class AudioController : MonoBehaviour
 	{
 		buttonSource.Play ();
 	}
-	
+
 	
 	// Sets whether the running score source is playing
 	// Called from 
@@ -439,6 +444,21 @@ public class AudioController : MonoBehaviour
 			break;
 			case "Shing":
 				clipp = shingClip;
+			break;
+			case "CheatButton":
+				clipp = cheatButtonClip;
+			break;
+			case "CheatFailed":
+				clipp = cheatFailedClip;
+			break;
+			case "CheatSucceeded":
+				clipp = cheatSucceededClip;
+			break;
+			case "AnimalBlink":
+				clipp = animalBlinkClip;
+			break;
+			case "AnimalLeave":
+				clipp = animalLeaveClip;
 			break;
 		}
 		return clipp;

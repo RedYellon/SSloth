@@ -54,7 +54,7 @@ public class AndroidRateUsPopUp : BaseAndroidPopup {
 	
 	
 	public void init() {
-		AndroidNative.showRateDialog(title, message, yes, later, no, url);
+		AN_PoupsProxy.showRateDialog(title, message, yes, later, no);
 	}
 	
 	
@@ -70,6 +70,7 @@ public class AndroidRateUsPopUp : BaseAndroidPopup {
 		int index = System.Convert.ToInt16(buttonIndex);
 		switch(index) {
 			case 0: 
+				AN_PoupsProxy.OpenAppRatePage(url);
 				OnComplete(AndroidDialogResult.RATED);
 				dispatch(BaseEvent.COMPLETE, AndroidDialogResult.RATED);
 				break;

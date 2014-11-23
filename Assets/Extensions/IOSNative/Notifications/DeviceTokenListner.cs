@@ -9,10 +9,15 @@
 
 
 
+#if UNITY_3_5 || UNITY_4_0 || UNITY_4_0_1 || UNITY_4_1 || UNITY_4_2 || UNITY_4_3 || UNITY_4_5 || UNITY_4_6
 using UnityEngine;
+#else
+using UnityEngine.iOS;
+#endif
+
 using System.Collections;
 
-public class DeviceTokenListner : MonoBehaviour {
+public class DeviceTokenListner : UnityEngine.MonoBehaviour {
 	
 	
 
@@ -21,7 +26,7 @@ public class DeviceTokenListner : MonoBehaviour {
 	//--------------------------------------
 
 	public static void Create() {
-		 new GameObject ("DeviceTockenListner").AddComponent<DeviceTokenListner> ();
+		new UnityEngine.GameObject ("DeviceTockenListner").AddComponent<DeviceTokenListner> ();
 	}
 
 

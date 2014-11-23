@@ -38,7 +38,13 @@ public class IOSNativePostProcess  {
 		}
 
 
+		string MobileCoreServices = "MobileCoreServices.framework";
+		if(!ISDSettings.Instance.frameworks.Contains(MobileCoreServices)) {
+			ISDSettings.Instance.frameworks.Add(MobileCoreServices);
+		}
 
+
+	
 	}
 	#endif
 }

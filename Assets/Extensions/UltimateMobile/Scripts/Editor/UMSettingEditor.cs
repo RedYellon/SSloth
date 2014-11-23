@@ -17,6 +17,16 @@ public class UMSettingEditor : Editor {
 	private UltimateMobileSettings settings;
 
 
+	void Awake() {
+	
+		
+		if(IsInstalled && IsUpToDate) {
+			AndroidNativeSettingsEditor.UpdateManifest();
+		}
+		
+	}
+
+
 	public override void OnInspectorGUI() {
 		settings = UltimateMobileSettings.Instance;
 
@@ -168,35 +178,86 @@ public class UMSettingEditor : Editor {
 
 	private void Actions() {
 		EditorGUILayout.Space();
+
+
+
+		settings.IsMoreSettingsOpen = EditorGUILayout.Foldout(settings.IsMoreSettingsOpen, "More Settings");
+		if(settings.IsMoreSettingsOpen) {
+
+			EditorGUILayout.BeginHorizontal();
+			EditorGUILayout.Space();
+			
+			if(GUILayout.Button("Android Native Settings ",  GUILayout.Width(140))) {
+				Selection.activeObject = AndroidNativeSettings.Instance;
+			}
+			
+			if(GUILayout.Button("IOS Native Settings ",  GUILayout.Width(140))) {
+				Selection.activeObject = IOSNativeSettings.Instance;
+			}
+			EditorGUILayout.EndHorizontal();
+			EditorGUILayout.Space();
+			
+			
+			
+			EditorGUILayout.BeginHorizontal();
+			EditorGUILayout.Space();
+			if(GUILayout.Button("Analytics Settings ",  GUILayout.Width(140))) {
+				Selection.activeObject = GoogleAnalyticsSettings.Instance;
+			}
+			
+			if(GUILayout.Button("Google Ad Settings ",  GUILayout.Width(140))) {
+				Selection.activeObject = GoogleMobileAdSettings.Instance;
+			}
+
+			EditorGUILayout.EndHorizontal();
+			EditorGUILayout.Space();
+			
+			
+			EditorGUILayout.BeginHorizontal();
+			EditorGUILayout.Space();
+			
+			
+			EditorGUILayout.EndHorizontal();
+			EditorGUILayout.Space();
+		}
+		
+		
+		
+		
 		settings.IsMoreActionsOpen = EditorGUILayout.Foldout(settings.IsMoreActionsOpen, "More Actions");
 		if(settings.IsMoreActionsOpen) {
 			
 
+			EditorGUILayout.BeginHorizontal();
+			EditorGUILayout.Space();
 
-
-			bool IsIOSGoogleAdEnabled = FileStaticAPI.IsFileExists(PluginsInstalationUtil.IOS_DESTANATION_PATH + "GoogleMobileAdBanner.h");
-
-			string buttonTitle = "Disable Google Ad for IOS";
-			if(!IsIOSGoogleAdEnabled) {
-				 buttonTitle = "Enable Google Ad for IOS";
+			if(GUILayout.Button("Open Manifest ",  GUILayout.Width(140))) {
+				UnityEditorInternal.InternalEditorUtility.OpenFileAtLineExternal("Assets" + AN_ManifestManager.MANIFEST_FILE_PATH, 1);
 			}
-
-
-
-				
-			if(GUILayout.Button(buttonTitle,  GUILayout.Width(160))) {
+			
+			bool IsIOSGoogleAdEnabled = FileStaticAPI.IsFileExists(PluginsInstalationUtil.IOS_DESTANATION_PATH + "GoogleMobileAdBanner.h");
+			
+			string buttonTitle = "Disable Google Ad(IOS)";
+			if(!IsIOSGoogleAdEnabled) {
+				buttonTitle = "Enable Google Ad for IOS";
+			}
+			
+			
+			
+			
+			if(GUILayout.Button(buttonTitle,  GUILayout.Width(140))) {
 				
 				
 				string IOSADBannerContent = FileStaticAPI.Read("Extensions/GoogleMobileAd/Scripts/IOS/IOSADBanner.cs");
 				string IOSAdMobControllerContent = FileStaticAPI.Read("Extensions/GoogleMobileAd/Scripts/IOS/IOSAdMobController.cs");
 				string GoogleMobileAdPostProcessContent = FileStaticAPI.Read("Extensions/GoogleMobileAd/Scripts/Editor/GoogleMobileAdPostProcess.cs");
-
+				
 				
 				if(IsIOSGoogleAdEnabled) {
 					IOSADBannerContent = IOSADBannerContent.Replace("//#define CODE_DISABLED", "#define CODE_DISABLED");
 					IOSAdMobControllerContent = IOSAdMobControllerContent.Replace("//#define CODE_DISABLED", "#define CODE_DISABLED");
 					GoogleMobileAdPostProcessContent = GoogleMobileAdPostProcessContent.Replace("//#define CODE_DISABLED", "#define CODE_DISABLED");
-
+					
 					FileStaticAPI.DeleteFile(PluginsInstalationUtil.IOS_DESTANATION_PATH + "GADAdMobExtras.h");
 					FileStaticAPI.DeleteFile(PluginsInstalationUtil.IOS_DESTANATION_PATH + "GADAdNetworkExtras.h");
 					FileStaticAPI.DeleteFile(PluginsInstalationUtil.IOS_DESTANATION_PATH + "GADAdSize.h");
@@ -212,12 +273,12 @@ public class UMSettingEditor : Editor {
 					FileStaticAPI.DeleteFile(PluginsInstalationUtil.IOS_DESTANATION_PATH + "GoogleMobileAdBanner.mm");
 					FileStaticAPI.DeleteFile(PluginsInstalationUtil.IOS_DESTANATION_PATH + "GoogleMobileAdController.mm");
 					FileStaticAPI.DeleteFile(PluginsInstalationUtil.IOS_DESTANATION_PATH + "libGoogleAdMobAds.a");
-
+					
 				} else {
 					IOSADBannerContent = IOSADBannerContent.Replace("#define CODE_DISABLED", "//#define CODE_DISABLED");
 					IOSAdMobControllerContent = IOSAdMobControllerContent.Replace("#define CODE_DISABLED", "//#define CODE_DISABLED");
 					GoogleMobileAdPostProcessContent = GoogleMobileAdPostProcessContent.Replace("#define CODE_DISABLED", "//#define CODE_DISABLED");
-
+					
 					PluginsInstalationUtil.IOS_UpdatePlugin();
 				}
 				
@@ -226,6 +287,11 @@ public class UMSettingEditor : Editor {
 				FileStaticAPI.Write("Extensions/GoogleMobileAd/Scripts/IOS/IOSAdMobController.cs", IOSAdMobControllerContent);
 				FileStaticAPI.Write("Extensions/GoogleMobileAd/Scripts/Editor/GoogleMobileAdPostProcess.cs", GoogleMobileAdPostProcessContent);
 			}
+			
+			EditorGUILayout.EndHorizontal();
+			EditorGUILayout.Space();
+			
+
 		}
 	}
 

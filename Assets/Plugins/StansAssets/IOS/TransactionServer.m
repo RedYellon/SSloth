@@ -167,22 +167,30 @@ NSString* lastTransaction = @"";
     NSLog(@"ISN: Transaction Failed with code : %i", transaction.error.code);
     NSLog(@"ISN: Transaction error: %@", transaction.error.description);
     
-    if(transaction.error.code != SKErrorPaymentCancelled) {
-        
-        UIAlertView *alert = [[UIAlertView alloc] init];
-        [alert setTitle:@"Transaction Error"];
-        
-        if(transaction.error.localizedDescription != NULL) {
-            [alert setMessage:transaction.error.localizedDescription];
-        } else {
-            [alert setMessage:transaction.error.description];
-        }
-        
-        [alert addButtonWithTitle:@"Ok"];
-        [alert setDelegate:NULL];
-        [alert show];
-        [alert release];
+    NSString *erroCode;
+    switch (transaction.error.code) {
+        case SKErrorClientInvalid:
+            erroCode = @"1";
+            break;
+        case SKErrorPaymentCancelled:
+            erroCode = @"2";
+            break;
+        case SKErrorPaymentInvalid:
+            erroCode = @"3";
+            break;
+        case SKErrorPaymentNotAllowed:
+            erroCode = @"4";
+            break;
+        case SKErrorStoreProductNotAvailable:
+            erroCode = @"4";
+            break;
+        default:
+             erroCode = @"0";
     }
+    
+    
+
+
     
     [[SKPaymentQueue defaultQueue] finishTransaction: transaction];
     
@@ -197,9 +205,14 @@ NSString* lastTransaction = @"";
     if(transaction.error.localizedDescription != NULL) {
          [data appendString:transaction.error.localizedDescription];
     } else {
-         [data appendString:transaction.error.description];
+        if(transaction.error.description != NULL) {
+            [data appendString:transaction.error.description];
+        } else {
+            [data appendString:@"Unknown Transaction Error"];
+        }
     }
-    
+    [data appendString:@"|"];
+    [data appendString:erroCode];
    
     
     NSString *str = [[data copy] autorelease];

@@ -190,6 +190,12 @@ public class IOSAdMobController : SA_Singleton<IOSAdMobController>, GoogleMobile
 
 	}
 
+	public void DirectBannerDestory(int id) {
+		#if (UNITY_IPHONE && !UNITY_EDITOR && !CODE_DISABLED) || SA_DEBUG_MODE
+		_GADDestroyBanner(id);
+		#endif
+	}
+
 	
 
 	public	void RecordInAppResolution(GADInAppResolution resolution) {

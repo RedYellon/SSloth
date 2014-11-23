@@ -115,9 +115,9 @@ public class BalloonController : MonoBehaviour
 	void MoveTextures ()
 	{
 		// Move the balloons
-		slothBalloon.Translate (Vector3.left * Time.deltaTime * (moveSpeed * manager.GetPlatformMoveSpeed ()), Space.World);
-		regularBalloon.Translate (Vector3.left * Time.deltaTime * (moveSpeed * manager.GetPlatformMoveSpeed ()), Space.World);
-		mannedBalloon.Translate (Vector3.left * Time.deltaTime * (moveSpeed * manager.GetPlatformMoveSpeed ()), Space.World);
+		slothBalloon.Translate (Vector3.left * Time.deltaTime * (moveSpeed * Mathf.Max (manager.GetPlatformMoveSpeed (), 5.0f)), Space.World);
+		regularBalloon.Translate (Vector3.left * Time.deltaTime * (moveSpeed * Mathf.Max (manager.GetPlatformMoveSpeed (), 5.0f)), Space.World);
+		mannedBalloon.Translate (Vector3.left * Time.deltaTime * (moveSpeed * Mathf.Max (manager.GetPlatformMoveSpeed (), 5.0f)), Space.World);
 	}
 	
 	

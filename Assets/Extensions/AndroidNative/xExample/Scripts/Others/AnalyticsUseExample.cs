@@ -20,7 +20,7 @@ public class AnalyticsUseExample : MonoBehaviour {
 		AndroidGoogleAnalytics.instance.StartTracking();
 
 		//If you want ot change default tracking id use this function after StartTracking:
-		//AndroidGoogleAnalytics.instance.SetTrackerID("My-Tracking-Id")
+	//	AndroidGoogleAnalytics.instance.SetTrackerID("UA-55040152-1");
 	}
 
 
@@ -39,6 +39,8 @@ public class AnalyticsUseExample : MonoBehaviour {
 		//Set session key
 		AndroidGoogleAnalytics.instance.SetKey("SCREEN", "MAIN");
 
+		AndroidGoogleAnalytics.instance.EnableAdvertisingIdCollection(true);
+
 
 		//To remove session key use
 		//AndroidGoogleAnalytics.instance.ClearKey("SCREEN");
@@ -49,6 +51,7 @@ public class AnalyticsUseExample : MonoBehaviour {
 
 		//To disable data sending use
 		//AndroidGoogleAnalytics.instance.SetDryRun(true);
+
 
 
 

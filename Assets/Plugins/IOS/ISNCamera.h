@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <MobileCoreServices/MobileCoreServices.h>
 #include "ISNDataConvertor.h"
 #if UNITY_VERSION < 450
 #include "iPhone_View.h"

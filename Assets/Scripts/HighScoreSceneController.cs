@@ -130,7 +130,7 @@ public class HighScoreSceneController : MonoBehaviour
 		// The number of times the user has confirmed they want to erase their data
 		private int _dataEraseConfirmationCount = 0;
 		// The screen mask used during the erase data process
-		private Renderer _eraseDataScreenMask;
+		private tk2dSprite _eraseDataScreenMask;
 		// The warning text displayed when erasing data
 		private Text _eraseDataWarningText;
 		// The YES and NO confirmation buttons
@@ -233,7 +233,7 @@ public class HighScoreSceneController : MonoBehaviour
 		{
 			case 0:
 				// Activate confirmation objects
-				_eraseDataScreenMask.material.color = new Color (_eraseDataScreenMask.material.color.r, _eraseDataScreenMask.material.color.g, _eraseDataScreenMask.material.color.b, 0.85f);
+				_eraseDataScreenMask.color = new Color (_eraseDataScreenMask.color.r, _eraseDataScreenMask.color.g, _eraseDataScreenMask.color.b, 0.85f);
 				_scoresStatsCanvas.SetActive (false);	
 				_eraseDataButton.SetActive (false);
 				_yesEraseDataButton.SetActive (true);
@@ -270,7 +270,7 @@ public class HighScoreSceneController : MonoBehaviour
 	{
 		_scoresStatsCanvas.SetActive (true);
 		_eraseDataButton.SetActive (true);	
-		_eraseDataScreenMask.material.color = Color.clear;
+		_eraseDataScreenMask.color = Color.clear;
 		_eraseDataWarningText.text = "";
 		_yesEraseDataButton.SetActive (false);
 		_noEraseDataButton.SetActive (false);
@@ -290,7 +290,7 @@ public class HighScoreSceneController : MonoBehaviour
 	// Called from EraseDataButtonPressed ()
 	void CleanUpEraseProcess ()
 	{
-		_eraseDataScreenMask.material.color = Color.clear;
+		_eraseDataScreenMask.color = Color.clear;
 		_eraseDataWarningText.text = "";
 		_dataEraseConfirmationCount = 0;
 		_scoresStatsCanvas.SetActive (true);
@@ -529,7 +529,7 @@ public class HighScoreSceneController : MonoBehaviour
 		buttonTabDisabledColor = scoresTabButton.GetComponent <Image> ().color;
 		_scoresStatsCanvas = GameObject.Find ("ScoresStatsCanvas");
 		_eraseDataButton = GameObject.Find ("EraseDataButton");
-		_eraseDataScreenMask = GameObject.Find ("ScreenMask").renderer;
+		_eraseDataScreenMask = GameObject.Find ("ScreenMask").GetComponent <tk2dSprite> ();
 		_yesEraseDataButton = GameObject.Find ("EraseDataYesButt");
 		_eraseDataWarningText = GameObject.Find ("EraseDataConfirmationLabel").GetComponent <Text> ();
 		_noEraseDataButton = GameObject.Find ("EraseDataNoButt");

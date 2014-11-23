@@ -19,7 +19,7 @@ public class PlayServicFridnsLoadExample_New : MonoBehaviour {
 	void Awake() {
 
 		playerLabel.text = "Player Diconnected";
-		defaulttexture = avatar.renderer.material.mainTexture;
+		defaulttexture = avatar.GetComponent<Renderer>().material.mainTexture;
 
 
 
@@ -29,8 +29,9 @@ public class PlayServicFridnsLoadExample_New : MonoBehaviour {
 		GooglePlayConnection.instance.addEventListener(GooglePlayConnection.CONNECTION_RESULT_RECEIVED, OnConnectionResult);
 		
 
-		GooglePlayManager.instance.addEventListener (GooglePlayManager.FRIENDS_LOADED, OnFriendListLoaded);
-		
+	
+		GooglePlayManager.ActionFriendsListLoaded +=  OnFriendListLoaded;
+
 
 		if(GooglePlayConnection.state == GPConnectionState.STATE_CONNECTED) {
 			//checking if player already connected
@@ -79,11 +80,11 @@ public class PlayServicFridnsLoadExample_New : MonoBehaviour {
 					rows[i].hasImage.text = "No";
 				}
 
-				rows[i].avatar.renderer.enabled = true;
+				rows[i].avatar.GetComponent<Renderer>().enabled = true;
 				if(p.hasIconImage && p.icon != null) {
-					rows[i].avatar.renderer.material.mainTexture = p.icon;
+					rows[i].avatar.GetComponent<Renderer>().material.mainTexture = p.icon;
 				} else {
-					rows[i].avatar.renderer.material.mainTexture = defaulttexture;
+					rows[i].avatar.GetComponent<Renderer>().material.mainTexture = defaulttexture;
 				}
 			}
 
@@ -101,10 +102,10 @@ public class PlayServicFridnsLoadExample_New : MonoBehaviour {
 	void FixedUpdate() {
 		if(GooglePlayConnection.state == GPConnectionState.STATE_CONNECTED) {
 			if(GooglePlayManager.instance.player.icon != null) {
-				avatar.renderer.material.mainTexture = GooglePlayManager.instance.player.icon;
+				avatar.GetComponent<Renderer>().material.mainTexture = GooglePlayManager.instance.player.icon;
 			}
 		}  else {
-			avatar.renderer.material.mainTexture = defaulttexture;
+			avatar.GetComponent<Renderer>().material.mainTexture = defaulttexture;
 		}
 		
 		
@@ -141,8 +142,8 @@ public class PlayServicFridnsLoadExample_New : MonoBehaviour {
 
 
 
-	private void OnFriendListLoaded(CEvent e) {
-		GooglePlayResult result = e.data as GooglePlayResult;
+	private void OnFriendListLoaded(GooglePlayResult result) {
+		GooglePlayManager.ActionFriendsListLoaded -=  OnFriendListLoaded;
 		SA_StatusBar.text = "Load Friends Result:  " + result.response.ToString();
 	}
 

@@ -1,3 +1,46 @@
+5.0:
+New Features:
+Google+ button API added
+Google Saved Games API new methods:
+* LoadAvaliableSavedGames()
+* LoadSpanShotByName(string)
+Links to online documentation added
+
+Auto manifest generation. Read more: http://goo.gl/CqSwFR
+Instagram API added Read more:
+
+
+Fixes:
+Google Ad LoadInterstisial methods fixe
+Google Analytics v4 bugs fixed 
+
+
+4.9:
+
+New Features:
+Google Play Saved Games API. Read more: http://goo.gl/k0v8zT
+Google Analytics API migrated to v4
+Ability to enable / disable separate APIs
+Editor Setting improvements 
+
+
+Updates:
+Android native jar spliced, now you can choose API to include in your project.
+
+Fixes:
+Billing exaction fixed when working with more than 20 products.
+Billing handling ActivityResult fixed
+AndroidCamera class instantiation fixed
+
+PlayMaker:
+AN_GetScore action added
+
+4.8.1:
+Playmaker Action compilation fix
+Notifications Manager minor fix
+Editor setting version parsing fixed
+
+
 4.8:
 Google Play API,
 Native Popups API,
@@ -10,6 +53,7 @@ Flash Like event system now use own namespace: UnionAssets.FLE
 Fixes:
 Twitter profile background loaded bug fixed
 Max photo size limit fixed
+In apps Fail event fixed
 
 Updates:
 Google Play SDK updated to v 6111000

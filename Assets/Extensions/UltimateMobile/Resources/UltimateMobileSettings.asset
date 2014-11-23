@@ -61,4 +61,5 @@ MonoBehaviour:
   IsLeaderBoardsOpen: 1
   IsAchievmentsOpen: 1
   IsMoreActionsOpen: 1
+  IsMoreSettingsOpen: 1
   InAppProducts: []

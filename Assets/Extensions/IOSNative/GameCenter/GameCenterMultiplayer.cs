@@ -32,7 +32,7 @@ public class GameCenterMultiplayer : EventDispatcher {
 	
 	#if (UNITY_IPHONE && !UNITY_EDITOR) || SA_DEBUG_MODE
 	[DllImport ("__Internal")]
-	private static extern void _findMatch(int minPlayers, int maxPlayers);
+	private static extern void _findMatch(int minPlayers, int maxPlayers, int playerGroup);
 
 	[DllImport ("__Internal")]
 	private static extern void _sendDataToAll(string data, int sendType);
@@ -79,9 +79,9 @@ public class GameCenterMultiplayer : EventDispatcher {
 	//--------------------------------------
 
 
-	public void FindMatch(int minPlayers, int maxPlayers) {
+	public void FindMatch(int minPlayers, int maxPlayers, int playerGroup = 0) {
 		#if (UNITY_IPHONE && !UNITY_EDITOR) || SA_DEBUG_MODE
-			_findMatch(minPlayers, maxPlayers);
+			_findMatch(minPlayers, maxPlayers, playerGroup);
 		#endif
 	}
 

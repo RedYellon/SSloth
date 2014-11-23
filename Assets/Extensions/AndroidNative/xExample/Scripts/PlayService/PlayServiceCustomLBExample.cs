@@ -51,7 +51,7 @@ public class PlayServiceCustomLBExample : MonoBehaviour {
 
 		
 		playerLabel.text = "Player Diconnected";
-		defaulttexture = avatar.renderer.material.mainTexture;
+		defaulttexture = avatar.GetComponent<Renderer>().material.mainTexture;
 
 		foreach(CustomLeaderboardFiledsHolder line in lines) {
 			line.Disable();
@@ -85,6 +85,8 @@ public class PlayServiceCustomLBExample : MonoBehaviour {
 
 
 	public void LoadScore() {
+		GPBoardTimeSpan displayTime = GPBoardTimeSpan.ALL_TIME;
+		GPCollectionType displayCollection = GPCollectionType.FRIENDS;
 		GooglePlayManager.instance.loadPlayerCenteredScores(LEADERBOARD_ID, displayTime, displayCollection, 10);
 	}
 
@@ -139,14 +141,14 @@ public class PlayServiceCustomLBExample : MonoBehaviour {
 		if(loadedLeaderBoard != null) {
 
 
-			//Geting current player score
+			//Getting current player score
 			int displayRank;
 
 			GPScore currentPlayerScore = loadedLeaderBoard.GetCurrentPlayerScore(displayTime, displayCollection);
 			if(currentPlayerScore == null) {
 				//Player does not have rank at this collection / time
 				//so let's show the top score
-				//since we used loadPlayerCenteredScores function. we should have top scores loaded if player have to scores at this collection / time
+				//since we used loadPlayerCenteredScores function. we should have top scores loaded if player have no scores at this collection / time
 				//https://developer.android.com/reference/com/google/android/gms/games/leaderboard/Leaderboards.html#loadPlayerCenteredScores(com.google.android.gms.common.api.GoogleApiClient, java.lang.String, int, int, int)
 				//Asynchronously load the player-centered page of scores for a given leaderboard. If the player does not have a score on this leaderboard, this call will return the top page instead.
 				displayRank = 1;
@@ -178,16 +180,16 @@ public class PlayServiceCustomLBExample : MonoBehaviour {
 					if(player != null) {
 						line.playerName.text =  player.name;
 						if(player.hasIconImage) {
-							line.avatar.renderer.material.mainTexture = player.icon;
+							line.avatar.GetComponent<Renderer>().material.mainTexture = player.icon;
 						} else {
-							line.avatar.renderer.material.mainTexture = defaulttexture;
+							line.avatar.GetComponent<Renderer>().material.mainTexture = defaulttexture;
 						}
 
 					} else {
 						line.playerName.text = "--";
-						line.avatar.renderer.material.mainTexture = defaulttexture;
+						line.avatar.GetComponent<Renderer>().material.mainTexture = defaulttexture;
 					}
-					line.avatar.renderer.enabled = true;
+					line.avatar.GetComponent<Renderer>().enabled = true;
 
 				} else {
 					line.Disable();
@@ -213,10 +215,10 @@ public class PlayServiceCustomLBExample : MonoBehaviour {
 		SubmitScoreButton.text = "Submit Score: " + score;
 		if(GooglePlayConnection.state == GPConnectionState.STATE_CONNECTED) {
 			if(GooglePlayManager.instance.player.icon != null) {
-				avatar.renderer.material.mainTexture = GooglePlayManager.instance.player.icon;
+				avatar.GetComponent<Renderer>().material.mainTexture = GooglePlayManager.instance.player.icon;
 			}
 		}  else {
-			avatar.renderer.material.mainTexture = defaulttexture;
+			avatar.GetComponent<Renderer>().material.mainTexture = defaulttexture;
 		}
 
 
@@ -299,6 +301,8 @@ public class PlayServiceCustomLBExample : MonoBehaviour {
 		loadedLeaderBoard = GooglePlayManager.instance.GetLeaderBoard(LEADERBOARD_ID);
 
 	}
+
+
 
 	private void SubmitScore() {
 		GooglePlayManager.instance.submitScoreById(LEADERBOARD_ID, score);

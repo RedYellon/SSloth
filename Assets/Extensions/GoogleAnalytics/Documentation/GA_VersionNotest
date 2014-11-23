@@ -1,3 +1,40 @@
+v 2.3
+New tracking methods:
+
+Session
+* IPOverride
+* UserAgentOverride
+
+
+APP TRACKING PROTOCOL
+* SetApplicationInstallerID
+
+
+Enhanced E-CommerceL
+* SetProductSKU
+* SetProductName
+* SetProductBrand
+* SetProductCategory
+* SetProductVariant
+* SetProductPrice
+* SetProductQuantity
+* SetProductCouponCode
+* SetProductPosition
+* SetProductCustomDimension
+* SetProductCustomMetric
+* SetProductAction
+* SetCouponCode
+* SetProductActionList
+* SetCheckoutStep
+* SetCheckoutStepOption
+
+v 2.2
+Few potential NPEs fixed
+
+v 2.1
+Request Caching improved, Queue Time param added
+Minor fixes
+
 v 2.0:
 Plugins Setting Editor Improvements
 

@@ -116,7 +116,7 @@ public class GameCenterExample : BaseIOSFeaturePreview {
 		StartX += XButtonStep;
 		if(GUI.Button(new Rect(StartX, StartY, buttonWidth, buttonHeight), "Report Score LB 1")) {
 			hiScore++;
-			GameCenterManager.reportScore(hiScore, leaderBoardId);
+			GameCenterManager.reportScore(9223372036854775000, leaderBoardId);
 		}
 		
 		StartX += XButtonStep;
@@ -200,6 +200,9 @@ public class GameCenterExample : BaseIOSFeaturePreview {
 	//--------------------------------------
 
 	private void OnAchievementsLoaded(ISN_Result result) {
+
+		Debug.Log("OnAchievementsLoaded");
+		Debug.Log(result.IsSucceeded);
 
 		if(result.IsSucceeded) {
 			Debug.Log ("Achievemnts was loaded from IOS Game Center");

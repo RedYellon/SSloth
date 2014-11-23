@@ -19,7 +19,7 @@
 
 
 
-- (void) reportScore: (long) score forCategory: (NSString*) category;
+- (void) reportScore: (long long) score forCategory: (NSString*) category;
 
 - (void) authenticateLocalPlayer;
 - (void) showLeaderBoard: (NSString*)leaderBoradrId scope: (int) scope;

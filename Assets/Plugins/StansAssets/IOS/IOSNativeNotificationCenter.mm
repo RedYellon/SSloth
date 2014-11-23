@@ -82,6 +82,7 @@ static IOSNativeNotificationCenter *sharedHelper = nil;
     localNotification.fireDate = [NSDate dateWithTimeIntervalSinceNow:time];
     localNotification.alertBody = messgae;
     localNotification.timeZone = [NSTimeZone defaultTimeZone];
+   
     if (badges > 0)
         localNotification.applicationIconBadgeNumber = badges;
     

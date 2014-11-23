@@ -26,7 +26,7 @@ public class GoogleMobileAd  {
 	public static Action OnInterstitialFailedLoading 	= delegate {};
 	public static Action OnInterstitialOpened 			= delegate {};
 	public static Action OnInterstitialClosed 			= delegate {};
-	public static Action OnInterstitialLeftApplication  	= delegate {};
+	public static Action OnInterstitialLeftApplication  = delegate {};
 	public static Action<string> OnAdInAppRequest		= delegate {};
 
 

@@ -53,7 +53,7 @@ public class AndroidAdMobController : SA_Singleton<AndroidAdMobController>, Goog
 
 		_banners =  new Dictionary<int, AndroidADBanner>();
 
-		AndroidNative.InitMobileAd(ad_unit_id);
+		AN_GoogleAdProxy.InitMobileAd(ad_unit_id);
 	}
 
 
@@ -72,12 +72,12 @@ public class AndroidAdMobController : SA_Singleton<AndroidAdMobController>, Goog
 
 	public void SetBannersUnitID(string ad_unit_id) {
 		_BannersUunitId = ad_unit_id;
-		AndroidNative.ChangeBannersUnitID(ad_unit_id);
+		AN_GoogleAdProxy.ChangeBannersUnitID(ad_unit_id);
 	}
 
 	public void SetInterstisialsUnitID(string ad_unit_id) {
 		_InterstisialUnitId = ad_unit_id;
-		AndroidNative.ChangeInterstisialsUnitID(ad_unit_id);
+		AN_GoogleAdProxy.ChangeInterstisialsUnitID(ad_unit_id);
 	}
 
 
@@ -96,7 +96,7 @@ public class AndroidAdMobController : SA_Singleton<AndroidAdMobController>, Goog
 			return;
 		}
 
-		AndroidNative.AddKeyword(keyword);
+		AN_GoogleAdProxy.AddKeyword(keyword);
 	}
 
 
@@ -106,7 +106,7 @@ public class AndroidAdMobController : SA_Singleton<AndroidAdMobController>, Goog
 			return;
 		}
 		
-		AndroidNative.SetBirthday(year, (int) month, day);
+		AN_GoogleAdProxy.SetBirthday(year, (int) month, day);
 	}
 
 	public void TagForChildDirectedTreatment(bool tagForChildDirectedTreatment)  {
@@ -115,7 +115,7 @@ public class AndroidAdMobController : SA_Singleton<AndroidAdMobController>, Goog
 			return;
 		}
 
-		AndroidNative.TagForChildDirectedTreatment(tagForChildDirectedTreatment);
+		AN_GoogleAdProxy.TagForChildDirectedTreatment(tagForChildDirectedTreatment);
 	}
 
 
@@ -127,7 +127,7 @@ public class AndroidAdMobController : SA_Singleton<AndroidAdMobController>, Goog
 			return;
 		}
 
-		AndroidNative.AddTestDevice(deviceId);
+		AN_GoogleAdProxy.AddTestDevice(deviceId);
 	}
 
 
@@ -144,7 +144,7 @@ public class AndroidAdMobController : SA_Singleton<AndroidAdMobController>, Goog
 		}
 
 
-		AndroidNative.AddTestDevice(string.Join(DEVICES_SEPARATOR, ids));
+		AN_GoogleAdProxy.AddTestDevice(string.Join(DEVICES_SEPARATOR, ids));
 	}
 
 
@@ -156,7 +156,7 @@ public class AndroidAdMobController : SA_Singleton<AndroidAdMobController>, Goog
 			return;
 		}
 
-		AndroidNative.SetGender((int) gender);
+		AN_GoogleAdProxy.SetGender((int) gender);
 	}
 
 
@@ -203,7 +203,7 @@ public class AndroidAdMobController : SA_Singleton<AndroidAdMobController>, Goog
 				AndroidADBanner banner = _banners[id];
 				if(banner.IsLoaded) {
 					_banners.Remove(id);
-					AndroidNative.DestroyBanner(id);
+					AN_GoogleAdProxy.DestroyBanner(id);
 				} else {
 					banner.DestroyAfterLoad();
 				}
@@ -219,7 +219,7 @@ public class AndroidAdMobController : SA_Singleton<AndroidAdMobController>, Goog
 			return;
 		}
 
-		AndroidNative.StartInterstitialAd();
+		AN_GoogleAdProxy.StartInterstitialAd();
 	}
 	
 	public void LoadInterstitialAd() {
@@ -228,7 +228,7 @@ public class AndroidAdMobController : SA_Singleton<AndroidAdMobController>, Goog
 			return;
 		}
 
-		AndroidNative.LoadInterstitialAd();
+		AN_GoogleAdProxy.LoadInterstitialAd();
 	}
 	
 	public void ShowInterstitialAd() {
@@ -237,12 +237,12 @@ public class AndroidAdMobController : SA_Singleton<AndroidAdMobController>, Goog
 			return;
 		}
 
-		AndroidNative.ShowInterstitialAd();
+		AN_GoogleAdProxy.ShowInterstitialAd();
 	}
 
 
 	public void RecordInAppResolution(GADInAppResolution resolution) {
-		AndroidNative.RecordInAppResolution((int) resolution);
+		AN_GoogleAdProxy.RecordInAppResolution((int) resolution);
 	}
 	
 	//--------------------------------------

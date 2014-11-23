@@ -10,7 +10,7 @@ using UnityEditor;
 
 public class GoogleMobileAdSettings : ScriptableObject {
 
-	public const string VERSION_NUMBER = "3.8";
+	public const string VERSION_NUMBER = "4.0";
 
 
 	public string IOS_InterstisialsUnitId = "";
@@ -29,6 +29,8 @@ public class GoogleMobileAdSettings : ScriptableObject {
 
 	public bool IsTestSettinsOpened = true;
 
+	public bool ShowActions = false;
+	public bool KeepManifestClean = true;
 	
 	
 	[SerializeField]

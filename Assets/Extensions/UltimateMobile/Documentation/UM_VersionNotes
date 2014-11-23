@@ -1,3 +1,24 @@
+2.0:
+Updates:
+AndroidNative_v5.0
+GoogleMobileAd_v4.0
+MobileNativePopups_v4.0
+IOSNative_v5.5
+GoogleAnalytics_v2.3
+WP8Native_v1.4
+
+1.9:
+Updates:
+AndroidNative_v4.9
+GoogleMobileAd_v3.9
+MobileNativePopups_v2.9
+IOSNative_v5.3
+GoogleAnalytics_v2.1
+WP8Native_v1.4
+
+1.8.1:
+Playmaker Actions compilation fixed
+
 1.8:
 Refactor:
 Flash Like event system now use own namespace: UnionAssets.FLE
