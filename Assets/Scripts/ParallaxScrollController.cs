@@ -284,6 +284,39 @@ public class ParallaxScrollController : MonoBehaviour
 			ResetAll ();
 		}
 	}
+
+
+	//
+	//
+	public void ChangeGrassColor (Color col)
+	{
+		for (int i = 0; i < textures.Length; i++)
+		{
+			textures [i].GetComponent <tk2dSprite> ().color = col;
+		}
+	}
+
+
+	//
+	public void ChangeToWinter ()
+	{
+		GameObject.Find ("GrassOrnament1").GetComponent <tk2dSprite> ().enabled = false;
+		GameObject.Find ("GrassOrnament3").GetComponent <tk2dSprite> ().SetSprite ("snow_weed");
+		GameObject.Find ("GrassOrnament4").GetComponent <tk2dSprite> ().SetSprite ("Snow_rock");
+		GameObject.Find ("Butterfly").GetComponent <tk2dSprite> ().enabled = false;
+		GameObject.Find ("GrassOrnament5").GetComponent <tk2dSprite> ().SetSprite ("snow_weed");
+	}
+
+
+	//
+	public void ChangeToNormal ()
+	{
+		GameObject.Find ("GrassOrnament1").GetComponent <tk2dSprite> ().enabled = true;
+		GameObject.Find ("GrassOrnament3").GetComponent <tk2dSprite> ().SetSprite ("weed");
+		GameObject.Find ("GrassOrnament4").GetComponent <tk2dSprite> ().SetSprite ("rock");
+		GameObject.Find ("Butterfly").GetComponent <tk2dSprite> ().enabled = true;
+		GameObject.Find ("GrassOrnament5").GetComponent <tk2dSprite> ().SetSprite ("rock_1_fixed");
+	}
 	
 	#endregion
 	

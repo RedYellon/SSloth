@@ -235,6 +235,17 @@ public class TimeController : MonoBehaviour
 	public int GetCurrentTime () { return currentTime; }
 	
 	#endregion
+
+
+	#region Setters
+
+	//
+	public void ChangeGrassDayColor (Color col)
+	{
+		grassDayColor = col;
+	}
+
+	#endregion
 	
 	
 	#region EventManager

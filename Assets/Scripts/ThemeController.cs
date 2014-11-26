@@ -33,8 +33,18 @@ public class ThemeController : MonoBehaviour
 		}
 		public ThemeType currentTheme = ThemeType.Normal;
 
-		// The snow particle controller
-		ParticleSystem snowParticles;
+			#region Winter
+
+			// The snow particle controller
+			ParticleSystem snowParticles;
+			// The color the grass should be when it's winter
+			public Color winterGrassColor;
+			public Color normalGrassColor;
+		// The title words
+		tk2dSprite titleSuper;
+		tk2dSprite titleSloth;
+
+			#endregion
 
 		#endregion
 
@@ -46,6 +56,10 @@ public class ThemeController : MonoBehaviour
 		PlayerController _playerCont;
 		// The snowflake manager
 		SnowflakeManager _snowManager;
+		// The grass controller
+		ParallaxScrollController _grassCont;
+		// The time controller
+		TimeController _timeCont;
 
 		#endregion
 
@@ -73,6 +87,11 @@ public class ThemeController : MonoBehaviour
 		_platManager.SetSnowIsActive (false);
 		_playerCont.SetSnowLanding (false);
 		_snowManager.TurnOffSnowflakes ();
+		_grassCont.ChangeGrassColor (normalGrassColor);
+		_timeCont.ChangeGrassDayColor (normalGrassColor);
+		_grassCont.ChangeToNormal ();
+		titleSuper.SetSprite ("Super");
+		titleSloth.SetSprite ("Sloth");
 	}
 
 
@@ -83,6 +102,11 @@ public class ThemeController : MonoBehaviour
 		_platManager.SetSnowIsActive (true);
 		_playerCont.SetSnowLanding (true);
 		_snowManager.TurnOnSnowflakes ();
+		_grassCont.ChangeGrassColor (winterGrassColor);
+		_timeCont.ChangeGrassDayColor (winterGrassColor);
+		_grassCont.ChangeToWinter ();
+		titleSuper.SetSprite ("Super_Winter");
+		titleSloth.SetSprite ("Sloth_Winter");
 	}
 
 	#endregion
@@ -105,7 +129,11 @@ public class ThemeController : MonoBehaviour
 	{
 		_platManager = GetComponent <PlatformManager> ();
 		_snowManager = GetComponent <SnowflakeManager> ();
+		_timeCont = GetComponent <TimeController> ();
 		_playerCont = GameObject.Find ("Player").GetComponent <PlayerController> ();
+		_grassCont = GameObject.Find ("Foreground Grass").GetComponent <ParallaxScrollController> ();
+		titleSuper = GameObject.Find ("SUPER").GetComponent <tk2dSprite> ();
+		titleSloth = GameObject.Find ("SLOTH").GetComponent <tk2dSprite> ();
 
 		// TEMP
 		ChangeTheme (ThemeType.Winter);

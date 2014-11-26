@@ -47,11 +47,11 @@ MonoBehaviour:
     - Button_Start_resized
     - Button_ScoresampersandStats
     - Button_Menu_resized
-    - 
+    - Super_Winter
     - Button_Star_new
     - scoresAndStatsButton
     - backMenuButtonNew
-    - 
+    - Sloth_Winter
     - 
     - 
     - twitterIcon
@@ -68,11 +68,11 @@ MonoBehaviour:
     - 13a4607806b4949ce895aa776948a9f5
     - 6b82fafa116c94268b6a0457b1ba651e
     - 35250fab5a8514ab7b88c041710e4e62
-    - 
+    - 52a5247c7c43f4ce4b774a76697454a2
     - 62abd618f527c4f419c21f40debb0459
     - fba38ba9c21924eae9520b526a80dd33
     - 885742e2408bc4c00ad54096f5e8e1f7
-    - 
+    - 9b051ecf4d8324d54b8959367e7042d5
     - 
     - 
     - 7edb8fd1413634ae8b9a1161577118bd
@@ -89,11 +89,11 @@ MonoBehaviour:
     - 1411667960
     - 1411667960
     - 1411667960
-    - 0
+    - 1416841352
     - 1411667960
     - 1411667960
     - 1411667960
-    - 0
+    - 1416841350
     - 0
     - 0
     - 1411667960
@@ -175,6 +175,12 @@ MonoBehaviour:
     - ostritchHead_2
     - llamaHead_2
     - giraffeNeck
+    - Snow_rock
+    - snow_weed
+    - snow_sloth
+    - snow_weed_2
+    - Super_Winter
+    - Sloth_Winter
     spriteTextureGUIDs:
     - 20ef99a41a6e54c808743ca46ff5692b
     - 40845dec67d774ed0a8d31902af895c9
@@ -246,6 +252,12 @@ MonoBehaviour:
     - c2913865a38e749aeb819a5df2961f2d
     - ec30537e557af4685a18a67dd36c02fd
     - f62bd7041b274493094c6e9211117f19
+    - 015f58b691b3b45fcbebfc23bc64935c
+    - 6ff418bb5d9e343a0bed4a8e7c562cc1
+    - 72ef6a66b75cd4eb1af00fa28a3f54f6
+    - b4d54ffdac2d9427fa7e3093ff98e77d
+    - 28822822ae6084d348b139450840eed9
+    - 80ff155a39a824bf2b4b1ac47cc91e3c
     spriteTextureTimeStamps:
     - 1411667960
     - 1411667960
@@ -317,6 +329,12 @@ MonoBehaviour:
     - 1416757487
     - 1416757434
     - 1416757403
+    - 1416851446
+    - 1416852496
+    - 1416852942
+    - 1416852422
+    - 1416943871
+    - 1416943895
     managedSpriteCollection: 0
     loadable: 0
     assetName: 
