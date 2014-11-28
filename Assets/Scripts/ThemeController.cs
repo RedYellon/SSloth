@@ -87,9 +87,10 @@ public class ThemeController : MonoBehaviour
 		_platManager.SetSnowIsActive (false);
 		_playerCont.SetSnowLanding (false);
 		_snowManager.TurnOffSnowflakes ();
-		_grassCont.ChangeGrassColor (normalGrassColor);
-		_timeCont.ChangeGrassDayColor (normalGrassColor);
-		_grassCont.ChangeToNormal ();
+		_grassCont.ChangeCurrentTheme (1);
+		//_grassCont.ChangeGrassColor (normalGrassColor);
+		_timeCont.ChangeCurrentTheme (1);
+		//_grassCont.ChangeToNormal ();
 		titleSuper.SetSprite ("Super");
 		titleSloth.SetSprite ("Sloth");
 	}
@@ -102,9 +103,10 @@ public class ThemeController : MonoBehaviour
 		_platManager.SetSnowIsActive (true);
 		_playerCont.SetSnowLanding (true);
 		_snowManager.TurnOnSnowflakes ();
-		_grassCont.ChangeGrassColor (winterGrassColor);
-		_timeCont.ChangeGrassDayColor (winterGrassColor);
-		_grassCont.ChangeToWinter ();
+		_grassCont.ChangeCurrentTheme (2);
+		//_grassCont.ChangeGrassColor (winterGrassColor);
+		_timeCont.ChangeCurrentTheme (2);
+		//_grassCont.ChangeToWinter ();
 		titleSuper.SetSprite ("Super_Winter");
 		titleSloth.SetSprite ("Sloth_Winter");
 	}

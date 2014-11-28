@@ -5,7 +5,7 @@
  	www.michaeljohnstephens.com
  	
  	Created:		-
- 	Last Edited:	June 6, 2014
+ 	Last Edited:	November 28, 2014
  	
  	Controls the changing of time.
 */
@@ -23,18 +23,43 @@ public class TimeController : MonoBehaviour
 		
 			#region Colors
 		
-			// The different color tints for the main tinter
+			[Header ("Tinter Normal Colors")]
 			public Color tinterDayColor;
 			public Color tinterEveningColor;
 			public Color tinterNightColor;
 			public Color tinterMorningColor;
+
+			[Header ("Tinter Winter Colors")]
+			public Color tinterDayColorWinter;
+			public Color tinterEveningColorWinter;
+			public Color tinterNightColorWinter;
+			public Color tinterMorningColorWinter;
+
 			// The different color tints for the objects in front of (and thus unaffected by) the main tinter
+			[Header ("Object Normal Colors")]
 			public Color objectDayColor;
 			public Color objectEveningColor;
 			public Color objectNightColor;
 			public Color objectMorningColor;
+
+			[Header ("Object Winter Colors")]
+			public Color objectDayColorWinter;
+			public Color objectEveningColorWinter;
+			public Color objectNightColorWinter;
+			public Color objectMorningColorWinter;
+
 			// The color of grass in the day
+			[Header ("Grass Normal Colors")]
 			public Color grassDayColor;
+			public Color grassEveningColor;
+			public Color grassNightColor;
+			public Color grassMorningColor;
+
+			[Header ("Grass Winter Colors")]
+			public Color grassDayColorWinter;
+			public Color grassEveningColorWinter;
+			public Color grassNightColorWinter;
+			public Color grassMorningColorWinter;
 			
 			#endregion
 			
@@ -81,6 +106,8 @@ public class TimeController : MonoBehaviour
 		private int currentTime = 1;
 		// Whether or not time is currently advancing
 		private bool isChanging = true;
+		// 1 = normal, 2 = winter, 3 = christmas
+		private int _currentThemeIndex = 1;
 		
 		#endregion
 	
@@ -96,35 +123,12 @@ public class TimeController : MonoBehaviour
 		// If time is advancing,,,
 		if (isChanging)
 		{
-			// Depending on the current time...
-			switch (currentTime)
+			// Change colors based on the current theme
+			switch (_currentThemeIndex)
 			{
-				// Day
-				case 1:
-					tinter.color = Color.Lerp (tinter.color, tinterDayColor, Time.deltaTime * changeSpeed);
-					foreach (tk2dSprite sprite in spritesToTint) { sprite.color = Color.Lerp (sprite.color, objectDayColor, Time.deltaTime * changeSpeed); }
-					foreach (tk2dSprite sprite in grasses) { sprite.color = Color.Lerp (sprite.color, grassDayColor, Time.deltaTime * changeSpeed); }
-				break;
-				// Dusk
-				case 2:
-					tinter.color = Color.Lerp (tinter.color, tinterEveningColor, Time.deltaTime * changeSpeed);
-					foreach (tk2dSprite sprite in spritesToTint) { sprite.color = Color.Lerp (sprite.color, objectEveningColor, Time.deltaTime * changeSpeed); }
-					foreach (tk2dSprite sprite in grasses) { sprite.color = Color.Lerp (sprite.color, objectEveningColor, Time.deltaTime * changeSpeed); }
-				break;
-				// Night
-				case 3:
-					tinter.color = Color.Lerp (tinter.color, tinterNightColor, Time.deltaTime * changeSpeed);
-					foreach (tk2dSprite sprite in backgroundStars) { sprite.color = Color.Lerp (sprite.color, Color.white, Time.deltaTime * changeSpeed); }
-					foreach (tk2dSprite sprite in spritesToTint) { sprite.color = Color.Lerp (sprite.color, objectNightColor, Time.deltaTime * changeSpeed); }
-					foreach (tk2dSprite sprite in grasses) { sprite.color = Color.Lerp (sprite.color, objectNightColor, Time.deltaTime * changeSpeed); }
-				break;
-				// Dawn
-				case 4:
-					tinter.color = Color.Lerp (tinter.color, tinterMorningColor, Time.deltaTime * changeSpeed);
-					foreach (tk2dSprite sprite in backgroundStars) { sprite.color = Color.Lerp (sprite.color, Color.clear, Time.deltaTime * changeSpeed * 3); }
-					foreach (tk2dSprite sprite in spritesToTint) { sprite.color = Color.Lerp (sprite.color, objectMorningColor, Time.deltaTime * changeSpeed); }
-					foreach (tk2dSprite sprite in grasses) { sprite.color = Color.Lerp (sprite.color, objectMorningColor, Time.deltaTime * changeSpeed); }
-				break;
+				case 1: ChangeColorsNormal (); break;
+				case 2: ChangeColorsWinter (); break;
+				case 3: ChangeColorsWinter (); break;
 			}
 			
 			// Check to see if the time of day should be changing
@@ -185,6 +189,104 @@ public class TimeController : MonoBehaviour
 	}
 	
 	#endregion
+
+
+	#region Color Change
+
+	// Changes the colors for the normal default theme
+	// Called from FixedUpdate ()
+	void ChangeColorsNormal ()
+	{
+		switch (currentTime)
+		{
+			// Day
+			case 1:
+				tinter.color = Color.Lerp (tinter.color, tinterDayColor, Time.deltaTime * changeSpeed);
+				foreach (tk2dSprite sprite in spritesToTint) { sprite.color = Color.Lerp (sprite.color, objectDayColor, Time.deltaTime * changeSpeed); }
+				foreach (tk2dSprite sprite in grasses) { sprite.color = Color.Lerp (sprite.color, grassDayColor, Time.deltaTime * changeSpeed); }
+			break;
+			// Dusk
+			case 2:
+				tinter.color = Color.Lerp (tinter.color, tinterEveningColor, Time.deltaTime * changeSpeed);
+				foreach (tk2dSprite sprite in spritesToTint) { sprite.color = Color.Lerp (sprite.color, objectEveningColor, Time.deltaTime * changeSpeed); }
+				foreach (tk2dSprite sprite in grasses) { sprite.color = Color.Lerp (sprite.color, grassEveningColor, Time.deltaTime * changeSpeed); }
+			break;
+			// Night
+			case 3:
+				tinter.color = Color.Lerp (tinter.color, tinterNightColor, Time.deltaTime * changeSpeed);
+				foreach (tk2dSprite sprite in backgroundStars) { sprite.color = Color.Lerp (sprite.color, Color.white, Time.deltaTime * changeSpeed); }
+				foreach (tk2dSprite sprite in spritesToTint) { sprite.color = Color.Lerp (sprite.color, objectNightColor, Time.deltaTime * changeSpeed); }
+				foreach (tk2dSprite sprite in grasses) { sprite.color = Color.Lerp (sprite.color, grassNightColor, Time.deltaTime * changeSpeed); }
+			break;
+			// Dawn
+			case 4:
+				tinter.color = Color.Lerp (tinter.color, tinterMorningColor, Time.deltaTime * changeSpeed);
+				foreach (tk2dSprite sprite in backgroundStars) { sprite.color = Color.Lerp (sprite.color, Color.clear, Time.deltaTime * changeSpeed * 3); }
+				foreach (tk2dSprite sprite in spritesToTint) { sprite.color = Color.Lerp (sprite.color, objectMorningColor, Time.deltaTime * changeSpeed); }
+				foreach (tk2dSprite sprite in grasses) { sprite.color = Color.Lerp (sprite.color, grassMorningColor, Time.deltaTime * changeSpeed); }
+			break;
+		}
+	}
+
+
+	// Changes the colors for the winter/christmas themes
+	// Called from FixedUpdate ()
+	void ChangeColorsWinter ()
+	{
+		switch (currentTime)
+		{
+			// Day
+			case 1:
+				tinter.color = Color.Lerp (tinter.color, tinterDayColorWinter, Time.deltaTime * changeSpeed);
+				foreach (tk2dSprite sprite in spritesToTint) { sprite.color = Color.Lerp (sprite.color, objectDayColorWinter, Time.deltaTime * changeSpeed); }
+				foreach (tk2dSprite sprite in grasses) { sprite.color = Color.Lerp (sprite.color, grassDayColorWinter, Time.deltaTime * changeSpeed); }
+			break;
+			// Dusk
+			case 2:
+				tinter.color = Color.Lerp (tinter.color, tinterEveningColorWinter, Time.deltaTime * changeSpeed);
+				foreach (tk2dSprite sprite in spritesToTint) { sprite.color = Color.Lerp (sprite.color, objectEveningColorWinter, Time.deltaTime * changeSpeed); }
+				foreach (tk2dSprite sprite in grasses) { sprite.color = Color.Lerp (sprite.color, grassEveningColorWinter, Time.deltaTime * changeSpeed); }
+			break;
+			// Night
+			case 3:
+				tinter.color = Color.Lerp (tinter.color, tinterNightColorWinter, Time.deltaTime * changeSpeed);
+				foreach (tk2dSprite sprite in backgroundStars) { sprite.color = Color.Lerp (sprite.color, Color.white, Time.deltaTime * changeSpeed); }
+				foreach (tk2dSprite sprite in spritesToTint) { sprite.color = Color.Lerp (sprite.color, objectNightColorWinter, Time.deltaTime * changeSpeed); }
+				foreach (tk2dSprite sprite in grasses) { sprite.color = Color.Lerp (sprite.color, grassNightColorWinter, Time.deltaTime * changeSpeed); }
+			break;
+			// Dawn
+			case 4:
+				tinter.color = Color.Lerp (tinter.color, tinterMorningColorWinter, Time.deltaTime * changeSpeed);
+				foreach (tk2dSprite sprite in backgroundStars) { sprite.color = Color.Lerp (sprite.color, Color.clear, Time.deltaTime * changeSpeed * 3); }
+				foreach (tk2dSprite sprite in spritesToTint) { sprite.color = Color.Lerp (sprite.color, objectMorningColorWinter, Time.deltaTime * changeSpeed); }
+				foreach (tk2dSprite sprite in grasses) { sprite.color = Color.Lerp (sprite.color, grassMorningColorWinter, Time.deltaTime * changeSpeed); }
+			break;
+		}
+	}
+
+
+	// Resets the object colors for the normal theme
+	// Called from Reset ()
+	void ResetColorsNormal ()
+	{
+		tinter.color = tinterDayColor;
+		foreach (tk2dSprite sprite in backgroundStars) { sprite.color = Color.clear; }
+		foreach (tk2dSprite sprite in spritesToTint) { sprite.color = objectDayColor; }
+		foreach (tk2dSprite sprite in grasses) { sprite.color = grassDayColor; }
+	}
+
+
+	// Resets the object colors for the winter theme
+	// Called from Reset ()
+	void ResetColorsWinter ()
+	{
+		tinter.color = tinterDayColorWinter;
+		foreach (tk2dSprite sprite in backgroundStars) { sprite.color = Color.clear; }
+		foreach (tk2dSprite sprite in spritesToTint) { sprite.color = objectDayColorWinter; }
+		foreach (tk2dSprite sprite in grasses) { sprite.color = grassDayColorWinter; }
+	}
+
+	#endregion
 	
 	
 	#region Setup/Cleanup
@@ -213,12 +315,16 @@ public class TimeController : MonoBehaviour
 		multiplier = 0;
 		scoreVar = 0;
 		currentTime = 1;
+
+		// Reset colors based on the current theme
+		switch (_currentThemeIndex)
+		{
+			case 1: ResetColorsNormal (); break;
+			case 2: ResetColorsWinter (); break;
+			case 3: ResetColorsWinter (); break;
+		}
 		
-		// Reset colors
-		tinter.color = tinterDayColor;
-		foreach (tk2dSprite sprite in backgroundStars) { sprite.color = Color.clear; }
-		foreach (tk2dSprite sprite in spritesToTint) { sprite.color = objectDayColor; }
-		foreach (tk2dSprite sprite in grasses) { sprite.color = grassDayColor; }
+		// Reset other variables
 		isChanging = true;
 		audioCont.ResetToDay ();
 		
@@ -240,9 +346,9 @@ public class TimeController : MonoBehaviour
 	#region Setters
 
 	//
-	public void ChangeGrassDayColor (Color col)
+	public void ChangeCurrentTheme (int index)
 	{
-		grassDayColor = col;
+		_currentThemeIndex = index;
 	}
 
 	#endregion

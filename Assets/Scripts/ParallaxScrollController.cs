@@ -50,17 +50,13 @@ public class ParallaxScrollController : MonoBehaviour
 		ButterflyBehavior butterfly;
 		// The firefly controller
 		FireflyBehavior firefly;
-		//
+		// The data controller
 		DataController dataCont;
+		// The time controller
+		TimeController _timeCont;
 		
 		#endregion
-		
-		#region References
-		
-		
-		
-		#endregion
-		
+
 		#region Private
 		
 		// If the parallax is moving
@@ -76,6 +72,8 @@ public class ParallaxScrollController : MonoBehaviour
 		private Vector3 [] ornamentBeginningPositions;
 		//
 		private bool ornamentCanSpawn = false;
+		// 1 = normal, 2 = winter, 3 = christmas
+		private int _currentThemeIndex = 1;
 		
 		#endregion
 	
@@ -286,36 +284,39 @@ public class ParallaxScrollController : MonoBehaviour
 	}
 
 
-	//
-	//
-	public void ChangeGrassColor (Color col)
+	// Changes the theme, and thus the grass colors/decorations
+	// Called from ThemeController.cs
+	public void ChangeCurrentTheme (int index)
 	{
-		for (int i = 0; i < textures.Length; i++)
+		_currentThemeIndex = index;
+		Color col = Color.white;
+		switch (_currentThemeIndex)
 		{
-			textures [i].GetComponent <tk2dSprite> ().color = col;
+			case 1:
+				GameObject.Find ("GrassOrnament1").GetComponent <tk2dSprite> ().enabled = true;
+				GameObject.Find ("GrassOrnament3").GetComponent <tk2dSprite> ().SetSprite ("weed");
+				GameObject.Find ("GrassOrnament4").GetComponent <tk2dSprite> ().SetSprite ("rock");
+				GameObject.Find ("Butterfly").GetComponent <tk2dSprite> ().enabled = true;
+				GameObject.Find ("GrassOrnament5").GetComponent <tk2dSprite> ().SetSprite ("rock_1_fixed");
+
+				// Change the color of the grass
+				col = _timeCont.grassDayColor;
+				for (int i = 0; i < textures.Length; i++)
+					textures [i].GetComponent <tk2dSprite> ().color = col;
+			break;
+			case 2:
+				GameObject.Find ("GrassOrnament1").GetComponent <tk2dSprite> ().enabled = false;
+				GameObject.Find ("GrassOrnament3").GetComponent <tk2dSprite> ().SetSprite ("snow_weed");
+				GameObject.Find ("GrassOrnament4").GetComponent <tk2dSprite> ().SetSprite ("Snow_rock");
+				GameObject.Find ("Butterfly").GetComponent <tk2dSprite> ().enabled = false;
+				GameObject.Find ("GrassOrnament5").GetComponent <tk2dSprite> ().SetSprite ("snow_weed");
+
+				// Change the color of the grass
+				col = _timeCont.grassDayColorWinter;
+				for (int i = 0; i < textures.Length; i++)
+					textures [i].GetComponent <tk2dSprite> ().color = col;
+			break;
 		}
-	}
-
-
-	//
-	public void ChangeToWinter ()
-	{
-		GameObject.Find ("GrassOrnament1").GetComponent <tk2dSprite> ().enabled = false;
-		GameObject.Find ("GrassOrnament3").GetComponent <tk2dSprite> ().SetSprite ("snow_weed");
-		GameObject.Find ("GrassOrnament4").GetComponent <tk2dSprite> ().SetSprite ("Snow_rock");
-		GameObject.Find ("Butterfly").GetComponent <tk2dSprite> ().enabled = false;
-		GameObject.Find ("GrassOrnament5").GetComponent <tk2dSprite> ().SetSprite ("snow_weed");
-	}
-
-
-	//
-	public void ChangeToNormal ()
-	{
-		GameObject.Find ("GrassOrnament1").GetComponent <tk2dSprite> ().enabled = true;
-		GameObject.Find ("GrassOrnament3").GetComponent <tk2dSprite> ().SetSprite ("weed");
-		GameObject.Find ("GrassOrnament4").GetComponent <tk2dSprite> ().SetSprite ("rock");
-		GameObject.Find ("Butterfly").GetComponent <tk2dSprite> ().enabled = true;
-		GameObject.Find ("GrassOrnament5").GetComponent <tk2dSprite> ().SetSprite ("rock_1_fixed");
 	}
 	
 	#endregion
@@ -350,12 +351,11 @@ public class ParallaxScrollController : MonoBehaviour
 	private void AssignVariables ()
 	{
 		manager = GameObject.Find ("&MainController").GetComponent <PlatformManager> ();
+		_timeCont = GameObject.Find ("&MainController").GetComponent <TimeController> ();
 		if (startOn) isMoving = true;
 		startPos = new Vector3 [textures.Length];
 		for (int i = 0; i < textures.Length; i++)
-		{
 			startPos [i] = textures [i].position;
-		}
 		
 		// Assign ornaments
 		ornamentBeginningPositions = new Vector3 [grassOrnaments.Length];
