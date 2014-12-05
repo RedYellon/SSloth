@@ -5,12 +5,11 @@
  	www.michaeljohnstephens.com
  	
  	Created:		November 22, 2014
- 	Last Edited:	November 23, 2014
+ 	Last Edited:	November 28, 2014
  	
  	Controls the changing and coordination of the different
  	visual themes.
 */
-
 
 
 using UnityEngine;
@@ -37,12 +36,9 @@ public class ThemeController : MonoBehaviour
 
 			// The snow particle controller
 			ParticleSystem snowParticles;
-			// The color the grass should be when it's winter
-			public Color winterGrassColor;
-			public Color normalGrassColor;
-		// The title words
-		tk2dSprite titleSuper;
-		tk2dSprite titleSloth;
+			// The title words
+			tk2dSprite titleSuper;
+			tk2dSprite titleSloth;
 
 			#endregion
 
@@ -60,6 +56,12 @@ public class ThemeController : MonoBehaviour
 		ParallaxScrollController _grassCont;
 		// The time controller
 		TimeController _timeCont;
+		// The camera controller
+		CameraController _camCont;
+		// The menu transition controller
+		MenuBackgroundTransitionController _menuTransitionCont;
+		// The animal friends script
+		AnimalFriends _animals;
 
 		#endregion
 
@@ -88,9 +90,10 @@ public class ThemeController : MonoBehaviour
 		_playerCont.SetSnowLanding (false);
 		_snowManager.TurnOffSnowflakes ();
 		_grassCont.ChangeCurrentTheme (1);
-		//_grassCont.ChangeGrassColor (normalGrassColor);
 		_timeCont.ChangeCurrentTheme (1);
-		//_grassCont.ChangeToNormal ();
+		_camCont.ChangeCurrentTheme (1);
+		_menuTransitionCont.ChangeCurrentTheme (1);
+		_animals.ChangeCurrentTheme (1);
 		titleSuper.SetSprite ("Super");
 		titleSloth.SetSprite ("Sloth");
 	}
@@ -104,9 +107,10 @@ public class ThemeController : MonoBehaviour
 		_playerCont.SetSnowLanding (true);
 		_snowManager.TurnOnSnowflakes ();
 		_grassCont.ChangeCurrentTheme (2);
-		//_grassCont.ChangeGrassColor (winterGrassColor);
 		_timeCont.ChangeCurrentTheme (2);
-		//_grassCont.ChangeToWinter ();
+		_camCont.ChangeCurrentTheme (2);
+		_menuTransitionCont.ChangeCurrentTheme (2);
+		_animals.ChangeCurrentTheme (2);
 		titleSuper.SetSprite ("Super_Winter");
 		titleSloth.SetSprite ("Sloth_Winter");
 	}
@@ -132,10 +136,13 @@ public class ThemeController : MonoBehaviour
 		_platManager = GetComponent <PlatformManager> ();
 		_snowManager = GetComponent <SnowflakeManager> ();
 		_timeCont = GetComponent <TimeController> ();
+		_menuTransitionCont = GetComponent <MenuBackgroundTransitionController> ();
+		_camCont = GameObject.Find ("Main Camera").GetComponent <CameraController> ();
 		_playerCont = GameObject.Find ("Player").GetComponent <PlayerController> ();
 		_grassCont = GameObject.Find ("Foreground Grass").GetComponent <ParallaxScrollController> ();
 		titleSuper = GameObject.Find ("SUPER").GetComponent <tk2dSprite> ();
 		titleSloth = GameObject.Find ("SLOTH").GetComponent <tk2dSprite> ();
+		_animals = GameObject.Find ("Animal").GetComponent <AnimalFriends> ();
 
 		// TEMP
 		ChangeTheme (ThemeType.Winter);

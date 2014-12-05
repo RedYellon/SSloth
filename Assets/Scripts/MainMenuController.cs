@@ -5,7 +5,7 @@
  	www.michaeljohnstephens.com
  	
  	Created:		February 14, 2014
- 	Last Edited:	November 22, 2014
+ 	Last Edited:	November 28, 2014
  	
  	Controls the functions and behavior of the main menu "scene".
 */
@@ -256,7 +256,6 @@ public class MainMenuController : MonoBehaviour
 				scrollThing.SetActive (false);
 				scrollThing.transform.parent.gameObject.GetComponent <ScrollRect> ().StopMovement ();
 				scrollThing.transform.localPosition = new Vector3 (scrollThing.transform.localPosition.x, -15.81f, scrollThing.transform.localPosition.z);
-				//optionsFoldout.gameObject.SetActive (true);
 				bnpIsOnScreen = true;
 				optionsFoldoutIsShowing = false;
 				optionsMasterButton.SetActive (true);
@@ -477,7 +476,6 @@ public class MainMenuController : MonoBehaviour
 		bnpIsOnScreen = true;
 		highlighterRend.enabled = true;
 		highlighterCapRend.enabled = true;
-		//highlighter.position = highlighterTargetPosition;
 		sceneIsTransitioning = false;
 	}
 	

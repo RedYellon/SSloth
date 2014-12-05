@@ -75,7 +75,7 @@ MonoBehaviour:
   atlasWidth: 2048
   atlasHeight: 2048
   forceSquareAtlas: 0
-  atlasWastage: 15.7850742
+  atlasWastage: 14.0595436
   allowMultipleAtlases: 0
   removeDuplicates: 1
   textureParams:
@@ -3113,11 +3113,11 @@ MonoBehaviour:
     colliderSmoothSphereCollisions: 0
     colliderColor: 0
     attachPoints: []
-  - name: Super_Winter
+  - name: llamaScarf
     disableTrimming: 0
     additive: 0
     scale: {x: 1, y: 1, z: 1}
-    texture: {fileID: 2800000, guid: 28822822ae6084d348b139450840eed9, type: 3}
+    texture: {fileID: 2800000, guid: 355508d20f58042b6a0f92bba3932a96, type: 3}
     materialId: 0
     anchor: 4
     anchorX: 0
@@ -3154,11 +3154,52 @@ MonoBehaviour:
     colliderSmoothSphereCollisions: 0
     colliderColor: 0
     attachPoints: []
-  - name: Sloth_Winter
+  - name: giraffeScarf
     disableTrimming: 0
     additive: 0
     scale: {x: 1, y: 1, z: 1}
-    texture: {fileID: 2800000, guid: 80ff155a39a824bf2b4b1ac47cc91e3c, type: 3}
+    texture: {fileID: 2800000, guid: d5fcadc09ecd64e9096e7676e2273490, type: 3}
+    materialId: 0
+    anchor: 4
+    anchorX: 0
+    anchorY: 0
+    overrideMesh: {fileID: 0}
+    doubleSidedSprite: 0
+    customSpriteGeometry: 0
+    geometryIslands: []
+    dice: 0
+    diceUnitX: 64
+    diceUnitY: 64
+    diceFilter: 0
+    pad: 0
+    extraPadding: 0
+    source: 0
+    fromSpriteSheet: 0
+    hasSpriteSheetId: 0
+    spriteSheetId: 0
+    spriteSheetX: 0
+    spriteSheetY: 0
+    extractRegion: 0
+    regionX: 0
+    regionY: 0
+    regionW: 0
+    regionH: 0
+    regionId: 0
+    colliderType: 0
+    colliderData: []
+    boxColliderMin: {x: 0, y: 0}
+    boxColliderMax: {x: 0, y: 0}
+    polyColliderIslands: []
+    polyColliderCap: 1
+    colliderConvex: 0
+    colliderSmoothSphereCollisions: 0
+    colliderColor: 0
+    attachPoints: []
+  - name: ostritchScarf
+    disableTrimming: 0
+    additive: 0
+    scale: {x: 1, y: 1, z: 1}
+    texture: {fileID: 2800000, guid: 1f2516a202b2a474d888f1212ef51b5c, type: 3}
     materialId: 0
     anchor: 4
     anchorX: 0

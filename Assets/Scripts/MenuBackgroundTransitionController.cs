@@ -3,7 +3,7 @@
  	Michael Stephens
  	
  	Created:		May 29, 2014
- 	Last Edited:	May 29, 2014
+ 	Last Edited:	November 28, 2014
  	
  	Coordinates the changing of the background during
  	main menu transitions.
@@ -26,31 +26,14 @@ public class MenuBackgroundTransitionController : MonoBehaviour
 		public float barColorAdvanceRate = 0.1f;
 		// The speed that the background color changes
 		public float backgroundColorChangeSpeed = 10.0f;
-		// The colors for the main menu
-		public Color mainMenuBackgroundColor;
-		public Color mainMenuBarColor;
-		// The colors for the high scores menu
-		public Color scoresBackgroundColor;
-		public Color scoresBarColor;
-		// The colors for the options menu
-		public Color optionsBackgroundColor;
-		public Color optionsBarColor;
-		// The colors for the credits
-		public Color creditsBackgroundColor;
-		public Color creditsBarColor;
 		
 		#endregion
-		
+
 		#region Scripts
-		
-		
-		
-		#endregion
-		
-		#region References
-		
-		
-		
+
+		// The colors controller
+		ColorsController _colors;
+
 		#endregion
 		
 		#region Private
@@ -64,6 +47,8 @@ public class MenuBackgroundTransitionController : MonoBehaviour
 		private Camera cam;
 		//
 		private bool isChanging = false;
+		// 1 = normal, 2 = winter, 3 = christmas
+		private int _currentThemeIndex = 1;
 		
 		#endregion
 		
@@ -96,27 +81,18 @@ public class MenuBackgroundTransitionController : MonoBehaviour
 		{
 			// Main menu
 			case 0:
-				targetBarColor = mainMenuBarColor;
-				targetBackgroundColor = mainMenuBackgroundColor;
-			break;
-			// Options
-			case 1:
-				targetBarColor = optionsBarColor;
-				targetBackgroundColor = optionsBackgroundColor;
+				//	targetBarColor = mainMenuBarColor;
+				//targetBackgroundColor = mainMenuBackgroundColor;
+				ChangeToMainMenuColors ();
 			break;
 			// High scores
 			case 2:
-				targetBarColor = scoresBarColor;
-				targetBackgroundColor = scoresBackgroundColor;
+				///targetBarColor = scoresBarColor;
+				//targetBackgroundColor = scoresBackgroundColor;
+				ChangeToScoresMenuColors ();
 			break;
 			case 3:
 				return;
-			break;
-			// Credits
-			case 5:
-				targetBarColor = creditsBarColor;
-				targetBackgroundColor = creditsBackgroundColor;
-			break;
 		}
 		InvokeRepeating ("ColorBarChange", barColorAdvanceRate, barColorAdvanceRate);
 	}
@@ -139,6 +115,40 @@ public class MenuBackgroundTransitionController : MonoBehaviour
 			colorBarChangingIndex++;
 		}
 	}
+
+
+	// Changes the main menu colors
+	void ChangeToMainMenuColors ()
+	{
+		switch (_currentThemeIndex)
+		{
+			case 1:
+				targetBarColor = _colors.stripesColor;
+				targetBackgroundColor = _colors.backgroundColor;
+			break;
+			case 2:
+				targetBarColor = _colors.stripesColorWinter;
+				targetBackgroundColor = _colors.backgroundColorWinter;
+			break;
+		}
+	}
+
+
+	// Changes the stats menu colors
+	void ChangeToScoresMenuColors ()
+	{
+		switch (_currentThemeIndex)
+		{
+			case 1:
+				targetBarColor = _colors.statsStripesColor;
+				targetBackgroundColor = _colors.statsBackgroundColor;
+			break;
+			case 2:
+				targetBarColor = _colors.statsStripesColorWinter;
+				targetBackgroundColor = _colors.statsBackgroundColorWinter;
+			break;
+		}
+	}
 	
 	#endregion
 	
@@ -149,12 +159,38 @@ public class MenuBackgroundTransitionController : MonoBehaviour
 	//
 	public bool IsAlreadyOnMainMenuColors ()
 	{
-		if (cam.backgroundColor == mainMenuBackgroundColor)
+		if (cam.backgroundColor == targetBackgroundColor)
 			return true;
 		else
 			return false;
 	}
 	
+	#endregion
+
+
+	#region Public
+
+	//
+	public void ChangeCurrentTheme (int index)
+	{
+		_currentThemeIndex = index;
+		switch (_currentThemeIndex)
+		{
+			case 1:
+				targetBarColor = _colors.stripesColor;
+				targetBackgroundColor = _colors.backgroundColor;
+			break;
+			case 2:
+				targetBarColor = _colors.stripesColorWinter;
+				targetBackgroundColor = _colors.backgroundColorWinter;
+			break;
+			case 3:
+				targetBarColor = _colors.stripesColorWinter;
+				targetBackgroundColor = _colors.backgroundColorWinter;
+			break;
+		}
+	}
+
 	#endregion
 	
 	
@@ -173,8 +209,9 @@ public class MenuBackgroundTransitionController : MonoBehaviour
 	// Called from Start ()
 	private void AssignVariables ()
 	{
-		targetBackgroundColor = mainMenuBackgroundColor;
 		cam = GameObject.Find ("Main Camera").camera;
+		_colors = GameObject.Find ("_ColorsController").GetComponent <ColorsController> ();
+		targetBackgroundColor = _colors.backgroundColor;
 	}
 	
 	#endregion

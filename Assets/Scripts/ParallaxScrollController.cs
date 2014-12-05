@@ -5,7 +5,7 @@
  	www.michaeljohnstephens.com
  	
  	Created:		March 28, 2014
- 	Last Edited:	June 7, 2014
+ 	Last Edited:	November 28, 2014
  	
  	Controls the behavior of any parallax textures.
 */
@@ -25,8 +25,10 @@ public class ParallaxScrollController : MonoBehaviour
 		public bool startOn = false;
 		// The array of grass transforms
 		public Transform [] textures;
-		// The array of grass ornaments
-		public Transform [] grassOrnaments;
+		// The array of grass ornaments for the normal theme
+		public Transform [] grassOrnamentsNormal;
+		// The array of grass ornaments for the winter theme
+		public Transform [] grassOrnamentsWinter;
 		// The speed that the textures move across the screen
 		public float moveSpeed = 5.0f;
 		// The X position where the grass texture resets itself
@@ -46,14 +48,14 @@ public class ParallaxScrollController : MonoBehaviour
 		
 		// The platform manager
 		PlatformManager manager;
-		// The butterfly controller
-		ButterflyBehavior butterfly;
-		// The firefly controller
-		FireflyBehavior firefly;
+		// The butterfly controllers
+		ButterflyBehavior [] _butterflies;
+		// The firefly controllers
+		FireflyBehavior [] _fireflies;
 		// The data controller
 		DataController dataCont;
-		// The time controller
-		TimeController _timeCont;
+		// The colors controller
+		ColorsController _colors;
 		
 		#endregion
 
@@ -69,11 +71,15 @@ public class ParallaxScrollController : MonoBehaviour
 		//
 		private bool isMovingOrnament = false;
 		//
-		private Vector3 [] ornamentBeginningPositions;
-		//
 		private bool ornamentCanSpawn = false;
 		// 1 = normal, 2 = winter, 3 = christmas
 		private int _currentThemeIndex = 1;
+		// The currently active array of ornaments
+		private Transform [] _ornaments;
+		//
+		private Vector3 [] _normalBeginningPos;
+		private Vector3 [] _winterBeginningPos;
+		private Vector3 [] _ornamentBeginningPositions;
 		
 		#endregion
 	
@@ -170,19 +176,11 @@ public class ParallaxScrollController : MonoBehaviour
 	//
 	void ResetOrnament ()
 	{
-		activeOrnament.position = ornamentBeginningPositions [activeOrnamentIndex];
+		activeOrnament.position = _ornamentBeginningPositions [activeOrnamentIndex];
 		isMovingOrnament = false;
-		
-		// Reset butterfly/firefly if necessary
-		if (activeOrnament == butterflyParent)
-		{
-			butterfly.ResetSetActiveCheck ();
-		}
-		else if (activeOrnament == fireflyParent)
-		{
-			firefly.ResetSetActiveCheck ();
-		}
-		
+
+		foreach (ButterflyBehavior b in _butterflies) { b.ResetSetActiveCheck (); }
+		foreach (FireflyBehavior f in _fireflies) { f.ResetSetActiveCheck (); }
 		Invoke ("SpawnOrnament", Random.Range (ornamentSpawnTimeRange.x, ornamentSpawnTimeRange.y));
 	}
 	
@@ -191,39 +189,44 @@ public class ParallaxScrollController : MonoBehaviour
 	//
 	void ResetAll ()
 	{
-		for (int i = 0; i < textures.Length; i++)
-		{
-			textures [i].position = startPos [i];
-		}
-		for (int i = 0; i < grassOrnaments.Length; i++) { grassOrnaments [i].position = ornamentBeginningPositions [i]; }
+		for (int i = 0; i < textures.Length; i++) textures [i].position = startPos [i];
+		for (int i = 0; i < grassOrnamentsNormal.Length; i++) { grassOrnamentsNormal [i].position = _normalBeginningPos [i]; }
+		for (int i = 0; i < grassOrnamentsWinter.Length; i++) { grassOrnamentsWinter [i].position = _winterBeginningPos [i]; }
 		isMovingOrnament = false;
 		
 		//
-		butterfly.ResetSetActiveCheck ();
-		firefly.ResetSetActiveCheck ();
+		foreach (ButterflyBehavior b in _butterflies) { b.ResetSetActiveCheck (); }
+		foreach (FireflyBehavior f in _fireflies) { f.ResetSetActiveCheck (); }
 	}
 	
 	
-	//
+	// Spawns a new ornament
 	void SpawnOrnament ()
 	{
 		if (!ornamentCanSpawn) return;
 		
-		int ornMun = Random.Range (0, grassOrnaments.Length);
+		int ornMun = Random.Range (0, _ornaments.Length);
 		activeOrnamentIndex = ornMun;
-		activeOrnament = grassOrnaments [ornMun];
+		activeOrnament = _ornaments [ornMun];
 		isMovingOrnament = true;
+
+		// If the ornament has a butterfly ir firefly...
+		bool hasButterfly = false;
+		bool hasFirefly = false;
+		if (activeOrnament.childCount > 0) { if (activeOrnament.GetChild (0).GetComponent <ButterflyBehavior> () != null) hasButterfly = true; } 
+		if (activeOrnament.childCount > 0) { if (activeOrnament.GetChild (0).GetComponent <FireflyBehavior> () != null) hasFirefly = true; }
 		
 		//
-		if (activeOrnament == butterflyParent)
+		if (hasButterfly)
 		{
-			butterfly.SetIsInMotion (true);
+			activeOrnament.GetChild (0).GetComponent <ButterflyBehavior> ().SetIsInMotion (true);
 			dataCont.IncrementButterfliesSeen (1);
 		}
-		else if (activeOrnament == fireflyParent)
+		else if (hasFirefly)
 		{
-			firefly.SetIsInMotion (true);
-			if (firefly.gameObject.renderer.enabled)
+			FireflyBehavior ff = activeOrnament.GetChild (0).GetComponent <FireflyBehavior> ();
+			ff.SetIsInMotion (true);
+			if (ff.gameObject.renderer.enabled)
 				dataCont.IncrementFirefliesSeen (1);
 		}
 	}
@@ -234,7 +237,6 @@ public class ParallaxScrollController : MonoBehaviour
 	public void ResetAllOrnaments ()
 	{
 		ResetAll ();
-		//for (int i = 0; i < grassOrnaments.Length; i++) { grassOrnaments [i].position = ornamentBeginningPositions [i]; }
 	}
 	
 	#endregion
@@ -243,7 +245,6 @@ public class ParallaxScrollController : MonoBehaviour
 	#region Public
 	
 	// Activates/Deactivates the moving of the grass
-	//
 	public void SetForegroundMove (bool b)
 	{
 		isMoving = b;
@@ -252,7 +253,6 @@ public class ParallaxScrollController : MonoBehaviour
 			ornamentCanSpawn = true;
 			CancelInvoke ("SpawnOrnament");
 			Invoke ("SpawnOrnament", Random.Range (ornamentSpawnTimeRange.x, ornamentSpawnTimeRange.y));
-			//ResetAllOrnaments ();
 			isMovingOrnament = false;
 		}
 		else
@@ -265,8 +265,7 @@ public class ParallaxScrollController : MonoBehaviour
 	}
 	
 	
-	//
-	//
+	// Makes the foreground visible
 	public void SetForegroundVisible (bool b)
 	{
 		foreach (Transform t in textures)
@@ -275,7 +274,8 @@ public class ParallaxScrollController : MonoBehaviour
 		}
 		if (!b)
 		{
-			for (int i = 0; i < grassOrnaments.Length; i++) { grassOrnaments [i].position = ornamentBeginningPositions [i]; }
+			for (int i = 0; i < grassOrnamentsNormal.Length; i++) { grassOrnamentsNormal [i].position = _normalBeginningPos [i]; }
+			for (int i = 0; i < grassOrnamentsWinter.Length; i++) { grassOrnamentsWinter [i].position = _winterBeginningPos [i]; }
 			isMovingOrnament = false;
 			ornamentCanSpawn = false;
 			CancelInvoke ("SpawnOrnament");
@@ -293,26 +293,26 @@ public class ParallaxScrollController : MonoBehaviour
 		switch (_currentThemeIndex)
 		{
 			case 1:
-				GameObject.Find ("GrassOrnament1").GetComponent <tk2dSprite> ().enabled = true;
-				GameObject.Find ("GrassOrnament3").GetComponent <tk2dSprite> ().SetSprite ("weed");
-				GameObject.Find ("GrassOrnament4").GetComponent <tk2dSprite> ().SetSprite ("rock");
-				GameObject.Find ("Butterfly").GetComponent <tk2dSprite> ().enabled = true;
-				GameObject.Find ("GrassOrnament5").GetComponent <tk2dSprite> ().SetSprite ("rock_1_fixed");
+				//
+				_ornaments = grassOrnamentsNormal;
+				_ornamentBeginningPositions = _normalBeginningPos;
+				grassOrnamentsWinter [0].parent.gameObject.SetActive (false);
+				grassOrnamentsNormal [0].parent.gameObject.SetActive (true);
 
 				// Change the color of the grass
-				col = _timeCont.grassDayColor;
+				col = _colors.grassDayColor;
 				for (int i = 0; i < textures.Length; i++)
 					textures [i].GetComponent <tk2dSprite> ().color = col;
 			break;
 			case 2:
-				GameObject.Find ("GrassOrnament1").GetComponent <tk2dSprite> ().enabled = false;
-				GameObject.Find ("GrassOrnament3").GetComponent <tk2dSprite> ().SetSprite ("snow_weed");
-				GameObject.Find ("GrassOrnament4").GetComponent <tk2dSprite> ().SetSprite ("Snow_rock");
-				GameObject.Find ("Butterfly").GetComponent <tk2dSprite> ().enabled = false;
-				GameObject.Find ("GrassOrnament5").GetComponent <tk2dSprite> ().SetSprite ("snow_weed");
+				//
+				_ornaments = grassOrnamentsWinter;
+				_ornamentBeginningPositions = _winterBeginningPos;
+				grassOrnamentsNormal [0].parent.gameObject.SetActive (false);
+				grassOrnamentsWinter [0].parent.gameObject.SetActive (true);
 
 				// Change the color of the grass
-				col = _timeCont.grassDayColorWinter;
+				col = _colors.grassDayColorWinter;
 				for (int i = 0; i < textures.Length; i++)
 					textures [i].GetComponent <tk2dSprite> ().color = col;
 			break;
@@ -351,20 +351,25 @@ public class ParallaxScrollController : MonoBehaviour
 	private void AssignVariables ()
 	{
 		manager = GameObject.Find ("&MainController").GetComponent <PlatformManager> ();
-		_timeCont = GameObject.Find ("&MainController").GetComponent <TimeController> ();
+		_colors = GameObject.Find ("_ColorsController").GetComponent <ColorsController> ();
 		if (startOn) isMoving = true;
 		startPos = new Vector3 [textures.Length];
 		for (int i = 0; i < textures.Length; i++)
 			startPos [i] = textures [i].position;
 		
 		// Assign ornaments
-		ornamentBeginningPositions = new Vector3 [grassOrnaments.Length];
-		for (int i = 0; i < grassOrnaments.Length; i++)
-		{
-			ornamentBeginningPositions [i] = grassOrnaments [i].position;
-		}
-		butterfly = GameObject.Find ("Butterfly").GetComponent <ButterflyBehavior> ();
-		firefly = GameObject.Find ("Firefly").GetComponent <FireflyBehavior> ();
+		_normalBeginningPos = new Vector3 [grassOrnamentsNormal.Length];
+		_winterBeginningPos = new Vector3 [grassOrnamentsWinter.Length];
+		for (int i = 0; i < grassOrnamentsNormal.Length; i++) { _normalBeginningPos [i] = grassOrnamentsNormal [i].position; }
+		for (int i = 0; i < grassOrnamentsWinter.Length; i++) { _winterBeginningPos [i] = grassOrnamentsWinter [i].position; }
+
+		//
+		_ornaments = grassOrnamentsNormal;
+		_ornamentBeginningPositions = _normalBeginningPos;
+
+		//
+		_butterflies = FindObjectsOfType (typeof (ButterflyBehavior)) as ButterflyBehavior [];
+		_fireflies = FindObjectsOfType (typeof (FireflyBehavior)) as FireflyBehavior [];
 		dataCont = GameObject.Find ("&MainController").GetComponent <DataController> ();
 	}
 	

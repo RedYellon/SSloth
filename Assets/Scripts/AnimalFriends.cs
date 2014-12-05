@@ -5,7 +5,7 @@
  	www.michaeljohnstephens.com
  	
  	Created:		September 1, 2014
- 	Last Edited:	November 23, 2014
+ 	Last Edited:	November 28, 2014
  	
  	Controls the appearance of the animal friends.
 */
@@ -24,6 +24,10 @@ public class AnimalFriends : MonoBehaviour
 		// The head and neck sprites for the animal
 		public tk2dSprite neckSprite;
 		public tk2dSprite headSprite;
+		// The winter scarf sprites for the animals
+		public GameObject llamaScarf;
+		public GameObject ostritchScarf;
+		public GameObject giraffeScarf;
 		// The animation for the animal
 		public Animation animalAnimation;
 		// The time between appearances
@@ -44,6 +48,8 @@ public class AnimalFriends : MonoBehaviour
 		private float currentWaitTime;
 		// The current animal we are
 		private int _animalNum = 0;
+		// 1 = normal, 2 = winter, 3 = christmas
+		private int _currentThemeIndex = 1;
 		
 		#endregion
 	
@@ -119,6 +125,13 @@ public class AnimalFriends : MonoBehaviour
 			case 2: neckSprite.SetSprite ("giraffeNeck"); headSprite.SetSprite ("giraffeHead_1"); break;
 		}
 
+		// If we are in a correct theme, we need to add some sprites
+		switch (_currentThemeIndex)
+		{
+			case 2: ActivateScarf (); break;
+			case 3: ActivateScarf (); break;
+		}
+
 		// Set a random animation
 		int n = Random.Range (0, 4);
 		switch (n)
@@ -128,6 +141,30 @@ public class AnimalFriends : MonoBehaviour
 			case 2: animalAnimation.Play ("AnimalAnimation3"); break;
 			case 3: animalAnimation.Play ("AnimalAnimation4"); break;
 		}
+	}
+
+
+	// Turns on the winter scarf for the appropriate animal
+	// Called from GoMove ()
+	void ActivateScarf ()
+	{
+		DeactivateScarfs ();
+		switch (_animalNum)
+		{
+			case 0: ostritchScarf.SetActive (true); break;
+			case 1: llamaScarf.SetActive (true); break;
+			case 2: giraffeScarf.SetActive (true); break;
+		}
+	}
+
+
+	// Turns off all the animal scarves
+	// Called from ActivateScarf () and ChangeCurrentTheme (int index)
+	void DeactivateScarfs ()
+	{
+		llamaScarf.SetActive (false);
+		ostritchScarf.SetActive (false);
+		giraffeScarf.SetActive (false);
 	}
 	
 
@@ -139,6 +176,18 @@ public class AnimalFriends : MonoBehaviour
 		GoMove ();
 	}
 	
+	#endregion
+
+
+	#region Themes
+
+	//
+	public void ChangeCurrentTheme (int index)
+	{
+		_currentThemeIndex = index;
+		if (_currentThemeIndex == 1) DeactivateScarfs ();
+	}
+
 	#endregion
 	
 	

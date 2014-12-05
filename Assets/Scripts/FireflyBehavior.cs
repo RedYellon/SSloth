@@ -3,7 +3,7 @@
  	Michael Stephens
  	
  	Created:		May 27, 2014
- 	Last Edited:	June 6, 2014
+ 	Last Edited:	November 28, 2014
  	
  	Controls the firefly glowing/moving.
 */
@@ -93,7 +93,7 @@ public class FireflyBehavior : MonoBehaviour
 	// Called from CheckForTimeChange () and Reset () in TimeController.cs
 	public void SetIsActive (bool b)
 	{
-		// If the firefly is moving across the screen, we need to wait to activate/deactivate it unitil it resets
+		// If the firefly is moving across the screen, we need to wait to activate/deactivate it until it resets
 		if (isInMotion)
 		{
 			if (b)

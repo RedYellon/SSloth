@@ -179,8 +179,9 @@ MonoBehaviour:
     - snow_weed
     - snow_sloth
     - snow_weed_2
-    - Super_Winter
-    - Sloth_Winter
+    - llamaScarf
+    - giraffeScarf
+    - ostritchScarf
     spriteTextureGUIDs:
     - 20ef99a41a6e54c808743ca46ff5692b
     - 40845dec67d774ed0a8d31902af895c9
@@ -256,8 +257,9 @@ MonoBehaviour:
     - 6ff418bb5d9e343a0bed4a8e7c562cc1
     - 72ef6a66b75cd4eb1af00fa28a3f54f6
     - b4d54ffdac2d9427fa7e3093ff98e77d
-    - 28822822ae6084d348b139450840eed9
-    - 80ff155a39a824bf2b4b1ac47cc91e3c
+    - 355508d20f58042b6a0f92bba3932a96
+    - d5fcadc09ecd64e9096e7676e2273490
+    - 1f2516a202b2a474d888f1212ef51b5c
     spriteTextureTimeStamps:
     - 1411667960
     - 1411667960
@@ -333,8 +335,9 @@ MonoBehaviour:
     - 1416852496
     - 1416852942
     - 1416852422
-    - 1416943871
-    - 1416943895
+    - 1417196476
+    - 1417196666
+    - 1417196233
     managedSpriteCollection: 0
     loadable: 0
     assetName: 

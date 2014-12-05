@@ -92,6 +92,10 @@ TagManager:
     userID: 15
     uniqueID: 1002936617
     locked: 0
+  - name: HighScoreGlasses
+    userID: 18
+    uniqueID: 4214170263
+    locked: 0
   - name: UI
     userID: 8
     uniqueID: 1960341009

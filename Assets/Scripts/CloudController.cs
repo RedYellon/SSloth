@@ -1,11 +1,13 @@
 ﻿/*
  	CloudController.cs
- 	Michael Stephens
+ 	
+	Michael Stephens
+ 	www.michaeljohnstephens.com
  	
  	Created:		May 8, 2014
- 	Last Edited:	May 19, 2014
+ 	Last Edited:	November 28, 2014
  	
- 	Controls the spawning of clouds.
+ 	Controls the spawning and movement of clouds.
 */
 
 
@@ -74,7 +76,7 @@ public class CloudController : MonoBehaviour
 		// Move the clouds
 		foreach (Transform t in cloudTrans)
 		{
-			t.Translate (Vector3.left * Time.deltaTime * (moveSpeed * manager.GetPlatformMoveSpeed ()), Space.World);
+			t.Translate (Vector3.left * Time.deltaTime * (moveSpeed * Mathf.Max (5.0f, manager.GetPlatformMoveSpeed ())), Space.World);
 		}
 	}
 	

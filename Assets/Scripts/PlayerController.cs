@@ -779,7 +779,7 @@ public class PlayerController : MonoBehaviour
 	void GameEnded ()
 	{
 		// Set proper transform values
-		sprite.renderer.sortingLayerName = "UI";
+		sprite.renderer.sortingLayerName = "HighScoreGlasses";
 		spriteTrans.rotation = Quaternion.Euler (Vector3.zero);
 		spriteTrans.localScale = new Vector3 (3.5f, 3.5f, 3.5f);
 		trans.parent = guiTransParent;

@@ -21,48 +21,6 @@ public class TimeController : MonoBehaviour
 	
 		#region Public
 		
-			#region Colors
-		
-			[Header ("Tinter Normal Colors")]
-			public Color tinterDayColor;
-			public Color tinterEveningColor;
-			public Color tinterNightColor;
-			public Color tinterMorningColor;
-
-			[Header ("Tinter Winter Colors")]
-			public Color tinterDayColorWinter;
-			public Color tinterEveningColorWinter;
-			public Color tinterNightColorWinter;
-			public Color tinterMorningColorWinter;
-
-			// The different color tints for the objects in front of (and thus unaffected by) the main tinter
-			[Header ("Object Normal Colors")]
-			public Color objectDayColor;
-			public Color objectEveningColor;
-			public Color objectNightColor;
-			public Color objectMorningColor;
-
-			[Header ("Object Winter Colors")]
-			public Color objectDayColorWinter;
-			public Color objectEveningColorWinter;
-			public Color objectNightColorWinter;
-			public Color objectMorningColorWinter;
-
-			// The color of grass in the day
-			[Header ("Grass Normal Colors")]
-			public Color grassDayColor;
-			public Color grassEveningColor;
-			public Color grassNightColor;
-			public Color grassMorningColor;
-
-			[Header ("Grass Winter Colors")]
-			public Color grassDayColorWinter;
-			public Color grassEveningColorWinter;
-			public Color grassNightColorWinter;
-			public Color grassMorningColorWinter;
-			
-			#endregion
-			
 		// The array of background star sprites
 		public tk2dSprite [] backgroundStars;
 		// The array of sprites that need to be tinted along with the tinter
@@ -78,14 +36,16 @@ public class TimeController : MonoBehaviour
 		
 		#region Scripts
 		
+		// The colors controller
+		ColorsController _colors;
 		// The score controller
 		ScoreController scoreCont;
 		// The audio controller
 		AudioController audioCont;
 		// The butterfly controller
-		ButterflyBehavior butterfly;
-		// The firefly controller
-		FireflyBehavior firefly;
+		ButterflyBehavior [] _butterflies;
+		// The firefly controllers
+		FireflyBehavior [] _fireflies;
 		// The leaderboard controller
 		Leaderboard lb;
 		// The data controller 
@@ -156,8 +116,8 @@ public class TimeController : MonoBehaviour
 					audioCont.SetIsDayTime (false); 
 					
 					// Enable night-specific grass ornaments
-					firefly.SetIsActive (true);
-					butterfly.SetIsActive (false);
+					foreach (FireflyBehavior f in _fireflies) { f.SetIsActive (true); }
+					foreach (ButterflyBehavior b in _butterflies) { b.SetIsActive (false); }
 				break;
 				// Dawn
 				case 4:
@@ -165,8 +125,8 @@ public class TimeController : MonoBehaviour
 					audioCont.SetIsDayTime (true);
 					
 					// Enable day-specific grass ornaments
-					butterfly.SetIsActive (true);
-					firefly.SetIsActive (false);
+					foreach (ButterflyBehavior b in _butterflies) { b.SetIsActive (true); }
+					foreach (FireflyBehavior f in _fireflies) { f.SetIsActive (false); }
 					
 					// We've survived the night!
 					dataCont.IncrementNightsSurvived (1);
@@ -201,29 +161,29 @@ public class TimeController : MonoBehaviour
 		{
 			// Day
 			case 1:
-				tinter.color = Color.Lerp (tinter.color, tinterDayColor, Time.deltaTime * changeSpeed);
-				foreach (tk2dSprite sprite in spritesToTint) { sprite.color = Color.Lerp (sprite.color, objectDayColor, Time.deltaTime * changeSpeed); }
-				foreach (tk2dSprite sprite in grasses) { sprite.color = Color.Lerp (sprite.color, grassDayColor, Time.deltaTime * changeSpeed); }
+				tinter.color = Color.Lerp (tinter.color, _colors.tinterDayColor, Time.deltaTime * changeSpeed);
+				foreach (tk2dSprite sprite in spritesToTint) { sprite.color = Color.Lerp (sprite.color, _colors.objectDayColor, Time.deltaTime * changeSpeed); }
+				foreach (tk2dSprite sprite in grasses) { sprite.color = Color.Lerp (sprite.color, _colors.grassDayColor, Time.deltaTime * changeSpeed); }
 			break;
 			// Dusk
 			case 2:
-				tinter.color = Color.Lerp (tinter.color, tinterEveningColor, Time.deltaTime * changeSpeed);
-				foreach (tk2dSprite sprite in spritesToTint) { sprite.color = Color.Lerp (sprite.color, objectEveningColor, Time.deltaTime * changeSpeed); }
-				foreach (tk2dSprite sprite in grasses) { sprite.color = Color.Lerp (sprite.color, grassEveningColor, Time.deltaTime * changeSpeed); }
+				tinter.color = Color.Lerp (tinter.color, _colors.tinterEveningColor, Time.deltaTime * changeSpeed);
+				foreach (tk2dSprite sprite in spritesToTint) { sprite.color = Color.Lerp (sprite.color, _colors.objectEveningColor, Time.deltaTime * changeSpeed); }
+				foreach (tk2dSprite sprite in grasses) { sprite.color = Color.Lerp (sprite.color, _colors.grassEveningColor, Time.deltaTime * changeSpeed); }
 			break;
 			// Night
 			case 3:
-				tinter.color = Color.Lerp (tinter.color, tinterNightColor, Time.deltaTime * changeSpeed);
+			tinter.color = Color.Lerp (tinter.color, _colors.tinterNightColor, Time.deltaTime * changeSpeed);
 				foreach (tk2dSprite sprite in backgroundStars) { sprite.color = Color.Lerp (sprite.color, Color.white, Time.deltaTime * changeSpeed); }
-				foreach (tk2dSprite sprite in spritesToTint) { sprite.color = Color.Lerp (sprite.color, objectNightColor, Time.deltaTime * changeSpeed); }
-				foreach (tk2dSprite sprite in grasses) { sprite.color = Color.Lerp (sprite.color, grassNightColor, Time.deltaTime * changeSpeed); }
+				foreach (tk2dSprite sprite in spritesToTint) { sprite.color = Color.Lerp (sprite.color, _colors.objectNightColor, Time.deltaTime * changeSpeed); }
+				foreach (tk2dSprite sprite in grasses) { sprite.color = Color.Lerp (sprite.color, _colors.grassNightColor, Time.deltaTime * changeSpeed); }
 			break;
 			// Dawn
 			case 4:
-				tinter.color = Color.Lerp (tinter.color, tinterMorningColor, Time.deltaTime * changeSpeed);
+			tinter.color = Color.Lerp (tinter.color, _colors.tinterMorningColor, Time.deltaTime * changeSpeed);
 				foreach (tk2dSprite sprite in backgroundStars) { sprite.color = Color.Lerp (sprite.color, Color.clear, Time.deltaTime * changeSpeed * 3); }
-				foreach (tk2dSprite sprite in spritesToTint) { sprite.color = Color.Lerp (sprite.color, objectMorningColor, Time.deltaTime * changeSpeed); }
-				foreach (tk2dSprite sprite in grasses) { sprite.color = Color.Lerp (sprite.color, grassMorningColor, Time.deltaTime * changeSpeed); }
+				foreach (tk2dSprite sprite in spritesToTint) { sprite.color = Color.Lerp (sprite.color, _colors.objectMorningColor, Time.deltaTime * changeSpeed); }
+				foreach (tk2dSprite sprite in grasses) { sprite.color = Color.Lerp (sprite.color, _colors.grassMorningColor, Time.deltaTime * changeSpeed); }
 			break;
 		}
 	}
@@ -237,29 +197,29 @@ public class TimeController : MonoBehaviour
 		{
 			// Day
 			case 1:
-				tinter.color = Color.Lerp (tinter.color, tinterDayColorWinter, Time.deltaTime * changeSpeed);
-				foreach (tk2dSprite sprite in spritesToTint) { sprite.color = Color.Lerp (sprite.color, objectDayColorWinter, Time.deltaTime * changeSpeed); }
-				foreach (tk2dSprite sprite in grasses) { sprite.color = Color.Lerp (sprite.color, grassDayColorWinter, Time.deltaTime * changeSpeed); }
+				tinter.color = Color.Lerp (tinter.color, _colors.tinterDayColorWinter, Time.deltaTime * changeSpeed);
+				foreach (tk2dSprite sprite in spritesToTint) { sprite.color = Color.Lerp (sprite.color, _colors.objectDayColorWinter, Time.deltaTime * changeSpeed); }
+				foreach (tk2dSprite sprite in grasses) { sprite.color = Color.Lerp (sprite.color, _colors.grassDayColorWinter, Time.deltaTime * changeSpeed); }
 			break;
 			// Dusk
 			case 2:
-				tinter.color = Color.Lerp (tinter.color, tinterEveningColorWinter, Time.deltaTime * changeSpeed);
-				foreach (tk2dSprite sprite in spritesToTint) { sprite.color = Color.Lerp (sprite.color, objectEveningColorWinter, Time.deltaTime * changeSpeed); }
-				foreach (tk2dSprite sprite in grasses) { sprite.color = Color.Lerp (sprite.color, grassEveningColorWinter, Time.deltaTime * changeSpeed); }
+				tinter.color = Color.Lerp (tinter.color, _colors.tinterEveningColorWinter, Time.deltaTime * changeSpeed);
+				foreach (tk2dSprite sprite in spritesToTint) { sprite.color = Color.Lerp (sprite.color, _colors.objectEveningColorWinter, Time.deltaTime * changeSpeed); }
+				foreach (tk2dSprite sprite in grasses) { sprite.color = Color.Lerp (sprite.color, _colors.grassEveningColorWinter, Time.deltaTime * changeSpeed); }
 			break;
 			// Night
 			case 3:
-				tinter.color = Color.Lerp (tinter.color, tinterNightColorWinter, Time.deltaTime * changeSpeed);
+				tinter.color = Color.Lerp (tinter.color, _colors.tinterNightColorWinter, Time.deltaTime * changeSpeed);
 				foreach (tk2dSprite sprite in backgroundStars) { sprite.color = Color.Lerp (sprite.color, Color.white, Time.deltaTime * changeSpeed); }
-				foreach (tk2dSprite sprite in spritesToTint) { sprite.color = Color.Lerp (sprite.color, objectNightColorWinter, Time.deltaTime * changeSpeed); }
-				foreach (tk2dSprite sprite in grasses) { sprite.color = Color.Lerp (sprite.color, grassNightColorWinter, Time.deltaTime * changeSpeed); }
+				foreach (tk2dSprite sprite in spritesToTint) { sprite.color = Color.Lerp (sprite.color, _colors.objectNightColorWinter, Time.deltaTime * changeSpeed); }
+				foreach (tk2dSprite sprite in grasses) { sprite.color = Color.Lerp (sprite.color, _colors.grassNightColorWinter, Time.deltaTime * changeSpeed); }
 			break;
 			// Dawn
 			case 4:
-				tinter.color = Color.Lerp (tinter.color, tinterMorningColorWinter, Time.deltaTime * changeSpeed);
+				tinter.color = Color.Lerp (tinter.color, _colors.tinterMorningColorWinter, Time.deltaTime * changeSpeed);
 				foreach (tk2dSprite sprite in backgroundStars) { sprite.color = Color.Lerp (sprite.color, Color.clear, Time.deltaTime * changeSpeed * 3); }
-				foreach (tk2dSprite sprite in spritesToTint) { sprite.color = Color.Lerp (sprite.color, objectMorningColorWinter, Time.deltaTime * changeSpeed); }
-				foreach (tk2dSprite sprite in grasses) { sprite.color = Color.Lerp (sprite.color, grassMorningColorWinter, Time.deltaTime * changeSpeed); }
+				foreach (tk2dSprite sprite in spritesToTint) { sprite.color = Color.Lerp (sprite.color, _colors.objectMorningColorWinter, Time.deltaTime * changeSpeed); }
+				foreach (tk2dSprite sprite in grasses) { sprite.color = Color.Lerp (sprite.color, _colors.grassMorningColorWinter, Time.deltaTime * changeSpeed); }
 			break;
 		}
 	}
@@ -269,10 +229,10 @@ public class TimeController : MonoBehaviour
 	// Called from Reset ()
 	void ResetColorsNormal ()
 	{
-		tinter.color = tinterDayColor;
+		tinter.color = _colors.tinterDayColor;
 		foreach (tk2dSprite sprite in backgroundStars) { sprite.color = Color.clear; }
-		foreach (tk2dSprite sprite in spritesToTint) { sprite.color = objectDayColor; }
-		foreach (tk2dSprite sprite in grasses) { sprite.color = grassDayColor; }
+		foreach (tk2dSprite sprite in spritesToTint) { sprite.color = _colors.objectDayColor; }
+		foreach (tk2dSprite sprite in grasses) { sprite.color = _colors.grassDayColor; }
 	}
 
 
@@ -280,10 +240,10 @@ public class TimeController : MonoBehaviour
 	// Called from Reset ()
 	void ResetColorsWinter ()
 	{
-		tinter.color = tinterDayColorWinter;
+		tinter.color = _colors.tinterDayColorWinter;
 		foreach (tk2dSprite sprite in backgroundStars) { sprite.color = Color.clear; }
-		foreach (tk2dSprite sprite in spritesToTint) { sprite.color = objectDayColorWinter; }
-		foreach (tk2dSprite sprite in grasses) { sprite.color = grassDayColorWinter; }
+		foreach (tk2dSprite sprite in spritesToTint) { sprite.color = _colors.objectDayColorWinter; }
+		foreach (tk2dSprite sprite in grasses) { sprite.color = _colors.grassDayColorWinter; }
 	}
 
 	#endregion
@@ -329,8 +289,8 @@ public class TimeController : MonoBehaviour
 		audioCont.ResetToDay ();
 		
 		// Reset time-specific ornaments
-		butterfly.SetIsActive (true);
-		firefly.SetIsActive (false);
+		foreach (ButterflyBehavior b in _butterflies) { b.SetIsActive (true); }
+		foreach (FireflyBehavior f in _fireflies) { f.SetIsActive (false); }
 	}
 	
 	#endregion
@@ -394,13 +354,14 @@ public class TimeController : MonoBehaviour
 	// Called from Start ()
 	void AssignVariables ()
 	{
+		_colors = GameObject.Find ("_ColorsController").GetComponent <ColorsController> ();
 		tinter = GameObject.Find ("TimeTint").GetComponent <tk2dSprite> ();
 		audioCont = GameObject.Find ("&MainController").GetComponent <AudioController> ();
 		dataCont = GameObject.Find ("&MainController").GetComponent <DataController> ();
 		lb = GameObject.Find ("&MainController").GetComponent <Leaderboard> ();
 		scoreCont = GameObject.Find ("Score").GetComponent <ScoreController> ();
-		butterfly = GameObject.Find ("Butterfly").GetComponent <ButterflyBehavior> ();
-		firefly = GameObject.Find ("Firefly").GetComponent <FireflyBehavior> ();
+		_butterflies = FindObjectsOfType (typeof (ButterflyBehavior)) as ButterflyBehavior [];
+		_fireflies = FindObjectsOfType (typeof (FireflyBehavior)) as FireflyBehavior [];
 	}
 	
 	#endregion

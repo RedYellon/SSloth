@@ -5,7 +5,7 @@
  	www.michaeljohnstephens.com
  	
  	Created:		February 13, 2014
- 	Last Edited:	September 14, 2014
+ 	Last Edited:	November 28, 2014
  	
  	Coordinates the end-of-game screen and info.
 */
@@ -165,6 +165,8 @@ public class DeathScreen : MonoBehaviour
 		private bool _isHighScore = false;
 		// If the user can interact with the screen
 		private bool _canInteract = false;
+		// The main death screen object
+		private GameObject _objectParent;
 	
 	#endregion
 	
@@ -440,6 +442,9 @@ public class DeathScreen : MonoBehaviour
 	// Called from OnRoundEnd event trigger
 	void InitiateDeathScreen ()
 	{
+		// Turn on the parent object
+		_objectParent.SetActive (true);
+
 		// Calculate the score for this round as well as the new total score
 		SetActualScoreData ();
 		
@@ -539,6 +544,18 @@ public class DeathScreen : MonoBehaviour
 		StopAllCoroutines ();
 		CancelInvoke ();
 		runningStarsInt = 0;
+
+		// Turn off the death screen
+		Invoke ("DeactivateDeathScreen", 0.4f);
+	}
+
+
+	// Turns off the death screen object for draw call savings
+	// Called from ClearDeathScreenProcessesUtility ()
+	void DeactivateDeathScreen ()
+	{
+		// Turn off all death screen objects
+		_objectParent.SetActive (false);
 	}
 	
 	#endregion
@@ -815,6 +832,7 @@ public class DeathScreen : MonoBehaviour
 		screenMask = GameObject.Find ("ScreenMask").GetComponent <tk2dSprite> ();
 		screenFlash = GameObject.Find ("ScreenFlasher").GetComponent <Flash> ();
 		playerCont = GameObject.Find ("Player").GetComponent <PlayerController> ();
+		_objectParent = GameObject.Find ("*EndGameScreen");
 		dykText1.text = "";
 		dykText2.text = "";
 		setSize = yourScoreNumber.fontSize;
@@ -834,6 +852,9 @@ public class DeathScreen : MonoBehaviour
 		_topMoveTarget = new Vector3 (_topMoveDefault.x, topMoveYTarget, _topMoveDefault.z);
 		_bottomMoveTargetClosed = new Vector3 (_bottomMoveDefault.x, bottomMoveYTargetClosed, _bottomMoveDefault.z);
 		_bottomMoveTargetOpen = new Vector3 (_bottomMoveDefault.x, bottomMoveYTargetOpen, _bottomMoveDefault.z);
+
+		// Turn off the death screen
+		Invoke ("DeactivateDeathScreen", 0.1f);
 	}
 	
 	#endregion

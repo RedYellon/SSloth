@@ -5,7 +5,7 @@
  	www.michaeljohnstephens.com
  	
  	Created:		February 13, 2014
- 	Last Edited:	February 14, 2014
+ 	Last Edited:	November 28, 2014
  	
  	Controls the camera behavior and movement.
 */
@@ -29,6 +29,8 @@ public class CameraController : MonoBehaviour
 		public Vector3 mainMenuPos = Vector3.zero;
 		//
 		public float shakeMagnitude = 10.0f;
+		// The stripes that appear in the background
+		public tk2dSprite [] skyStripes;
 		
 		#endregion
 		
@@ -36,6 +38,8 @@ public class CameraController : MonoBehaviour
 		
 		// The data controller
 		DataController dataCont;
+		// The colors controller
+		ColorsController _colors;
 		
 		#endregion
 	
@@ -54,6 +58,8 @@ public class CameraController : MonoBehaviour
 		private bool isInMainMenuMode = true;
 		// The sprite camera
 		private tk2dCamera spriteCam;
+		// 1 = normal, 2 = winter, 3 = christmas
+		private int _currentThemeIndex = 1;
 		
 		#endregion
 	
@@ -143,17 +149,31 @@ public class CameraController : MonoBehaviour
 		
 		trans.position = originalCamPos;
 	}
+
+
+	// Changes the color of the camera background
+	public void ChangeCurrentTheme (int index)
+	{
+		_currentThemeIndex = index;
+		switch (_currentThemeIndex)
+		{
+			case 1: 
+				camera.backgroundColor = _colors.backgroundColor; 
+				for (int i = 0; i < skyStripes.Length; i++) {skyStripes [i].color = _colors.stripesColor; }
+			break;
+			case 2: 
+				camera.backgroundColor = _colors.backgroundColorWinter; 
+				for (int i = 0; i < skyStripes.Length; i++) {skyStripes [i].color = _colors.stripesColorWinter; }
+			break;
+			case 3: 
+				camera.backgroundColor = _colors.backgroundColorWinter; 
+				for (int i = 0; i < skyStripes.Length; i++) {skyStripes [i].color = _colors.stripesColorWinter; }
+			break;
+		}
+	}
 	
 	
 	#endregion
-	
-	
-	#if UNITY_ANDROID
-	
-	// Required to fix some shitty Android glitch
-	void OnGUI () { GUI.Button (new Rect (0,0,1,1), ""); }
-	
-	#endif
 	
 	
 	#region Initialization
@@ -207,6 +227,7 @@ public class CameraController : MonoBehaviour
 	{
 		target = GameObject.Find ("Player").transform;
 		dataCont = GameObject.Find ("&MainController").GetComponent <DataController> ();
+		_colors = GameObject.Find ("_ColorsController").GetComponent <ColorsController> ();
 		spriteCam = GetComponent <tk2dCamera> ();
 		trans = transform;
 	}
