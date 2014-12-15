@@ -5,7 +5,7 @@
  	www.michaeljohnstephens.com
  	
  	Created:		September 1, 2014
- 	Last Edited:	November 28, 2014
+ 	Last Edited:	December 14, 2014
  	
  	Controls the appearance of the animal friends.
 */
@@ -24,6 +24,9 @@ public class AnimalFriends : MonoBehaviour
 		// The head and neck sprites for the animal
 		public tk2dSprite neckSprite;
 		public tk2dSprite headSprite;
+		// The reindeer sprites for the christmas update
+		public tk2dSprite reindeerSprite;
+		public tk2dSprite reindeerNoseSprite;
 		// The winter scarf sprites for the animals
 		public GameObject llamaScarf;
 		public GameObject ostritchScarf;
@@ -72,6 +75,7 @@ public class AnimalFriends : MonoBehaviour
 			case 0: headSprite.SetSprite ("ostritchHead_2"); break;
 			case 1: headSprite.SetSprite ("llamaHead_2"); break;
 			case 2: headSprite.SetSprite ("giraffeHead_2"); break;
+			case 3: reindeerNoseSprite.gameObject.SetActive (true); break;
 		}
 		audioCont.PlaySound ("AnimalBlink");
 	}
@@ -85,6 +89,7 @@ public class AnimalFriends : MonoBehaviour
 			case 0: headSprite.SetSprite ("ostritchHead_1"); break;
 			case 1: headSprite.SetSprite ("llamaHead_1"); break;
 			case 2: headSprite.SetSprite ("giraffeHead_1"); break;
+			case 3: reindeerNoseSprite.gameObject.SetActive (false); break;
 		}
 	}
 
@@ -116,13 +121,30 @@ public class AnimalFriends : MonoBehaviour
 	// Called externally
 	public void GoMove ()
 	{
+		// Reset sprites
+		neckSprite.gameObject.SetActive (true);
+		headSprite.gameObject.SetActive (true);
+		reindeerSprite.gameObject.SetActive (false);
+		reindeerNoseSprite.gameObject.SetActive (false);
+		
 		// Set a random animal sprite
-		_animalNum = Random.Range (0, 3);
+		_animalNum = 0;
+		if (_currentThemeIndex != 3) _animalNum = Random.Range (0, 3);
+		else _animalNum = Random.Range (0, 4);
+
+		// Activate the proper sprites for the chosen animal
 		switch (_animalNum)
 		{
 			case 0: neckSprite.SetSprite ("ostritchNeck"); headSprite.SetSprite ("ostritchHead_1"); break;
 			case 1: neckSprite.SetSprite ("llamaNeck"); headSprite.SetSprite ("llamaHead_1"); break;
 			case 2: neckSprite.SetSprite ("giraffeNeck"); headSprite.SetSprite ("giraffeHead_1"); break;
+			// The reindeer sprite will require us to do a little object manipulation
+			case 3: 
+				neckSprite.gameObject.SetActive (false);
+				headSprite.gameObject.SetActive (false);
+				reindeerSprite.gameObject.SetActive (true);
+				reindeerNoseSprite.gameObject.SetActive (false);
+			break;
 		}
 
 		// If we are in a correct theme, we need to add some sprites

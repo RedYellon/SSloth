@@ -60,8 +60,12 @@ public class ThemeController : MonoBehaviour
 		CameraController _camCont;
 		// The menu transition controller
 		MenuBackgroundTransitionController _menuTransitionCont;
+		// The main menu controller
+		MainMenuController _mainMenuCont;
 		// The animal friends script
 		AnimalFriends _animals;
+		// The audio controller
+		AudioController _audioCont;
 
 		#endregion
 
@@ -78,6 +82,7 @@ public class ThemeController : MonoBehaviour
 		{
 			case ThemeType.Normal: NormalThemeActivate (); break;
 			case ThemeType.Winter: WinterThemeActivate (); break;
+			case ThemeType.Christmas: HolidayThemeActivate (); break;
 		}
 	}
 
@@ -87,13 +92,15 @@ public class ThemeController : MonoBehaviour
 	void NormalThemeActivate ()
 	{
 		_platManager.SetSnowIsActive (false);
-		_playerCont.SetSnowLanding (false);
+		_playerCont.ChangeCurrentTheme (1);
 		_snowManager.TurnOffSnowflakes ();
 		_grassCont.ChangeCurrentTheme (1);
 		_timeCont.ChangeCurrentTheme (1);
 		_camCont.ChangeCurrentTheme (1);
 		_menuTransitionCont.ChangeCurrentTheme (1);
 		_animals.ChangeCurrentTheme (1);
+		_mainMenuCont.ChangeCurrentTheme (1);
+		_audioCont.ChangeCurrentTheme (1);
 		titleSuper.SetSprite ("Super");
 		titleSloth.SetSprite ("Sloth");
 	}
@@ -104,13 +111,34 @@ public class ThemeController : MonoBehaviour
 	void WinterThemeActivate ()
 	{
 		_platManager.SetSnowIsActive (true);
-		_playerCont.SetSnowLanding (true);
+		_playerCont.ChangeCurrentTheme (2);
 		_snowManager.TurnOnSnowflakes ();
 		_grassCont.ChangeCurrentTheme (2);
 		_timeCont.ChangeCurrentTheme (2);
 		_camCont.ChangeCurrentTheme (2);
 		_menuTransitionCont.ChangeCurrentTheme (2);
 		_animals.ChangeCurrentTheme (2);
+		_mainMenuCont.ChangeCurrentTheme (2);
+		_audioCont.ChangeCurrentTheme (2);
+		titleSuper.SetSprite ("Super_Winter");
+		titleSloth.SetSprite ("Sloth_Winter");
+	}
+
+
+	// Activates the holiday theme
+	// Called from ChangeTheme (ThemeType theme)
+	void HolidayThemeActivate ()
+	{
+		_platManager.SetSnowIsActive (true);
+		_playerCont.ChangeCurrentTheme (3);
+		_snowManager.TurnOnSnowflakes ();
+		_grassCont.ChangeCurrentTheme (2);
+		_timeCont.ChangeCurrentTheme (2);
+		_camCont.ChangeCurrentTheme (2);
+		_menuTransitionCont.ChangeCurrentTheme (2);
+		_animals.ChangeCurrentTheme (3);
+		_mainMenuCont.ChangeCurrentTheme (3);
+		_audioCont.ChangeCurrentTheme (3);
 		titleSuper.SetSprite ("Super_Winter");
 		titleSloth.SetSprite ("Sloth_Winter");
 	}
@@ -136,7 +164,9 @@ public class ThemeController : MonoBehaviour
 		_platManager = GetComponent <PlatformManager> ();
 		_snowManager = GetComponent <SnowflakeManager> ();
 		_timeCont = GetComponent <TimeController> ();
+		_mainMenuCont = GetComponent <MainMenuController> ();
 		_menuTransitionCont = GetComponent <MenuBackgroundTransitionController> ();
+		_audioCont = GetComponent <AudioController> ();
 		_camCont = GameObject.Find ("Main Camera").GetComponent <CameraController> ();
 		_playerCont = GameObject.Find ("Player").GetComponent <PlayerController> ();
 		_grassCont = GameObject.Find ("Foreground Grass").GetComponent <ParallaxScrollController> ();
@@ -144,8 +174,8 @@ public class ThemeController : MonoBehaviour
 		titleSloth = GameObject.Find ("SLOTH").GetComponent <tk2dSprite> ();
 		_animals = GameObject.Find ("Animal").GetComponent <AnimalFriends> ();
 
-		// TEMP
-		ChangeTheme (ThemeType.Winter);
+		// Set the default theme
+		ChangeTheme (currentTheme);
 	}
 	
 	#endregion

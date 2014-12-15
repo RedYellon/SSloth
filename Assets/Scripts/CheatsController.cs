@@ -5,7 +5,7 @@
  	www.michaeljohnstephens.com
  	
  	Created:		November 22, 2014
- 	Last Edited:	November 22, 2014
+ 	Last Edited:	December 14, 2014
  	
  	Controls the cheat menu and functions.
 */
@@ -163,6 +163,11 @@ public class CheatsController : MonoBehaviour
 				Invoke ("SwitchThemeToWinter", 1.0f);
 			break;
 
+			case "SLOTH3":
+				CheatSucceeded ();
+				Invoke ("SwitchThemeToHoliday", 1.0f);
+			break;
+
 			// If it doesn't match a valid cheat, we should get out
 			default: CheatFailed (); break;
 		}
@@ -214,6 +219,18 @@ public class CheatsController : MonoBehaviour
 	{
 		_themeCont.ChangeTheme (ThemeController.ThemeType.Winter);
 
+		// Exit cheats menu
+		_isProcessing = false;
+		ExitCheatsMenuButtonPressed ();
+	}
+
+
+	// The cheat to switch to the Holiday theme
+	// Called from RegisterCheat ()
+	void SwitchThemeToHoliday ()
+	{
+		_themeCont.ChangeTheme (ThemeController.ThemeType.Christmas);
+		
 		// Exit cheats menu
 		_isProcessing = false;
 		ExitCheatsMenuButtonPressed ();

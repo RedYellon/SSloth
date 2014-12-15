@@ -357,6 +357,14 @@ MonoBehaviour:
     - 1_head_aviators_slothIdle2
     - 1_head_aviators_slothJump6
     - 1_head_aviators_slothJump1
+    - SantaHat_12
+    - SantaHat_11
+    - SantaHat_10
+    - SantaHat_9
+    - SantaHat_5
+    - SantaHat_4
+    - SantaHat_7_8
+    - SantaHat_6
     spriteTextureGUIDs:
     - 243764c7cfab34488b7481ba7eef563d
     - 4d142fd35f427403c890f5fe49d0d400
@@ -369,6 +377,14 @@ MonoBehaviour:
     - a8f4b6ff7268146eb8559e626366ba64
     - cae1a494228a54acb99b3cac307733d5
     - e54af9522fd0a4273862406db03cbeb8
+    - 136568e28f68b49629d3f2a208adb0b2
+    - 33a67aea6150643b79059e56b75d7aa1
+    - 3c8d64479c55a4e12be957c8058bd7bd
+    - 42a82fac708914c009915ea1bb39f048
+    - 5bd239f269b214372bfb09e3e1a807ee
+    - 69b07e0254b2c4128ac50bf2c3d17704
+    - 6fd23cb60938e4fcaac7e3dc7f208c93
+    - 81107979c6ed54ebabf48ec3472d76f1
     spriteTextureTimeStamps:
     - 1411667960
     - 1411667960
@@ -381,6 +397,147 @@ MonoBehaviour:
     - 1411667960
     - 1411667960
     - 1411667960
+    - 1417561380
+    - 1417561378
+    - 1417561374
+    - 1417561372
+    - 1417561370
+    - 1417561366
+    - 1417561376
+    - 1417561370
+    managedSpriteCollection: 0
+    loadable: 0
+    assetName: 
+    version: 3
+  - name: WinterSpriteSheet
+    spriteCollectionGUID: 8bddb146903eb44fcbd5c1ad52cb5a0b
+    spriteCollectionDataGUID: 47ea1f1f9d6654cda81fbd2f4235a503
+    spriteNames:
+    - christmastree_snow
+    - icicle_1
+    - snoflakeface_3
+    - giraffeScarf
+    - snow_1
+    - snowflake_2
+    - snowflake_4
+    - icicle_2
+    - ostritchScarf
+    - llamaScarf
+    - snoflakeface_2
+    - snowflake_5
+    - snow_2
+    - snow_ostritch
+    - snowflake_1
+    - snow_sloth
+    - Snow_rock
+    - snow_3
+    - snoflakeface_4
+    - snow_llama
+    - snow_Giraffe
+    - snow_weed
+    - reindeer_nose
+    - snowflake_3
+    - snow_weed_2
+    - snoflakeface_5
+    - snoflakeface_1
+    - reindeer
+    - ornamnet_red
+    - ornament_sloth
+    - ornament_green
+    - lights1_2
+    - lights1
+    - SantaHat_12
+    - SantaHat_11
+    - SantaHat_10
+    - SantaHat_9
+    - SantaHat_5
+    - SantaHat_4
+    - SantaHat_7_8
+    - SantaHat_6
+    spriteTextureGUIDs:
+    - 5ecbd6c8772ee42b1b57831f1f22737f
+    - def743301a57442d493c83cfe07e28fc
+    - 30c8367043b8a4f7c8f258763ed45d80
+    - d5fcadc09ecd64e9096e7676e2273490
+    - c77a8ae000d354b8b8ff58a52720654e
+    - bc878c6111b5f42fab01a3d954f33f71
+    - 847f72e1301d246fdb4c5e77f148b298
+    - ebdef642a6b1c4495b9a5407e8500da8
+    - 1f2516a202b2a474d888f1212ef51b5c
+    - 355508d20f58042b6a0f92bba3932a96
+    - 711443136d92a468aadb64e967006154
+    - 5da31e74475f14d18a215cb02fbfbf36
+    - 9cdf252527e4d48ca83179e01fccc9ee
+    - 46134f35b717649ae9c9fb1296ae7a5e
+    - a28517f5bbe4246df916d9075bad55ce
+    - 72ef6a66b75cd4eb1af00fa28a3f54f6
+    - 015f58b691b3b45fcbebfc23bc64935c
+    - 957e42876ba284ad0a5680f9dbe44dcb
+    - 06eb5869bf04d4bb4bc9c1d3e8cf2dbc
+    - caab3c7a03b45468db8e3002cb89d91f
+    - d4355c7bb017a40f8bc2ecec3b11a324
+    - 6ff418bb5d9e343a0bed4a8e7c562cc1
+    - f6a77d91efc0144fd8410f955d67cb80
+    - a508b5cda647f41be9283c034ab55ac4
+    - b4d54ffdac2d9427fa7e3093ff98e77d
+    - 95f8a94fecaaf4b2aa285fb8ff723bfe
+    - 19ffd56fa72ff4711a5f4b2ce1f47c3f
+    - ca3811897cb8049fb85968eb87de94fc
+    - 2e892fe6415bf4fc7b36b59411c777ec
+    - 5e2015163868047f58b2d891b7b22d1f
+    - bfd0e76d248b64e81bd11ea01bcb2e59
+    - 9d2d70ba6ed7748b0a527144fbe80515
+    - c8c3e7219ff53458f8637be692317438
+    - 136568e28f68b49629d3f2a208adb0b2
+    - 33a67aea6150643b79059e56b75d7aa1
+    - 3c8d64479c55a4e12be957c8058bd7bd
+    - 42a82fac708914c009915ea1bb39f048
+    - 5bd239f269b214372bfb09e3e1a807ee
+    - 69b07e0254b2c4128ac50bf2c3d17704
+    - 6fd23cb60938e4fcaac7e3dc7f208c93
+    - 81107979c6ed54ebabf48ec3472d76f1
+    spriteTextureTimeStamps:
+    - 1418567114
+    - 1416295664
+    - 1416415834
+    - 1417196666
+    - 1416296886
+    - 1416415678
+    - 1416415718
+    - 1416295668
+    - 1417196233
+    - 1417196476
+    - 1416415812
+    - 1416415742
+    - 1416296888
+    - 1416851772
+    - 1416415634
+    - 1416852942
+    - 1416851446
+    - 1416296888
+    - 1416415852
+    - 1416852232
+    - 1416852338
+    - 1416852496
+    - 1418568742
+    - 1416418092
+    - 1416852422
+    - 1416415868
+    - 1416415796
+    - 1418568804
+    - 1417537694
+    - 1417537714
+    - 1417537704
+    - 1418570446
+    - 1418570397
+    - 1417561380
+    - 1417561378
+    - 1417561374
+    - 1417561372
+    - 1417561370
+    - 1417561366
+    - 1417561376
+    - 1417561370
     managedSpriteCollection: 0
     loadable: 0
     assetName: 

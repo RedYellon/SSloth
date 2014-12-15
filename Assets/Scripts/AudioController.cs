@@ -22,6 +22,9 @@ public class AudioController : MonoBehaviour
 	
 		#region Public
 		
+		//The max volumes for the day and night tracks
+		public float dayMusicMaxVolume = 1.4f;
+		public float nightMusicMaxVolume = 1.4f;
 		// The rate that music tracks fade in/out
 		public float musicFadeRate = 0.003f;
 		// The percentage of total volume that is played when the music is ducked
@@ -47,6 +50,17 @@ public class AudioController : MonoBehaviour
 		// The image used to indicate the volume has been turned off
 		public Image volumeOffImg;
 			
+		#endregion
+
+		#region Music
+
+		// The default daytime music clip
+		public AudioClip defaultDayMusicClip;
+		// The winter daytime mix
+		public AudioClip winterDayMusicClip;
+		// The holiday daytime mix
+		public AudioClip holidayDayMusicClip;
+
 		#endregion
 	
 		#region Sound Effects
@@ -142,6 +156,8 @@ public class AudioController : MonoBehaviour
 		private float masterMusicVolumeLevel = 1.0f;
 		// Whether or not the music is ducked
 		private bool musicIsDucked = false;
+		// 1 = normal, 2 = winter, 3 = christmas
+		private int _currentThemeIndex = 1;
 	
 		#endregion
 	
@@ -267,7 +283,7 @@ public class AudioController : MonoBehaviour
 	public void ResetToDay ()
 	{
 		isDayTime = true;
-		uncorrectedDayMusicVol = 1.4f;
+		uncorrectedDayMusicVol = dayMusicMaxVolume;
 		uncorrectedNightMusicVol = 0f;
 	}
 	
@@ -295,8 +311,8 @@ public class AudioController : MonoBehaviour
 		// If it's currently day time in-game...
 		if (isDayTime)
 		{
-			if (uncorrectedDayMusicVol < 1.4f) { uncorrectedDayMusicVol += musicFadeRate; }
-			else { uncorrectedDayMusicVol = 1.4f; }
+			if (uncorrectedDayMusicVol < dayMusicMaxVolume) { uncorrectedDayMusicVol += musicFadeRate; }
+			else { uncorrectedDayMusicVol = dayMusicMaxVolume; }
 			
 			if (uncorrectedNightMusicVol > 0.0f) { uncorrectedNightMusicVol -= musicFadeRate; }
 			else { uncorrectedNightMusicVol = 0f; }
@@ -304,8 +320,8 @@ public class AudioController : MonoBehaviour
 		// If it's currently night time in-game...
 		else
 		{
-			if (uncorrectedNightMusicVol < 1.4f) { uncorrectedNightMusicVol += musicFadeRate; }
-			else { uncorrectedNightMusicVol = 1.4f; }
+			if (uncorrectedNightMusicVol < nightMusicMaxVolume) { uncorrectedNightMusicVol += musicFadeRate; }
+			else { uncorrectedNightMusicVol = nightMusicMaxVolume; }
 			
 			if (uncorrectedDayMusicVol > 0.0f) { uncorrectedDayMusicVol -= musicFadeRate; } 	
 			else { uncorrectedDayMusicVol = 0f; }
@@ -532,6 +548,38 @@ public class AudioController : MonoBehaviour
 	}
 	
 	#endregion
+
+
+	#region Theme
+	
+	//
+	public void ChangeCurrentTheme (int index)
+	{
+		_currentThemeIndex = index;
+		switch (_currentThemeIndex)
+		{
+			case 1:
+				dayMusicSource.clip = defaultDayMusicClip;
+				dayMusicMaxVolume = 1.4f;
+			break;
+			case 2:
+				dayMusicSource.clip = winterDayMusicClip;
+				dayMusicMaxVolume = 0.4f;
+			break;
+			case 3:
+				dayMusicSource.clip = holidayDayMusicClip;
+				dayMusicMaxVolume = 0.92f;
+			break;
+		}
+
+		//
+		dayMusicSource.Stop ();
+		nightMusicSource.Stop ();
+		dayMusicSource.Play ();
+		nightMusicSource.Play ();
+	}
+	
+	#endregion
 	
 	
 	#region Initialization
@@ -577,8 +625,8 @@ public class AudioController : MonoBehaviour
 		}
 		
 		// Begin playing the day and night music
-		dayMusicSource.Play ();
-		nightMusicSource.Play ();
+		//dayMusicSource.Play ();
+		//nightMusicSource.Play ();
 	}
 	
 	

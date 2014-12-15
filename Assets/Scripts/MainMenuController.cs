@@ -58,6 +58,8 @@ public class MainMenuController : MonoBehaviour
 		//
 		public Transform ospinner1;
 		public Transform ospinner2;
+		// The christmas ornaments objects
+		public GameObject [] christmasOrnaments;
 		
 		#endregion
 	
@@ -134,6 +136,8 @@ public class MainMenuController : MonoBehaviour
 		private Vector3 title2ResetPos;
 		// If the camera type has been overridden (to stretch)
 		private bool _camOverrideType = false;
+		// 1 = normal, 2 = winter, 3 = christmas
+		private int _currentThemeIndex = 1;
 	
 		#endregion
 	
@@ -600,6 +604,29 @@ public class MainMenuController : MonoBehaviour
 		// Turn all of the main menu renderers off
 		foreach (Renderer r in mainMenuRenderers)
 			r.enabled = false;
+	}
+	
+	#endregion
+
+
+	#region Public
+	
+	//
+	public void ChangeCurrentTheme (int index)
+	{
+		_currentThemeIndex = index;
+		switch (_currentThemeIndex)
+		{
+			case 1:
+				for (int i = 0; i < christmasOrnaments.Length; i++) { christmasOrnaments [i].SetActive (false); }
+			break;
+			case 2:
+				//for (int i = 0; i < christmasOrnaments.Length; i++) { christmasOrnaments [i].SetActive (false); }
+			break;
+			case 3:
+				//for (int i = 0; i < christmasOrnaments.Length; i++) { christmasOrnaments [i].SetActive (true); }
+			break;
+		}
 	}
 	
 	#endregion

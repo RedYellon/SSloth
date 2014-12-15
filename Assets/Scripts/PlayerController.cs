@@ -20,149 +20,151 @@ public class PlayerController : MonoBehaviour
 {
 	#region Variables
 	
-	#region Public
+		#region Public
+		
+		// The walk animation speed
+		public float walkAnimSpeed = 0.2f;
+		// The jump height of the sloth
+		public float jumpHeight = 600;
+		// The launch height of the sloth
+		public float launchHeight = 1400;
+		// The jump height of the sloth
+		public float doubleJumpHeight = 600;
+		// When the player falls below this level, they lose
+		public float deathYLevel = -3.74f;
+		// How fast the player must be falling to register a "hard" hit
+		public float landHardVelocityGate = 28f;
+		// How quickly the sloth sprite rotates during a double jump
+		public float doubleJumpRotationSpeed = 800;
+		// Used to position the gui sloth on the death screen
+		public Transform guiTransParent;
+		public Vector3 guiLocalPos;
+		// The colors for the landing effect
+		public Color hardLandSmokeColor;
+		public Color hardLandSnowSmokeColor;
+		// The materials for the landing particle effect
+		public Material hardLandSmokeMat;
+		public Material hardLandSnowSmokeMat;
+		
+		#endregion
 	
-	// The walk animation speed
-	public float walkAnimSpeed = 0.2f;
-	// The jump height of the sloth
-	public float jumpHeight = 600;
-	// The launch height of the sloth
-	public float launchHeight = 1400;
-	// The jump height of the sloth
-	public float doubleJumpHeight = 600;
-	// When the player falls below this level, they lose
-	public float deathYLevel = -3.74f;
-	// How fast the player must be falling to register a "hard" hit
-	public float landHardVelocityGate = 28f;
-	// How quickly the sloth sprite rotates during a double jump
-	public float doubleJumpRotationSpeed = 800;
-	// Used to position the gui sloth on the death screen
-	public Transform guiTransParent;
-	public Vector3 guiLocalPos;
-	// The colors for the landing effect
-	public Color hardLandSmokeColor;
-	public Color hardLandSnowSmokeColor;
-	// The materials for the landing particle effect
-	public Material hardLandSmokeMat;
-	public Material hardLandSnowSmokeMat;
+		#region Scripts
+		
+		// The input controller
+		InputController inputCont;
+		// The platform manager
+		PlatformManager platformManager;
+		// The audio controller
+		AudioController audioCont;
+		// The game controller
+		GameController gameCont;
+		// The data controller
+		DataController dataCont;
+		// The controller that scrolls the grass
+		ParallaxScrollController grassCont;
+		// The camera controller
+		CameraController camCont;
+		// The score controller
+		ScoreController scoreCont;
+		// The item controller
+		ItemController itemCont;
+		// The leaderboard
+		Leaderboard lb;
+		// The event controller
+		EventManager eventManager;
+		
+		#endregion
 	
-	#endregion
+		#region Caches
+		
+		// The cached transform of the player parent
+		Transform trans;
+		// The cached transform of the sloth sprite
+		Transform spriteTrans;
+		// The cached rigidbody of the sloth
+		Rigidbody rb;
+		// The mud splatter particle system
+		ParticleSystem mudSplatter;
+		// The hard land smoke particle system
+		ParticleSystem hardLandSmoke;
+		// The double jump effect particle system
+		ParticleSystem doubleJumpEffect;
+		
+		#endregion
 	
-	#region Scripts
+		#region Stat Collection
+		
+		int sessionPlayTime = 0;
+		int angryPlatsHit = 0;
+		int sadPlatsHit = 0;
+		int dirtyPlatsHit = 0;
+		int timesJumped = 0;
+		int timesDoubleJumped = 0;
+		int timesLanded = 0;
+		
+		#endregion
 	
-	// The input controller
-	InputController inputCont;
-	// The platform manager
-	PlatformManager platformManager;
-	// The audio controller
-	AudioController audioCont;
-	// The game controller
-	GameController gameCont;
-	// The data controller
-	DataController dataCont;
-	// The controller that scrolls the grass
-	ParallaxScrollController grassCont;
-	// The camera controller
-	CameraController camCont;
-	// The score controller
-	ScoreController scoreCont;
-	// The item controller
-	ItemController itemCont;
-	// The leaderboard
-	Leaderboard lb;
-	// The event controller
-	EventManager eventManager;
-	
-	#endregion
-	
-	#region Caches
-	
-	// The cached transform of the player parent
-	Transform trans;
-	// The cached transform of the sloth sprite
-	Transform spriteTrans;
-	// The cached rigidbody of the sloth
-	Rigidbody rb;
-	// The mud splatter particle system
-	ParticleSystem mudSplatter;
-	// The hard land smoke particle system
-	ParticleSystem hardLandSmoke;
-	// The double jump effect particle system
-	ParticleSystem doubleJumpEffect;
-	
-	#endregion
-	
-	#region Stat Collection
-	
-	int sessionPlayTime = 0;
-	int angryPlatsHit = 0;
-	int sadPlatsHit = 0;
-	int dirtyPlatsHit = 0;
-	int timesJumped = 0;
-	int timesDoubleJumped = 0;
-	int timesLanded = 0;
-	
-	#endregion
-	
-	#region Private
-	
-	//
-	tk2dSprite sprite;
-	// The beginning position of the sloth
-	private Vector3 beginningPosition;
-	// Used to determine landing 
-	private List <PlatformController> plats = new List <PlatformController> ();
-	private List <PlatformController> horizontallyValidPlats = new List <PlatformController> ();
-	private List <PlatformController> landPlats = new List <PlatformController> ();
-	// The platform the sloth is currently on
-	private PlatformController currentOnPlatform;
-	// If the player can jump
-	private bool canJump = false;
-	// If the sloth is grounded
-	private bool isGrounded = false;
-	// If the sloth is on his way down from a jump and can land on a platform
-	private bool canLand = false;
-	// If the sloth is in mid-jump and on the way up
-	private bool isOnTheWayUp = false;
-	// Bool used to switch between frames of walk animation
-	private bool walkAnimBool = false;
-	// If the sloth is currently playing the walking animation
-	private bool isWalkingAnim = false;
-	// If the player can double-jumo
-	private bool canDoubleJump = false;
-	// If the sloth is spinning from a double-jump
-	private bool isSlothSpinning = false;
-	// If the sloth should be wearing shades!
-	private bool isWearingShades = false;
-	//
-	private bool isLaunchingUp = false;
-	// Used to rotate the sloth when the player hsa lost
-	private bool isDead = false;
-	//
-	private bool slothIsBeginningFalling = false;
-	//
-	private bool isHardLand = false;
-	//
-	private Transform fallingWithPlat = null;
-	private PlatformController fp;
-	private float fallingWithPlatHeight;
-	//
-	private Vector3 startGamePos;
-	//
-	private bool guiSlothAnimateBool = false;
-	//
-	private bool didPrevLandOnBouncePlat = false;
-	//
-	private Vector3 mudSplatterLocalPosition;
-	private Vector3 hardLandSmokeLocalPosition;
-	private Vector3 doubleJumpEffectLocalPosition;
-	//
-	private int playTimeAtStart = 0;
-	private float _hangtimeStartTime = 0;
-	private float _maxHangtimeThisRun = 0;
-	private float _peakAirThisRun = 0;
-	
-	#endregion
+		#region Private
+		
+		//
+		tk2dSprite sprite;
+		// The beginning position of the sloth
+		private Vector3 beginningPosition;
+		// Used to determine landing 
+		private List <PlatformController> plats = new List <PlatformController> ();
+		private List <PlatformController> horizontallyValidPlats = new List <PlatformController> ();
+		private List <PlatformController> landPlats = new List <PlatformController> ();
+		// The platform the sloth is currently on
+		private PlatformController currentOnPlatform;
+		// If the player can jump
+		private bool canJump = false;
+		// If the sloth is grounded
+		private bool isGrounded = false;
+		// If the sloth is on his way down from a jump and can land on a platform
+		private bool canLand = false;
+		// If the sloth is in mid-jump and on the way up
+		private bool isOnTheWayUp = false;
+		// Bool used to switch between frames of walk animation
+		private bool walkAnimBool = false;
+		// If the sloth is currently playing the walking animation
+		private bool isWalkingAnim = false;
+		// If the player can double-jumo
+		private bool canDoubleJump = false;
+		// If the sloth is spinning from a double-jump
+		private bool isSlothSpinning = false;
+		// If the sloth should be wearing shades!
+		private bool isWearingShades = false;
+		//
+		private bool isLaunchingUp = false;
+		// Used to rotate the sloth when the player hsa lost
+		private bool isDead = false;
+		//
+		private bool slothIsBeginningFalling = false;
+		//
+		private bool isHardLand = false;
+		//
+		private Transform fallingWithPlat = null;
+		private PlatformController fp;
+		private float fallingWithPlatHeight;
+		//
+		private Vector3 startGamePos;
+		//
+		private bool guiSlothAnimateBool = false;
+		//
+		private bool didPrevLandOnBouncePlat = false;
+		//
+		private Vector3 mudSplatterLocalPosition;
+		private Vector3 hardLandSmokeLocalPosition;
+		private Vector3 doubleJumpEffectLocalPosition;
+		//
+		private int playTimeAtStart = 0;
+		private float _hangtimeStartTime = 0;
+		private float _maxHangtimeThisRun = 0;
+		private float _peakAirThisRun = 0;
+		// 1 = normal, 2 = winter, 3 = christmas
+		private int _currentThemeIndex = 1;
+		
+		#endregion
 	
 	#endregion
 	
@@ -566,29 +568,7 @@ public class PlayerController : MonoBehaviour
 	}
 	
 	#endregion
-	
-	
-	#region Themes
-	
-	// Swaps the smoke effect for snow (false = normal)
-	//
-	public void SetSnowLanding (bool b)
-	{
-		hardLandSmoke = GameObject.Find ("HardLandSmokeEffect").GetComponent <ParticleSystem> ();
-		if (b)
-		{
-			hardLandSmoke.GetComponent <Renderer> ().material = hardLandSnowSmokeMat;
-			hardLandSmoke.startColor = hardLandSnowSmokeColor;
-		}
-		else
-		{
-			hardLandSmoke.GetComponent <Renderer> ().material = hardLandSmokeMat;
-			hardLandSmoke.startColor = hardLandSmokeColor;
-		}
-	}
-	
-	#endregion
-	
+
 	
 	#region Animation
 	
@@ -695,6 +675,8 @@ public class PlayerController : MonoBehaviour
 	{
 		// Reset the transform values of the player
 		sprite.renderer.sortingLayerName = "Player";
+		itemCont.BringSantaHatsToBackground ();
+		itemCont.BringHeadToBackground ();
 		trans.parent = null;
 		trans.position = startGamePos;
 		spriteTrans.rotation = Quaternion.Euler (Vector3.zero);
@@ -705,6 +687,10 @@ public class PlayerController : MonoBehaviour
 		
 		// If the player had a high score, apply the shades 8)
 		ApplyShadesIfNeeded ();
+
+		//
+		if (_currentThemeIndex == 3)
+			itemCont.SetSantaHatSpriteActive (true);
 		
 		// Un-duck the music
 		audioCont.DuckMusic (false);
@@ -767,6 +753,7 @@ public class PlayerController : MonoBehaviour
 	public void UnApplyShadesFromDeathScreen ()
 	{
 		itemCont.SetHeadSpriteActive (false);
+		itemCont.SetSantaHatSpriteActive (false);
 	}
 	
 	#endregion
@@ -780,6 +767,8 @@ public class PlayerController : MonoBehaviour
 	{
 		// Set proper transform values
 		sprite.renderer.sortingLayerName = "HighScoreGlasses";
+		itemCont.BringSantaHatsToForeground ();
+		itemCont.BringHeadToForeground ();
 		spriteTrans.rotation = Quaternion.Euler (Vector3.zero);
 		spriteTrans.localScale = new Vector3 (3.5f, 3.5f, 3.5f);
 		trans.parent = guiTransParent;
@@ -853,6 +842,36 @@ public class PlayerController : MonoBehaviour
 		_peakAirThisRun = 0;
 		_maxHangtimeThisRun = 0;
 		_hangtimeStartTime = Time.time;
+	}
+	
+	#endregion
+
+
+	#region Themes
+	
+	//
+	public void ChangeCurrentTheme (int index)
+	{
+		_currentThemeIndex = index;
+		hardLandSmoke = GameObject.Find ("HardLandSmokeEffect").GetComponent <ParticleSystem> ();
+		switch (_currentThemeIndex)
+		{
+			case 1:
+				itemCont.SetSantaHatSpriteActive (false);
+				hardLandSmoke.GetComponent <Renderer> ().material = hardLandSmokeMat;
+				hardLandSmoke.startColor = hardLandSmokeColor;
+			break;
+			case 2:
+				itemCont.SetSantaHatSpriteActive (false);
+				hardLandSmoke.GetComponent <Renderer> ().material = hardLandSnowSmokeMat;
+				hardLandSmoke.startColor = hardLandSnowSmokeColor;
+			break;
+			case 3:
+				//itemCont.SetSantaHatSpriteActive (true);
+				hardLandSmoke.GetComponent <Renderer> ().material = hardLandSnowSmokeMat;
+				hardLandSmoke.startColor = hardLandSnowSmokeColor;
+			break;
+		}
 	}
 	
 	#endregion
